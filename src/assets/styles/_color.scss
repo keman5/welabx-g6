@@ -1,0 +1,86 @@
+@mixin _color() {
+    .light {
+        color: #fff
+    }
+    .stable {
+        color: #f5f5f5
+    }
+    .primary {
+        color: #4a90e2
+    }
+    .calm {
+        color: #11c1f3
+    }
+    .success {
+        color: #66cd66
+    }
+    .warning {
+        color: #ffbd17
+    }
+    .burlywood {
+        color: burlywood;
+    }
+    .danger {
+        color: #ea5a49
+    }
+    .royal {
+        color: #b5b5b5
+    }
+    .dark {
+        color: #484746
+    }
+    .main {
+        color: #00d3eb
+    }
+    .ctitle {
+        color: #333
+    } // 重要级文字、标题
+    .carticle {
+        color: #666
+    } // 段落、引导词
+    .clabel {
+        color: #999999
+    } // 辅助
+    .light-bg {
+        background-color: #fff
+    }
+    .stable-bg {
+        background-color: #f5f5f5
+    }
+    .primary-bg {
+        background-color: #4a90e2
+    }
+    .calm-bg {
+        background-color: #11c1f3
+    }
+    .success-bg {
+        background-color: #66cd66
+    }
+    .warning-bg {
+        background-color: #ffbd17
+    }
+    .burlywood-bg {
+        background-color: burlywood;
+    }
+    .danger-bg {
+        background-color: #ea5a49
+    }
+    .royal-bg {
+        background-color: #b5b5b5
+    }
+    .dark-bg {
+        background-color: #484746
+    }
+    .main-bg {
+        background-color: #00d3eb
+    }
+    .ctitle-bg {
+        background-color: #333
+    } // 重要级文字、标题
+    .carticle-bg {
+        background-color: #666
+    } // 段落、引导词
+    .clabel-bg {
+        background-color: #999999
+    } // 辅助
+}

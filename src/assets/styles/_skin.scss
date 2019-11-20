@@ -1,0 +1,42 @@
+.skin_gray{
+    background: url('../images/TB1_1680x370.png') no-repeat 0 0 #2e323f;
+    background-size: 1920px auto;
+    background-attachment: fixed;
+    .base-heading{
+        background: url('../images/TB1_1680x370.png') no-repeat 0 0 #2e323f;
+        background-size: 1920px auto;
+    }
+    .main-aside,
+    .el-menu{
+        background: transparent;
+    }
+    .nav-aside{
+        .el-submenu{
+            &.is-opened,
+            &:focus{
+                border-bottom: 0 !important;
+            }
+            .el-submenu__title{
+                border-bottom-color: transparent !important;
+            }
+        }
+        .el-menu-item,
+        .el-submenu__title{
+            border-radius: 3px;
+            margin-left: 20px;
+            color: #fff;
+            &.is-active,
+            &:focus{
+                color: #fff;
+                background: #3080fe;
+            }
+            &:hover {
+                background: #448dff;
+                i {
+                    color: #fff;
+                }
+            }
+            .el-menu-link:after{display: none;}
+        }
+    }
+}

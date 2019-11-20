@@ -1,0 +1,23 @@
+@import './_mixins.scss';
+@import './_1px.scss';
+@import './_color.scss';
+@import './_common.scss';
+@mixin layout() {
+    @include gap('40', 40px);
+    @include gap('30', 30px);
+    @include gap('20', 20px);
+    @include gap('10', 10px);
+    @include gap('5', 5px);
+    @include gap('0', 0);
+    @include font-size();
+    @include my_flex();
+    @include _flex();
+    @include _color();
+    @include txt();
+    @include display();
+    @include ico-size('30', 30px);
+    @include border_radius_v(20);
+    @include word-line(1);
+}
+
+@include layout();
