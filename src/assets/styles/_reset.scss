@@ -1,0 +1,97 @@
+@import './_normalize.scss';
+
+a,article,aside,audio,body,button,canvas,code,dd,details,div,dl,em,figure,footer,form,h1,h2,h3,h4,h5,h6,header,hgroup,html,i,img,input,label,li,main,nav,ol,p,pre,section,select,span,sub,sup,table,td,textarea,th,tr,ul,video {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: OpenSans,Arial,Helvetica,PingFang SC,"Helvetica Neue",Roboto,"Droid Sans", Microsoft YaHei,SimSun,sans-serif;
+    font-size: 13px;
+    color: #333;
+    line-height: 1.7;
+    background-color: #f4f5f6;
+    -webkit-overflow-scrolling: touch;
+}
+
+dd,dl,dt,figure,h1,h2,h3,h4,h5,h6,li,ol,p,ul {
+    padding: 0;
+    margin: 0;
+    font-weight: 400;
+    word-wrap: break-word;
+}
+
+sub,sup {
+    position: static;
+    font-size: 100%;
+    top: auto;
+}
+
+button,input,select,textarea {
+    outline: none;
+    border: 0;
+}
+
+button,code,input,pre,select,textarea {
+    font-family: 'Avenir', Helvetica, Arial, sans-serif;
+}
+
+code,pre {
+    overflow: auto;
+    word-break: break-all;
+    word-wrap: break-word;
+}
+
+ul {list-style: none;}
+
+a {
+    text-decoration: none;
+    font-size: inherit;
+    outline: none;
+    color: inherit;
+    cursor: pointer;
+}
+
+table {width: 100%}
+
+img {
+    max-width: 100%;
+    height: auto;
+    vertical-align: middle;
+}
+
+table,td,th,tr {
+    border-collapse: collapse;
+    border-spacing: 0;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    outline: 0;
+    font-weight: 400;
+    font-style: normal;
+}
+
+::-webkit-input-placeholder {color: #999;}
+
+::-moz-placeholder {color: #999;}
+
+::-webkit-scrollbar {
+    height: 6px;
+    width: 6px;
+    border-radius: 3px;
+}
+
+::-webkit-scrollbar,::-webkit-scrollbar:hover {background: hsla(0,0%,40%,.3);}
+
+::-webkit-scrollbar-thumb {
+    background: hsla(0,0%,40%,.7);
+    border-radius: 6px;
+}
+
+::-webkit-scrollbar-thumb:hover {background-color: #676767;}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button { -webkit-appearance: none; }
+input[type="number"]{ -moz-appearance: textfield; }
+input:-internal-autofill-selected{box-shadow: 0 0 0 1000px white inset;}

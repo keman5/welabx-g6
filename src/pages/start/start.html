@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta label="viewport" content="width=device-width, initial-scale=1.0">
+  <title>antv/G6 纯 js 使用案例</title>
+  <link rel="stylesheet" href="./reset.css" type="text/css">
+  <style>
+    #graph{
+      width: 100%;
+      height: 100vh;
+    }
+  </style>
+</head>
+<body>
+
+  <div id="graph"></div>
+
+  <script src="./g6.js"></script>
+  <script>
+    window.onload = function () {
+      const graph = new G6.Graph({
+        container: document.getElementById('graph'),
+        width:     window.innerWidth,
+        height:    window.innerHeight,
+        layout:    {
+          type: 'dagre',
+        },
+        defaultNode: {
+          type: 'rect',
+        },
+        defaultEdge: {
+          type: 'polyline',
+        },
+        fitView: true,
+      });
+
+      const data = {
+        nodes: [
+          {
+            id:    '1',
+            label: 'alps_file1',
+          },
+          {
+            id:    '2',
+            label: 'alps_file2',
+          },
+          {
+            id:    '3',
+            label: 'alps_file3',
+          },
+          {
+            id:    '4',
+            label: 'sql_file1',
+          },
+          {
+            id:    '5',
+            label: 'sql_file2',
+          },
+          {
+            id:    '6',
+            label: 'feature_etl_1',
+          },
+          {
+            id:    '7',
+            label: 'feature_etl_1',
+          },
+          {
+            id:    '8',
+            label: 'feature_extractor',
+          },
+        ],
+        edges: [
+          {
+            source: '1',
+            target: '2',
+          },
+          {
+            source: '1',
+            target: '3',
+          },
+          {
+            source: '2',
+            target: '4',
+          },
+          {
+            source: '3',
+            target: '4',
+          },
+          {
+            source: '4',
+            target: '5',
+          },
+          {
+            source: '5',
+            target: '6',
+          },
+          {
+            source: '6',
+            target: '7',
+          },
+          {
+            source: '6',
+            target: '8',
+          },
+        ],
+      };
+
+      graph.read(data);
+    };
+  </script>
+</body>
+</html>
