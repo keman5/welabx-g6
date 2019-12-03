@@ -1,4 +1,4 @@
-@import '//at.alicdn.com/t/font_1540180_cj6lvluss1o.css';
+@import '//at.alicdn.com/t/font_1540180_nron3vgjml.css';
 
 .gb-toggle-btn{
     position: absolute;
@@ -26,7 +26,7 @@
     position: relative;
     z-index: 11;
     box-shadow: 0 2px 2px 0 rgba(0,0,0,.1);
-    transition: transform .2s;
+    transition: transform .3s ease-in-out;
     &.hidden{
         transform: translate(0, -100%);
     }
@@ -53,9 +53,8 @@
     z-index: 10;
     width: 40px;
     background: #fff;
-    padding-top: 60px;
-    text-align: center;
-    transition: transform .2s;
+    padding-top: 65px;
+    transition: transform .3s ease-in-out;
     box-shadow: 0 0 2px 0 rgba(0,0,0,.1);
     &.hidden{
         transform: translate(-100%, 0);
@@ -68,9 +67,11 @@
         height: 20px;
         line-height: 20px;
         font-size: 18px;
+        background: #f5f5f5;
+        text-align: center;
         cursor: move;
         &:hover{
-            background: #e0e0e0;
+            background: #f1f1f1;
         }
     }
     .gb-toggle-btn{
@@ -82,6 +83,28 @@
         box-shadow: 2px 0 2px 0 rgba(0,0,0,.1);
         transform: translate(0, -50%);
     }
+    .split{
+        height: 1px;
+        display: block;
+        background: #e0e0e0;
+        margin: 5px 0;
+    }
+    .icon-tool{
+        .iconfont{
+            display: inline-block;
+            vertical-align: top;
+            text-align: center;
+            width: 40px;
+            height: 40px;
+            line-height: 40px;
+            font-size: 30px;
+            cursor: move;
+            border: 1px solid transparent;
+            &:hover {
+                border-color: #ccc;
+            }
+        }
+    }
 }
 
 #configPanel{
@@ -92,14 +115,14 @@
     width: 200px;
     background: #fff;
     padding-top: 40px;
-    transition: transform .2s;
+    transition: transform .3s ease-in-out;
     box-shadow: 0 0 2px 0 rgba(0,0,0,.1);
     &.hidden{
         transform: translate(100%, 0);
     }
     .panel-title{
         font-size: 16px;
-        padding:0 10px;
+        padding:5px 10px;
         border-bottom: 1px solid #ccc;
     }
     .gb-toggle-btn{
@@ -117,10 +140,38 @@
     position: absolute;
     top: 60px;
     left: 50%;
-    height: 50px;
     padding: 10px;
+    user-select: none;
+    white-space: nowrap;
     transform: translate(-50%, 0);
     box-shadow: 0 0 2px 0 rgba(0,0,0,.1);
     background: #fff;
     z-index: 100;
+    .split{
+        display: inline-block;
+        position: relative;
+        top: 5px;
+        height: 20px;
+        width: 1px;
+        background: #999;
+        margin: 0 5px;
+    }
+    .iconfont{
+        display: inline-block;
+        vertical-align: top;
+        text-align: center;
+        line-height: 30px;
+        font-size: 20px;
+        height: 30px;
+        width: 30px;
+        color: #bfbfbf;
+        cursor: pointer;
+        border: 1px solid transparent;
+        &:hover {
+            border-color: #ccc;
+        }
+        &.enabled {
+            color: #666;
+        }
+    }
 }

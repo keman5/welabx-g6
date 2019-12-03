@@ -11,26 +11,72 @@
             />
         </div>
         <!-- 左侧按钮 -->
-        <div
-            id="itemPanel"
-            :class="{'hidden': itemVisible}"
-        >
-            <i class="iconfont icon-h-drag" />
+        <item-panel
+            :graph="graph"
+            @canvas-mouseup="drop"
+        />
+        <!-- 浮动工具条 -->
+        <div id="toolbar">
             <i
-                class="gb-toggle-btn"
-                @click="itemVisible = !itemVisible"
+                class="iconfont icon-undo"
+                @click="addCircle"
+            />
+            <i
+                class="iconfont icon-redo"
+                @click="addCircle"
+            />
+            <i class="split" />
+            <i
+                class="iconfont icon-copy"
+                @click="copyNode"
+            />
+            <i
+                class="iconfont icon-paste"
+                @click="addCircle"
+            />
+            <i class="split" />
+            <i
+                class="iconfont icon-line-style"
+                @click="addCircle"
+            />
+            <i
+                class="iconfont icon-line-strong"
+                @click="addCircle"
+            />
+            <i class="split" />
+            <i
+                class="iconfont icon-toup"
+                @click="addCircle"
+            />
+            <i
+                class="iconfont icon-todown"
+                @click="addCircle"
+            />
+            <i class="split" />
+            <i
+                class="iconfont icon-font-size"
+                @click="addCircle"
+            />
+            <i
+                class="iconfont icon-actual-size"
+                @click="addCircle"
+            />
+            <i
+                class="iconfont icon-full-screen"
+                @click="addCircle"
             />
         </div>
-        <!-- 浮动工具条 -->
-        <div id="toolbar" />
         <!-- 挂载节点 -->
-        <div id="canvasPanel" />
+        <div
+            id="canvasPanel"
+            @dragover.prevent=""
+        />
         <!-- 配置面板 -->
         <div
             id="configPanel"
-            :class="{'hidden': configVisible}"
+            :class="{'hidden': !configVisible}"
         >
-            <h2 class="panel-title">配置</h2>
+            <h2 class="panel-title">数据配置</h2>
             <i
                 class="gb-toggle-btn"
                 @click="configVisible = !configVisible"
@@ -42,26 +88,41 @@
 <script>
     import G6 from '@antv/g6';
     import Grid from '@antv/g6/plugins/grid';
-    import dataset from './dataset.json';
+    import ItemPanel from './plugins/ItemPanel.vue';
 
     export default {
+        components: {
+            ItemPanel,
+        },
         data () {
             return {
+                graph:     {},
+                highLight: {
+                    undo: false,
+                    redo: false,
+                },
+                // 保存线条样式
+                lineStyle: {
+                    type:  'line',
+                    width: 1,
+                },
                 headVisible:   false,
-                itemVisible:   false,
                 configVisible: false,
             };
         },
         mounted () {
             this.createGraphic();
         },
+        beforeDestroy () {
+            this.graph.destroy();
+        },
         methods: {
             createGraphic () {
                 const { innerWidth, innerHeight } = window;
-                // 实例化 grid 插件
+                // 背景网格
                 const grid = new Grid();
 
-                const graph = new G6.Graph({
+                this.graph = new G6.Graph({
                     container: 'canvasPanel',         // String | HTMLElement，必须，在 Step 1 中创建的容器 id 或容器本身
                     width:     innerWidth,   // Number，必须，图的宽度
                     height:    innerHeight,  // Number，必须，图的高度
@@ -71,16 +132,18 @@
                     modes:     {
                         default: ['drag-canvas', 'zoom-canvas', 'clickSelected'],  // 允许拖拽画布、放缩画布、拖拽节点
                     },
+                    /* defaultNode: {
+                        shape: 'modelRect',
+                    }, */
                     // 节点不同状态下的样式集合
                     nodeStateStyles: {
                         // 鼠标 hover 上节点，即 hover 状态为 true 时的样式
                         hover: {
-                            fill: '#000',
+                            fill: '#eee',
                         },
                         // 鼠标点击节点，即 click 状态为 true 时的样式
                         click: {
-                            stroke:    '#000',
-                            lineWidth: 3,
+                            stroke: '#000',
                         },
                     },
                     // 节点不同状态下的样式集合
@@ -93,61 +156,84 @@
                     plugins: [grid],
                 });
 
-                graph.read(dataset);  // 读取 Step 2 中的数据源到图上
+                // this.graph.read({});  // 读取 Step 2 中的数据源到图上
 
-                this.initEvents(graph);
+                this.initEvents();
             },
-            initEvents (graph) {
+            // 初始化事件
+            initEvents () {
 
                 // 鼠标进入节点
-                graph.on('node:mouseenter', e => {
+                this.graph.on('node:mouseenter', e => {
                     const nodeItem = e.item;  // 获取鼠标进入的节点元素对象
 
-                    graph.setItemState(nodeItem, 'hover', true);  // 设置当前节点的 hover 状态为 true
+                    this.graph.setItemState(nodeItem, 'hover', true);  // 设置当前节点的 hover 状态为 true
                 });
 
                 // 鼠标离开节点
-                graph.on('node:mouseleave', e => {
+                this.graph.on('node:mouseleave', e => {
                     const nodeItem = e.item;  // 获取鼠标离开的节点元素对象
 
-                    graph.setItemState(nodeItem, 'hover', false); // 设置当前节点的 hover 状态为 false
+                    this.graph.setItemState(nodeItem, 'hover', false); // 设置当前节点的 hover 状态为 false
                 });
 
                 // 点击节点
-                graph.on('node:click', e => {
+                this.graph.on('node:click', e => {
                     // 先将所有当前是 click 状态的节点置为非 click 状态
-                    const clickNodes = graph.findAllByState('node', 'click');
+                    const clickNodes = this.graph.findAllByState('node', 'click');
 
                     clickNodes.forEach(cn => {
-                        graph.setItemState(cn, 'click', false);
+                        this.graph.setItemState(cn, 'click', false);
                     });
                     const nodeItem = e.item;  // 获取被点击的节点元素对象
 
-                    graph.setItemState(nodeItem, 'click', true); // 设置当前节点的 click 状态为 true
+                    this.graph.setItemState(nodeItem, 'click', true); // 设置当前节点的 click 状态为 true
                 });
 
                 // 点击边
-                graph.on('edge:click', e => {
+                this.graph.on('edge:click', e => {
                     // 先将所有当前是 click 状态的边置为非 click 状态
-                    const clickEdges = graph.findAllByState('edge', 'click');
+                    const clickEdges = this.graph.findAllByState('edge', 'click');
 
                     clickEdges.forEach(ce => {
-                        graph.setItemState(ce, 'click', false);
+                        this.graph.setItemState(ce, 'click', false);
                     });
                     const edgeItem = e.item;  // 获取被点击的边元素对象
 
-                    graph.setItemState(edgeItem, 'click', true); // 设置当前边的 click 状态为 true
+                    this.graph.setItemState(edgeItem, 'click', true); // 设置当前边的 click 状态为 true
                 });
 
-                // 2000 ms 后切换为允许节点重叠的 force 布局
-                setTimeout(() => {
-                    graph.updateLayout({
-                        type:           'force',
-                        preventOverlap: true,
-                        // nodeSize:       10,
-                        linkDistance:   120,
-                    });   // 参数为 String 代表布局名称
-                }, 2000);
+            },
+            // 复制节点
+            copyNode () {
+
+            },
+            // 粘贴节点
+            paste () {
+
+            },
+            // 添加圆圈
+            addCircle (e) {
+                const model = {
+                    label: 'node',
+                    x:     e.clientX,
+                    y:     e.clientY,
+                    style: {
+                        fill: '#fff',
+                    },
+                };
+
+                this.graph.addItem('node', model);
+            },
+            // 拖放事件
+            drop (e) {
+                console.log(e);
+                this.addCircle(e);
+                const node = this.graph.findAll('node', node => {
+                    return node.get('model').x;
+                });
+
+                console.log(node);
 
             },
         },
