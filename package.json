@@ -22,7 +22,7 @@
         "vue-router": "^3.1.2"
     },
     "devDependencies": {
-        "@antv/g6": "^3.1.9",
+        "@antv/g6": "^3.2.4",
         "@babel/core": "^7.5.4",
         "@babel/plugin-transform-runtime": "^7.5.0",
         "@vue/babel-preset-app": "^3.9.2",

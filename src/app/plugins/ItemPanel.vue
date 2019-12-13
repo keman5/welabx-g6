@@ -8,23 +8,27 @@
         <div class="icon-tool">
             <i
                 draggable="true"
+                data-type="circle"
                 class="iconfont icon-circle"
-                @click="addCircle"
+                @click="addNode"
             />
             <i
                 draggable="true"
+                data-type="rect"
                 class="iconfont icon-rect"
-                @click="addCircle"
+                @click="addNode"
             />
             <i
                 draggable="true"
+                data-type="ellipse"
                 class="iconfont icon-ellipse"
-                @click="addCircle"
+                @click="addNode"
             />
             <i
                 draggable="true"
+                data-type="diamond"
                 class="iconfont icon-diamond"
-                @click="addCircle"
+                @click="addNode"
             />
             <i class="split" />
             <i
@@ -56,8 +60,7 @@
             icons.forEach(icon => {
                 // 拖拽结束
                 icon.addEventListener('dragend', e => {
-                    // e.dataTransfer.setData('Text', e.target);
-                    this.$emit('canvas-mouseup', e);
+                    this.$emit('canvas-dragend', e);
                 });
             });
 
@@ -67,7 +70,7 @@
             }, false);
         },
         methods: {
-            addCircle ($event) {
+            addNode ($event) {
                 const { target } = $event;
                 const classes = [...target.classList].join(' ');
 
