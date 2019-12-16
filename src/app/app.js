@@ -6,7 +6,16 @@
 
 import Vue from 'vue';
 import App from './App.vue';
+import VueRouter from 'vue-router';
+import routes from './router';
 import '@styles/base.scss';
+
+const router = new VueRouter({
+    mode: 'history',
+    routes,
+});
+
+Vue.use(VueRouter);
 
 // 添加 eventbus
 Vue.prototype.$bus = new Vue();
@@ -17,6 +26,7 @@ Vue.prototype.$bus = new Vue();
 window.$app = new Vue({
     el:     '#app',
     render: h => h(App),
+    router,
 });
 
 // 阻止双击放大
