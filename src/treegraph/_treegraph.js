@@ -1,6 +1,4 @@
 import G6 from '@antv/g6';
-import Grid from '@antv/g6/build/grid';
-import Minimap from '@antv/g6/build/minimap';
 
 export default {
     data () {
@@ -192,10 +190,12 @@ export default {
     },
     methods: {
         init () {
+            let { grid, minimap } = G6;
             const height = this.height;
             const width = this.width;
-            const minimap = new Minimap({ container: 'minimap' });
-            const grid = new Grid(); //网格
+
+            minimap = new Minimap({ container: 'minimap' });
+            grid = new Grid(); //网格
 
             grid.forceAlign = true;
             this.graph = new G6.TreeGraph({

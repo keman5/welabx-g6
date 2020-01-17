@@ -26,7 +26,7 @@ export default G6 => {
             this._clearSelected();
             // 获取被点击的节点元素对象
             // 设置当前节点的 click 状态为 true
-            this.graph.setItemState(e.item, 'selected', true);
+            this.graph.setItemState(e.item, 'selectedItems', true);
         },
         onCanvasClick () {
             this._clearSelected();
@@ -49,16 +49,16 @@ export default G6 => {
         },
         // 清空已选
         _clearSelected () {
-            const selectedNodes = this.graph.findAllByState('node', 'selected');
+            const selectedNodes = this.graph.findAllByState('node', 'selectedItems');
 
             selectedNodes.forEach(cn => {
-                this.graph.setItemState(cn, 'selected', false);
+                this.graph.setItemState(cn, 'selectedItems', false);
             });
 
-            const selectedEdges = this.graph.findAllByState('edge', 'selected');
+            const selectedEdges = this.graph.findAllByState('edge', 'selectedItems');
 
             selectedEdges.forEach(cn => {
-                this.graph.setItemState(cn, 'selected', false);
+                this.graph.setItemState(cn, 'selectedItems', false);
             });
         },
     });

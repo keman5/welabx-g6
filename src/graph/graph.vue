@@ -88,11 +88,11 @@
 
 <script>
     import G6 from '@antv/g6';
-    import Grid from '@antv/g6/plugins/grid';
-    import behavior from '../behavior/index.js';
+    import register from './register';
     import ItemPanel from '../plugins/ItemPanel.vue';
+    import data from './data.js';
 
-    const { Graph, Util } = G6;
+    const { TreeGraph, Grid } = G6;
 
     export default {
         components: {
@@ -115,8 +115,6 @@
             };
         },
         mounted () {
-            // 注册行为
-            behavior(G6);
             // 创建画布
             this.createGraphic();
         },
@@ -129,30 +127,35 @@
                 // 背景网格
                 const grid = new Grid();
 
-                this.graph = new Graph({
-                    container: 'canvasPanel', // String | HTMLElement，必须，在 Step 1 中创建的容器 id 或容器本身
-                    width:     innerWidth, // Number，必须，图的宽度
-                    height:    innerHeight, // Number，必须，图的高度
+                // 注册组件, 行为, 事件等
+                register(G6);
+
+                this.graph = new TreeGraph({
+                    container:  'canvasPanel', // String | HTMLElement，必须，在 Step 1 中创建的容器 id 或容器本身
+                    width:      innerWidth, // Number，必须，图的宽度
+                    height:     innerHeight, // Number，必须，图的高度
+                    pixelRatio: 2,
                     // fitViewPadding: 20,
-                    fitView:   true,
-                    animate:   true,
-                    modes:     {
+                    fitView:    true,
+                    animate:    true,
+                    modes:      {
                         // 允许拖拽画布、缩放画布、拖拽节点
                         default: [
                             'drag-canvas',
-                            'zoom-canvas',
+                            //'zoom-canvas',
                             {
                                 type:    'click-select',
                                 trigger: 'ctrl',
                             },
                             'click-selected',
+                            'delete-item',
                             'drag-node',
                             'hover-node',
                             'ahchor-active',
                         ],
                     },
                     defaultNode: {
-                        shape:        'modelRect',
+                        type:         'rect',
                         size:         [140, 50],
                         anchorPoints: [[0, 0], [0, 1], [1, 0], [1, 1]],
                         linkPoints:   {
@@ -182,9 +185,37 @@
                         selected: {
                             stroke: 'steelblue',
                         },
+                        hover: {
+                            fill: 'steelblue',
+                        },
+                    },
+                    layout: {
+                        type:      'compactBox',
+                        direction: 'LR',
+                        getId (d) {
+                            return d.id;
+                        },
+                        getVGap () {
+                            return 20;
+                        },
+                        getHGap () {
+                            return 100;
+                        },
                     },
                     plugins: [grid],
                 });
+
+                this.graph.node(node => {
+                    return {
+                        label:    node.id,
+                        labelCfg: {
+                            offset:   10,
+                            position: node.children && node.children.length > 0 ? 'left' : 'right',
+                        },
+                    };
+                });
+                this.graph.read(data);
+                this.graph.fitView();
             },
             // 复制节点
             copyNode () { },
@@ -194,9 +225,9 @@
             addNode (e) {
                 const model = {
                     label: 'node',
-                    id:    Util.uniqueId(),
+                    // id:    Util.uniqueId(),
                     // 形状
-                    shape: e.target.dataset.shape,
+                    type:  e.target.dataset.shape,
                     // 坐标
                     x:     e.clientX,
                     y:     e.clientY,
@@ -211,7 +242,7 @@
             // 添加 edge
             addEdge (e) {
                 const model = {
-                    id:    Util.uniqueId(),
+                    // id:    Util.uniqueId(),
                     label: 'edge',
                 };
 
