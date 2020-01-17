@@ -3,7 +3,6 @@
  * date 11/09/2019
  * 应用程序入口文件
  */
-
 import Vue from 'vue';
 import App from './App.vue';
 import VueRouter from 'vue-router';
