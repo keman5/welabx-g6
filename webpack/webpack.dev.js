@@ -1,45 +1,40 @@
-/*!
+/**
  * @author claude
  * date 07/05/2019
  * webpack dev 配置
  */
 
-const path = require('path');
 const webpack = require('webpack');
-const merge = require('webpack-merge');
-const { webpackConfig } = require('./webpack.common.js');
-const plugins = [
-    new webpack.DefinePlugin({
-        'process.env.NODE_ENV': JSON.stringify('development'),
-    }),
-    new webpack.HotModuleReplacementPlugin(),
-];
+const envFile = require('dotenv-extended').load({
+    path: `${process.env.INIT_CWD}/.env`,
+});
+// 默认编译 test
+const STAGE = JSON.parse(process.env.npm_config_argv).cooked[2] || 'test';
+const { coreConfig, userConfig } = require('./webpack.common');
+const env = {};
 
-const devServer = {
-    mode:      'development',
-    devtool:   '#source-map',
-    devServer: {
-        compress:           true,
-        historyApiFallback: true,
-        contentBase:        path.join(__dirname, '../dist'),
-        host:               '127.0.0.1',
-        port:               4300,
-        hot:                true,
-        open:               true,
-        progress:           false,
-        quiet:              true,
-        overlay:            {
-            warning: true,
-            errors:  true,
-        },
-        proxy: {},
-    },
-    watchOptions: {
-        ignored: [
-            'node_modules',
-        ],
-    },
-    plugins,
+for (const key in envFile) {
+    env[key] = JSON.stringify(envFile[key]);
+}
+
+coreConfig
+    // 热更新
+    .plugin('HotModuleReplacement')
+        .use(webpack.HotModuleReplacementPlugin)
+        .end()
+    // 注入环境变量
+    .plugin('definePlugin')
+        .use(webpack.DefinePlugin, [{
+            'process': {
+                env: {
+                    ...env,
+                    STAGE,
+                },
+            },
+        }])
+        .end()
+
+module.exports = {
+    coreConfig,
+    userConfig,
 };
-
-module.exports = merge(webpackConfig, devServer);
