@@ -56,10 +56,10 @@
     "@antv/util" "~2.0.0"
     detect-browser "^4.6.0"
 
-"@antv/g6@^3.4.1":
-  version "3.4.1"
-  resolved "https://registry.yarnpkg.com/@antv/g6/-/g6-3.4.1.tgz#5dbdf61c7855a1e6be85a3df63e307587ac38e43"
-  integrity sha512-YpRofcJQRUz+GGdBwOoSxgexuqtvg0N+2Xhwdp3D9YBq24CF6puE3y1OShv+87IWMw8NL5dM7h9hHpydEqfaPQ==
+"@antv/g6@^3.4.3":
+  version "3.4.3"
+  resolved "https://registry.yarnpkg.com/@antv/g6/-/g6-3.4.3.tgz#7d450f2a6acd82513c7497a433655aff65930081"
+  integrity sha512-jiT2X4swGaxlEPSBuZFrufhccMZ2gZPkPpfcDvZF/NSgAwSXuiM9aMDUyZUrV3qUWbfQhwmZ6UKejFzNz/86Nw==
   dependencies:
     "@antv/dom-util" "^2.0.1"
     "@antv/event-emitter" "~0.1.0"

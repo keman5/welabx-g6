@@ -82,17 +82,18 @@
                 class="gb-toggle-btn"
                 @click="configVisible = !configVisible"
             />
+            <div class="config-data">
+                {{ config }}
+            </div>
         </div>
     </div>
 </template>
 
 <script>
-    import G6 from '@antv/g6';
+    import G6 from '@antv/g6/es/index';
     import register from './register';
     import ItemPanel from '../plugins/ItemPanel.vue';
     import data from './data.js';
-
-    const { TreeGraph, Grid } = G6;
 
     export default {
         components: {
@@ -112,11 +113,17 @@
                 },
                 headVisible:   false,
                 configVisible: false,
+                config:        {
+
+                },
             };
         },
         mounted () {
             // 创建画布
-            this.createGraphic();
+            this.$nextTick(() => {
+                this.createGraphic();
+                this.initGraphEvent();
+            });
         },
         beforeDestroy () {
             this.graph.destroy();
@@ -125,20 +132,26 @@
             createGraphic () {
                 const { innerWidth, innerHeight } = window;
                 // 背景网格
-                const grid = new Grid();
+                const grid = new G6.Grid();
 
                 // 注册组件, 行为, 事件等
                 register(G6);
 
-                this.graph = new TreeGraph({
-                    container:  'canvasPanel', // String | HTMLElement，必须，在 Step 1 中创建的容器 id 或容器本身
-                    width:      innerWidth, // Number，必须，图的宽度
-                    height:     innerHeight, // Number，必须，图的高度
-                    pixelRatio: 2,
-                    // fitViewPadding: 20,
-                    fitView:    true,
-                    animate:    true,
-                    modes:      {
+                this.graph = new G6.Graph({
+                    container:      'canvasPanel',
+                    width:          innerWidth,
+                    height:         innerHeight - 40,
+                    // renderer:       'svg',
+                    //fitView:        true,
+                    fitViewPadding: 20,
+                    // animate:    true,
+                    layout:         {
+                        type:    'dagre',
+                        rankdir: 'LR',
+                        nodesep: 30,
+                        ranksep: 50,
+                    },
+                    modes: {
                         // 允许拖拽画布、缩放画布、拖拽节点
                         default: [
                             'drag-canvas',
@@ -149,39 +162,28 @@
                             },
                             'click-selected',
                             'delete-item',
-                            'drag-node',
+                            /* {
+                                type:           'drag-node',
+                                enableDelegate: true,
+                            }, */
                             'hover-node',
-                            'ahchor-active',
+                            'dragNode',
                         ],
                     },
                     defaultNode: {
-                        type:         'rect',
-                        size:         [140, 50],
-                        anchorPoints: [[0, 0], [0, 1], [1, 0], [1, 1]],
-                        linkPoints:   {
-                            top:    true,
-                            right:  true,
-                            bottom: true,
-                            left:   true,
-                            fill:   '#fff',
-                            stroke: '#1890FF',
-                            show:   false,
-                        },
+                        type: 'circle-node',
                     },
                     // 节点不同状态下的样式集合
                     nodeStateStyles: {
-                        // 鼠标 hover 上节点，即 hover 状态为 true 时的样式
                         hover: {
                             fill: '#eee',
                         },
-                        // 鼠标点击节点，即 selected 状态为 true 时的样式
                         selected: {
                             stroke: '#1890FF',
                         },
                     },
                     // 节点不同状态下的样式集合
                     edgeStateStyles: {
-                        // 鼠标点击边，即 selected 状态为 true 时的样式
                         selected: {
                             stroke: 'steelblue',
                         },
@@ -189,33 +191,12 @@
                             fill: 'steelblue',
                         },
                     },
-                    layout: {
-                        type:      'compactBox',
-                        direction: 'LR',
-                        getId (d) {
-                            return d.id;
-                        },
-                        getVGap () {
-                            return 20;
-                        },
-                        getHGap () {
-                            return 100;
-                        },
-                    },
                     plugins: [grid],
                 });
 
-                this.graph.node(node => {
-                    return {
-                        label:    node.id,
-                        labelCfg: {
-                            offset:   10,
-                            position: node.children && node.children.length > 0 ? 'left' : 'right',
-                        },
-                    };
-                });
                 this.graph.read(data);
-                this.graph.fitView();
+                this.graph.paint();
+                // this.graph.fitView();
             },
             // 复制节点
             copyNode () { },
@@ -227,14 +208,10 @@
                     label: 'node',
                     // id:    Util.uniqueId(),
                     // 形状
-                    type:  e.target.dataset.shape,
+                    type:  'rect-node', // e.target.dataset.shape
                     // 坐标
-                    x:     e.clientX,
-                    y:     e.clientY,
-                    // 默认样式
-                    style: {
-                        fill: '#fff',
-                    },
+                    x:     e.clientX - 50,
+                    y:     e.clientY + 200,
                 };
 
                 this.graph.addItem('node', model);
@@ -247,6 +224,18 @@
                 };
 
                 this.graph.addItem('edge', model);
+            },
+            // 初始化图事件
+            initGraphEvent() {
+                this.graph.on('after-item-selected', data => {
+                    this.configVisible = !!data;
+
+                    if(data) {
+                        this.config = {
+                            id: data._cfg.id,
+                        };
+                    }
+                });
             },
         },
     };

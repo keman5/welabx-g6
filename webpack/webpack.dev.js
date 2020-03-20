@@ -25,7 +25,7 @@ const devServer = {
         host:               '127.0.0.1',
         port:               4300,
         hot:                true,
-        open:               true,
+        open:               false,
         progress:           false,
         quiet:              true,
         overlay:            {

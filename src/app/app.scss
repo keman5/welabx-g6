@@ -12,11 +12,13 @@
 .root,
 #canvasPanel{
     position: fixed!important;
-    top: 0;
     right: 0;
     bottom: 0;
     left: 0;
 }
+
+.root{top: 0;}
+#canvasPanel{top: 40px;}
 
 #headPanel{
     height: 40px;
@@ -112,9 +114,9 @@
     top: 0;
     right: 0;
     bottom: 0;
-    width: 200px;
-    background: #fff;
+    width: 25%;
     padding-top: 40px;
+    background: #fff;
     transition: transform .3s ease-in-out;
     box-shadow: 0 0 2px 0 rgba(0,0,0,.1);
     &.hidden{
@@ -138,9 +140,9 @@
 
 #toolbar{
     position: absolute;
-    top: 60px;
+    top: 0;
     left: 50%;
-    padding: 10px;
+    padding:5px 10px;
     user-select: none;
     white-space: nowrap;
     transform: translate(-50%, 0);
@@ -175,3 +177,5 @@
         }
     }
 }
+
+.g6-grid{transform: none !important;}

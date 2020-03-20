@@ -1,80 +1,114 @@
 export default {
-    'id':       'Modeling Methods',
-    'children': [
+    nodes: [
         {
-            'id':       'Classification',
-            'children': [
-                {
-                    'id': 'Logistic regression',
-                },
-                {
-                    'id': 'Linear discriminant analysis',
-                },
-            ],
+          id:    '1',
+          label: '公司1',
         },
         {
-            'id':       'Consensus',
-            'children': [
-                {
-                    'id':       'Models diversity',
-                    'children': [
-                        {
-                            'id': 'Different initializations',
-                        },
-                        {
-                            'id': 'Different parameter choices',
-                        },
-                        {
-                            'id': 'Different architectures',
-                        },
-                    ],
-                },
-                {
-                    'id':       'Methods',
-                    'children': [
-                        {
-                            'id': 'Classifier selection',
-                        },
-                        {
-                            'id': 'Classifier fusion',
-                        },
-                    ],
-                },
-                {
-                    'id':       'Common',
-                    'children': [
-                        {
-                            'id': 'Bagging',
-                        },
-                        {
-                            'id': 'Boosting',
-                        },
-                        {
-                            'id': 'AdaBoost',
-                        },
-                    ],
-                },
-            ],
+          id:    '2',
+          label: '公司2',
         },
         {
-            'id':       'Regression',
-            'children': [
-                {
-                    'id': 'Multiple linear regression',
-                },
-                {
-                    'id': 'Partial least squares',
-                },
-                {
-                    'id': 'Multi-layer feedforward neural network',
-                },
-                {
-                    'id': 'General regression neural network',
-                },
-                {
-                    'id': 'Support vector regression',
-                },
-            ],
+          id:    '3',
+          label: '公司3',
+        },
+        {
+          id:    '4',
+          label: '公司4',
+        },
+        {
+          id:    '5',
+          label: '公司5',
+        },
+        {
+          id:    '6',
+          label: '公司6',
+        },
+        {
+          id:    '7',
+          label: '公司7',
+        },
+        {
+          id:    '8',
+          label: '公司8',
+        },
+        {
+          id:    '9',
+          label: '公司9',
+        },
+      ],
+      edges: [
+        {
+          source: '1',
+          target: '2',
+          data:   {
+            type:   'A',
+            amount: '100,000 元',
+            date:   '2019-08-03',
+          },
+        },
+        {
+          source: '1',
+          target: '3',
+          data:   {
+            type:   'B',
+            amount: '100,000 元',
+            date:   '2019-08-03',
+          },
+        },
+        {
+          source: '2',
+          target: '5',
+          data:   {
+            type:   'C',
+            amount: '100,000 元',
+            date:   '2019-08-03',
+          },
+        },
+        {
+          source: '5',
+          target: '6',
+          data:   {
+            type:   'B',
+            amount: '100,000 元',
+            date:   '2019-08-03',
+          },
+        },
+        {
+          source: '3',
+          target: '4',
+          data:   {
+            type:   'C',
+            amount: '100,000 元',
+            date:   '2019-08-03',
+          },
+        },
+        {
+          source: '4',
+          target: '7',
+          data:   {
+            type:   'B',
+            amount: '100,000 元',
+            date:   '2019-08-03',
+          },
+        },
+        {
+          source: '1',
+          target: '8',
+          data:   {
+            type:   'B',
+            amount: '100,000 元',
+            date:   '2019-08-03',
+          },
+        },
+        {
+          source: '1',
+          target: '9',
+          data:   {
+            type:   'C',
+            amount: '100,000 元',
+            date:   '2019-08-03',
+          },
         },
     ],
 };

@@ -7,10 +7,10 @@ export default G6 => {
             };
         },
         onNodeEnter (e) {
-            this.graph.setItemState(e.item, 'show-anchor', true);
+            this.graph.setItemState(e.item, 'anchorShow', true);
         },
         onNodeLeave (e) {
-            this.graph.setItemState(e.item, 'show-anchor', false);
+            this.graph.setItemState(e.item, 'anchorShow', false);
         },
     });
 };
