@@ -32,8 +32,9 @@ export default G6 => {
                     ...nodeStyles,
                     width,
                     height,
-                    x:             0,
-                    y:             0,
+                    // 将图形中心坐标移动到图形中心, 用于方便鼠标位置计算
+                    x:             -width/2,
+                    y:             -height/2,
                     radius:        5,
                     shadowOffsetX: 0,
                     shadowOffsetY: 2,
@@ -57,16 +58,15 @@ export default G6 => {
     G6.registerNode('circle-node', {
         shapeType: 'circle',
         getShapeStyle (cfg) {
-            const radius = cfg.style.r || 50;
+            const r = cfg.style.r || 50;
 
             return {
                 style: {
                     ...nodeStyles,
-                    width:  0,
-                    height: 0,
-                    x:      0,
-                    y:      0,
-                    r:      radius,
+                    r, // 半径
+                    // 将图形中心坐标移动到图形中心, 用于方便鼠标位置计算
+                    x: 0,
+                    y: 0,
                 },
                 anchorPointStyles,
                 labelCfg: nodeLabelStyles,
@@ -86,16 +86,13 @@ export default G6 => {
     G6.registerNode('triangle-node', {
         shapeType: 'triangle',
         getShapeStyle (cfg) {
-            const radius = cfg.style.r || 50;
 
             return {
                 style: {
                     ...nodeStyles,
-                    width:  0,
-                    height: 0,
-                    x:      0,
-                    y:      0,
-                    r:      radius,
+                    // 将图形中心坐标移动到图形中心, 用于方便鼠标位置计算
+                    x: 0,
+                    y: 0,
                 },
                 anchorPointStyles,
                 labelCfg: nodeLabelStyles,

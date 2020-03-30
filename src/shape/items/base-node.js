@@ -57,8 +57,8 @@ export default G6 => {
                         y: bbox.minY + bbox.height * p[1],
                         ...anchorPointStyles,
                     },
+                    nodeId:    group.get('item')._cfg.id,
                     className: 'node-anchor',
-                    name:      'node-anchor',
                     draggable: true,
                     isAnchor:  true,
                     index:     i,
@@ -78,7 +78,7 @@ export default G6 => {
             };
             // 查找指定锚点
             group.getAnchor = (i) => {
-                return group.anchorShapes.filter(c => c.get('index') === i);
+                return group.anchorShapes.filter(c => c.get('className') === 'node-anchor' && c.get('index') === i);
             };
             // 查找所有锚点背景
             group.getAllAnchorBg = () => {
@@ -88,9 +88,7 @@ export default G6 => {
         /* 添加文本节点 */
         addLabel (cfg, group) {
             if (cfg.label) {
-                const { type, style, labelCfg } = this.options;
-                const width = style ? style.width : 50;
-                const height = style ? style.height : 50;
+                const { type, labelCfg } = this.options;
 
                 // 字体小于12时 svg会报错
                 if (labelCfg && labelCfg.fontSize < 12) {
@@ -99,8 +97,6 @@ export default G6 => {
 
                 group.addShape('text', {
                     attrs: {
-                        x:    width / 2,
-                        y:    height / 2,
                         text: cfg.label,
                         ...labelCfg,
                     },
@@ -126,7 +122,7 @@ export default G6 => {
         draw (cfg, group) {
             const shapeName = this.shapeType || 'rect';
             // 合并外部样式和默认样式
-            const attrs = Util.deepMix(cfg, this.getShapeStyle(cfg));
+            const attrs = Util.deepMix({}, this.getShapeStyle(cfg), cfg);
 
             // 添加节点
             const shape = group.addShape(shapeName, {
@@ -135,7 +131,6 @@ export default G6 => {
                     labelCfg: attrs.labelCfg,
                 },
                 className: `${shapeName}-shape`,
-                name:      `${shapeName}-shape`,
                 draggable: true,
             });
 
@@ -169,7 +164,7 @@ export default G6 => {
         /* 绘制后的附加操作，默认没有任何操作 */
         afterDraw (cfg, group) {
             group.getItem = className => {
-                return group.get('children').find(item => item.cfg.className === className);
+                return group.get('children').find(item => item.get('className') === className);
             };
 
             this.runAnimate(cfg, group);

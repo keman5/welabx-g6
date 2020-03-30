@@ -4,9 +4,12 @@
  * @description 锚点事件
  */
 
-export default (anchor, group, p) => {
+let anchorNodeId = null; // dragover 也会发生在拖拽的锚点上, 用于记录当前拖拽的节点id
 
+export default (anchor, group, p) => {
+    // 鼠标移入事件
     anchor.on('mouseenter', () => {
+        // 可以传入多个键值对
         anchor.attr({
             cursor: 'crosshair',
         });
@@ -14,52 +17,80 @@ export default (anchor, group, p) => {
 
     // 拖拽事件
     anchor.on('dragstart', e => {
-        const { bboxCache: bbox, model: { style } } = group.get('item')._cfg;
+        const { id, bboxCache, model: { style } } = group.get('item')._cfg;
         const lineWidth = (style.lineWidth || 0) / 2;
-        const point = [bbox.width * p[0] - lineWidth, bbox.height * p[1] - lineWidth];
+        const point = [bboxCache.width * (p[0] - 0.5) - lineWidth, bboxCache.height * (p[1] - 0.5) - lineWidth];
 
         // 添加线条
-        const line= group.addShape('path', {
+        const line = group.addShape('path', {
             attrs: {
-                zIndex:          1,
-                lineCap:         'round',
-                stroke:          '#1890FF',
-                lineWidth:       1,
-                lineAppendWidth: 5,
-                lineDash:        [5, 5],
-                path:            [
-                    ['M', point[0], point[1]],
-                    ['L', point[0], point[1]],
+                lineCap:   'round',
+                stroke:    '#1890FF',
+                lineDash:  [5, 5],
+                lineWidth: 1,
+                path:      [
+                    ['M', ...point],
+                    ['L', ...point],
                 ],
-                x: 0,
-                y: 0,
             },
-            className: 'dashed-line',
+            className:  'dashed-line',
+            pointStart: point,
         });
 
         // 置于顶层
         group.toFront();
         line.toFront();
+        anchorNodeId = id;
     });
 
+    // 拖拽中
     anchor.on('drag', e => {
-        const bbox = group.get('children')[0].cfg.canvasBox;
-        const item = group.getItem('dashed-line');
+        const bboxCache = group.get('item').getBBox();
+        const line = group.getItem('dashed-line');
+        const pointStart = line.get('pointStart');
 
-        /* item.attr({
+        line.toFront();
+        line.attr({
             path: [
-                ['M', -10, -11],
-                ['L', e.x - bbox.x - bbox.width / 2, e.y - bbox.y - bbox.height / 2],
+                /**
+                 * 计算方法:
+                 * 鼠标位置 - box左上角 - width/2 => 中心坐标
+                 * 这里减1px 是为了让鼠标释放时 node: drag 事件监听到,而不是当前虚线
+                 */
+                ['M', ...pointStart],
+                ['L', e.x - bboxCache.x - bboxCache.width / 2 - 1, e.y - bboxCache.y - bboxCache.height / 2 - 1],
             ],
-        }); */
+        });
     });
 
+    // 拖拽结束删除虚线
     anchor.on('dragend', e => {
         const item = group.getItem('dashed-line');
 
         item.remove();
-
-        console.log('end', e.x, e.y);
-
     });
+
+    // 拖拽到其他锚点上
+    anchor.on('dragover', e => {
+        // 排除相同节点的锚点
+        if (e.target.cfg.nodeId !== anchorNodeId) {
+            const { index } = e.target.cfg;
+
+            group.getAllAnchorBg()[index].attr('opacity', '0.7');
+            // group.getAnchor(index)[0].attr('r', '5');
+        }
+    });
+
+    // 拖拽离开事件
+    anchor.on('dragleave', e => {
+        // 排除相同节点的锚点
+        if (e.target.cfg.nodeId !== anchorNodeId) {
+            const { index } = e.target.cfg;
+
+            group.getAllAnchorBg()[index].attr('opacity', '0.5');
+            // group.getAnchor(index)[0].attr('r', '5');
+        }
+    });
+
+    // ! 在锚点上释放见node监听事件
 };

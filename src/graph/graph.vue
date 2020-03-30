@@ -144,7 +144,7 @@
                     // renderer:       'svg',
                     //fitView:        true,
                     fitViewPadding: 20,
-                    // animate:    true,
+                    animate:        true,
                     layout:         {
                         type:    'dagre',
                         rankdir: 'LR',
@@ -172,6 +172,12 @@
                     },
                     defaultNode: {
                         type: 'circle-node',
+                    },
+                    defaultEdge: {
+                        type:  'polyline',
+                        style: {
+                            stroke: '#aaa',
+                        },
                     },
                     // 节点不同状态下的样式集合
                     nodeStateStyles: {

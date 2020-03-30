@@ -36,21 +36,29 @@ const events = {
             const allAnchors = this.getAnchorPoints();
 
             group.showAnchor(group);
-            allAnchors.forEach(p => {
+            allAnchors.forEach((p, i) => {
                 const anchorBg = group.addShape('circle', {
                     attrs: {
-                        x:    bbox.minX + bbox.width * p[0],
-                        y:    bbox.minY + bbox.height * p[1],
-                        fill: 'rgba(24, 144, 255, .5)',
-                        r:    10,
+                        x:       bbox.minX + bbox.width * p[0],
+                        y:       bbox.minY + bbox.height * p[1],
+                        fill:    '#1890ff',
+                        opacity: '0.5',
+                        r:       10,
                     },
+                    nodeId:    group.get('item')._cfg.id,
                     className: 'node-anchor-bg',
+                    isAnchor:  true,
+                    index:     i,
                 });
 
                 group.anchorShapes.push(anchorBg);
             });
 
-            group.getAllAnchors().forEach(item => item.toFront());
+            group.anchorShapes.filter(item => {
+                if (item.get('className') === 'node-anchor') {
+                    item.toFront();
+                }
+            });
         } else {
             // 移除
             group.clearAnchor(group);
