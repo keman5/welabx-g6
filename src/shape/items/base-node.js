@@ -1,6 +1,10 @@
+/**
+ * @author claude
+ * @date 2018/3/15
+ * @description 注册基础节点, 其他节点都在此基础上继承和扩展
+ */
 
-// import createAnchor from '../items/archor-create';
-import events from './item-event';
+import itemEvents from './item-event';
 import anchorEvent from './anchor-event';
 import defaultStyles from '../../utils/defaultStyles';
 
@@ -202,7 +206,7 @@ export default G6 => {
 
             if (buildInEvents.includes(name)) {
                 // 内部this绑定到了当前item实例
-                events[name].call(this, value, group);
+                itemEvents[name].call(this, value, group);
             } else {
                 console.warn(`warning: ${name} 事件回调未注册!`);
             }

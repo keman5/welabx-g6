@@ -58,7 +58,7 @@ export default G6 => {
     G6.registerNode('circle-node', {
         shapeType: 'circle',
         getShapeStyle (cfg) {
-            const r = cfg.style.r || 50;
+            const r = cfg.style.r || 30;
 
             return {
                 style: {

@@ -91,7 +91,7 @@
 
 <script>
     import G6 from '@antv/g6/es/index';
-    import register from './register';
+    import registerFactory from './register-factory';
     import ItemPanel from '../plugins/ItemPanel.vue';
     import data from './data.js';
 
@@ -135,7 +135,7 @@
                 const grid = new G6.Grid();
 
                 // 注册组件, 行为, 事件等
-                register(G6);
+                registerFactory(G6);
 
                 this.graph = new G6.Graph({
                     container:      'canvasPanel',

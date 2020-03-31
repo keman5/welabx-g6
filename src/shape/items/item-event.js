@@ -36,6 +36,7 @@ const events = {
             const allAnchors = this.getAnchorPoints();
 
             group.showAnchor(group);
+
             allAnchors.forEach((p, i) => {
                 const anchorBg = group.addShape('circle', {
                     attrs: {
@@ -102,36 +103,6 @@ const events = {
             }
         }
     },
-
-    /**
-     * @description 节点拖拽开始事件
-     */
-    nodeOnDragStart(value, group) {
-        // console.log(value, group);
-
-    },
-
-    /**
-     * @description 节点拖拽事件
-     */
-    nodeOnDrag(value, group) {
-
-    },
-
-    /**
-     * @description 节点拖拽结束事件
-     */
-    nodeOnDragEnd(value, group) {
-
-    },
-
-    /**
-     * @description 边hover事件
-     */
-    edgeHover(value, group) {
-
-    },
-
 };
 
 export default events;

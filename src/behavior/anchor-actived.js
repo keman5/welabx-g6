@@ -12,8 +12,6 @@ export default G6 => {
         },
         // 移入 anchor
         onAnchorEnter (e) {
-            console.log(e.item);
-
             this.graph.setItemState(e.item, 'anchorActived', true);
         },
         // 移除 anchor

@@ -17,18 +17,17 @@ export default (anchor, group, p) => {
 
     // 拖拽事件
     anchor.on('dragstart', e => {
-        const { id, bboxCache, model: { style } } = group.get('item')._cfg;
+        const cacheCanvasBBox = group.get('cacheCanvasBBox');
+        const { id, model: { style } } = group.get('item')._cfg;
         const lineWidth = (style.lineWidth || 0) / 2;
-        const point = [bboxCache.width * (p[0] - 0.5) - lineWidth, bboxCache.height * (p[1] - 0.5) - lineWidth];
+        const point = [cacheCanvasBBox.width * (p[0] - 0.5) - lineWidth - 2, cacheCanvasBBox.height * (p[1] - 0.5) - lineWidth - 2];
 
         // 添加线条
         const line = group.addShape('path', {
             attrs: {
-                lineCap:   'round',
-                stroke:    '#1890FF',
-                lineDash:  [5, 5],
-                lineWidth: 1,
-                path:      [
+                stroke:   '#1890FF',
+                lineDash: [5, 5],
+                path:     [
                     ['M', ...point],
                     ['L', ...point],
                 ],
