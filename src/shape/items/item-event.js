@@ -67,9 +67,9 @@ const events = {
     },
 
     /**
-     * @description selected事件
+     * @description 节点selected事件
      */
-    selected (value, group) {
+    nodeSelected (value, group) {
         const nodeDefault = this.options.style;
         const textDefault = this.options.nodeLabelStyles;
         const nodeHover = this.options.nodeStateStyles.selected;
@@ -100,6 +100,64 @@ const events = {
             node.attr('cursor', 'default');
             if(text) {
                 text.attr('cursor', 'default');
+            }
+        }
+    },
+
+    /**
+     * @description edge hover事件
+     */
+    edgeHover (value, group) {
+        const edge = group.getChildByIndex(0);
+        const { endArrow } = edge.get('attrs');
+
+        if (value) {
+            edge.attr('stroke', '#1890FF');
+            if (endArrow) {
+                edge.attr('endArrow', {
+                    path: endArrow.path,
+                    fill: '#1890FF',
+                });
+            }
+        } else {
+            edge.attr('stroke', '#aab7c3');
+            if (endArrow) {
+                edge.attr('endArrow', {
+                    path: endArrow.path,
+                    fill: '#aab7c3',
+                });
+            }
+        }
+    },
+
+    /**
+     * @description edge 选中事件
+     */
+    edgeSelected (value, group) {
+        const edge = group.getChildByIndex(0);
+        const { endArrow } = edge.get('attrs');
+
+        if (value) {
+            edge.attr({
+                stroke:    '#1890FF',
+                lineWidth: 2,
+            });
+            if (endArrow) {
+                edge.attr('endArrow', {
+                    path: endArrow.path,
+                    fill: '#1890FF',
+                });
+            }
+        } else {
+            edge.attr({
+                stroke:    '#aab7c3',
+                lineWidth: 1,
+            });
+            if (endArrow) {
+                edge.attr('endArrow', {
+                    path: endArrow.path,
+                    fill: '#aab7c3',
+                });
             }
         }
     },

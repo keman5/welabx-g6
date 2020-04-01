@@ -1,5 +1,5 @@
 export default G6 => {
-    G6.registerBehavior('dragNode', {
+    G6.registerBehavior('drag-node', {
         getDefaultCfg() {
             return {
                 // 记录当前拖拽模式

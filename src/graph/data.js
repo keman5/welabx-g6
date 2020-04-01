@@ -21,14 +21,6 @@ export default {
           label: '公司5',
         },
         {
-          id:    '6',
-          label: '公司6',
-        },
-        {
-          id:    '7',
-          label: '公司7',
-        },
-        {
           id:    '8',
           label: '公司8',
         },
@@ -46,6 +38,7 @@ export default {
             amount: '100,000 元',
             date:   '2019-08-03',
           },
+          label: '条件',
         },
         {
           source: '1',
@@ -55,6 +48,7 @@ export default {
             amount: '100,000 元',
             date:   '2019-08-03',
           },
+          label: '终止',
         },
         {
           source: '2',
@@ -64,15 +58,7 @@ export default {
             amount: '100,000 元',
             date:   '2019-08-03',
           },
-        },
-        {
-          source: '5',
-          target: '6',
-          data:   {
-            type:   'B',
-            amount: '100,000 元',
-            date:   '2019-08-03',
-          },
+          label: '循环',
         },
         {
           source: '3',
@@ -82,15 +68,7 @@ export default {
             amount: '100,000 元',
             date:   '2019-08-03',
           },
-        },
-        {
-          source: '4',
-          target: '7',
-          data:   {
-            type:   'B',
-            amount: '100,000 元',
-            date:   '2019-08-03',
-          },
+          label: '否',
         },
         {
           source: '1',
@@ -100,6 +78,7 @@ export default {
             amount: '100,000 元',
             date:   '2019-08-03',
           },
+          label: '小于',
         },
         {
           source: '1',
@@ -109,6 +88,7 @@ export default {
             amount: '100,000 元',
             date:   '2019-08-03',
           },
+          label: '大于',
         },
     ],
 };

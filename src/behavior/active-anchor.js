@@ -1,5 +1,5 @@
 export default G6 => {
-    G6.registerBehavior('ahchor-active', {
+    G6.registerBehavior('active-ahchor', {
         getEvents () {
             return {
                 'anchor:mouseenter': 'onAnchorEnter',

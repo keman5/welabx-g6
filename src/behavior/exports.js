@@ -1,13 +1,21 @@
-import clickSelected from './click-selected.js';
-import ahchorActived from './anchor-actived.js';
-import deleteItem from './delete-item.js';
-import hoverNode from './hover-node.js';
-import dragNode from './drag-node.js';
+/**
+ * @author claude
+ * @date 2018/3/15
+ * @description 暴露所有注册方法
+ */
+
+import selectNode from './select-node';
+import activeAnchor from './active-anchor';
+import deleteItem from './delete-item';
+import activeEdge from './active-edge';
+import hoverNode from './hover-node';
+import dragNode from './drag-node';
 
 export default G6 => {
-    clickSelected(G6);
-    ahchorActived(G6);
+    selectNode(G6);
+    activeAnchor(G6);
     deleteItem(G6);
+    activeEdge(G6);
     hoverNode(G6);
     dragNode(G6);
 };

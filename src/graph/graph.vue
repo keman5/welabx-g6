@@ -139,7 +139,7 @@
 
                 this.graph = new G6.Graph({
                     container:      'canvasPanel',
-                    width:          innerWidth,
+                    width:          innerWidth - 100,
                     height:         innerHeight - 40,
                     // renderer:       'svg',
                     //fitView:        true,
@@ -147,7 +147,7 @@
                     animate:        true,
                     layout:         {
                         type:    'dagre',
-                        rankdir: 'LR',
+                        // rankdir: 'LR',
                         nodesep: 30,
                         ranksep: 50,
                     },
@@ -155,29 +155,27 @@
                         // 允许拖拽画布、缩放画布、拖拽节点
                         default: [
                             'drag-canvas',
-                            //'zoom-canvas',
-                            {
+                            // 'zoom-canvas',
+                            /* {
                                 type:    'click-select',
                                 trigger: 'ctrl',
-                            },
-                            'click-selected',
-                            'delete-item',
+                            }, */
                             /* {
                                 type:           'drag-node',
                                 enableDelegate: true,
                             }, */
+                            'delete-item',
+                            'select-node',
                             'hover-node',
-                            'dragNode',
+                            'drag-node',
+                            'active-edge',
                         ],
                     },
                     defaultNode: {
                         type: 'circle-node',
                     },
                     defaultEdge: {
-                        type:  'polyline',
-                        style: {
-                            stroke: '#aaa',
-                        },
+                        type: 'base-edge', // base-edge polyline
                     },
                     // 节点不同状态下的样式集合
                     nodeStateStyles: {
@@ -233,7 +231,17 @@
             },
             // 初始化图事件
             initGraphEvent() {
-                this.graph.on('after-item-selected', data => {
+                this.graph.on('after-node-selected', data => {
+                    this.configVisible = !!data;
+
+                    if(data) {
+                        this.config = {
+                            id: data._cfg.id,
+                        };
+                    }
+                });
+
+                this.graph.on('after-edge-selected', data => {
                     this.configVisible = !!data;
 
                     if(data) {

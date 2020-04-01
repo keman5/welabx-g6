@@ -1,6 +1,6 @@
 // 点选项目
 export default G6 => {
-    G6.registerBehavior('click-selected', {
+    G6.registerBehavior('select-node', {
         // 默认配置
         getDefaultCfg () {
             return {
@@ -12,10 +12,7 @@ export default G6 => {
         getEvents () {
             return {
                 'node:click':      'onClick',
-                'edge:click':      'onClick',
                 'canvas:click':    'onCanvasClick',
-                'edge:mouseover':  'onEdgeMouseOver',
-                'edge:mouseleave': 'onEdgeMouseLeave',
                 'node:mouseover':  'onNodeMouseOver',
                 'node:mouseleave': 'onNodeMouseLeave',
             };
@@ -26,20 +23,12 @@ export default G6 => {
             this._clearSelected();
             // 获取被点击的节点元素对象
             // 设置当前节点的 click 状态为 true
-            this.graph.setItemState(e.item, 'selected', true);
+            this.graph.setItemState(e.item, 'nodeSelected', true);
             // 将点击事件发送给 graph 实例
-            this.graph.emit('after-item-selected', e.item);
+            this.graph.emit('after-node-selected', e.item);
         },
-        onCanvasClick () {
+        onCanvasClick (e) {
             this._clearSelected();
-        },
-        // hover edge
-        onEdgeMouseOver (e) {
-            this.graph.setItemState(e.item, 'edgeHover', true);
-        },
-        // 移出 edge
-        onEdgeMouseLeave (e) {
-            this.graph.setItemState(e.item, 'edgeHover', false);
         },
         // hover node
         onNodeMouseOver (e) {
@@ -51,18 +40,18 @@ export default G6 => {
         },
         // 清空已选
         _clearSelected () {
-            const selectedNodes = this.graph.findAllByState('node', 'selected');
+            const selectedNodes = this.graph.findAllByState('node', 'nodeSelected');
 
             selectedNodes.forEach(current => {
-                this.graph.setItemState(current, 'selected', false);
+                this.graph.setItemState(current, 'nodeSelected', false);
             });
 
-            const selectedEdges = this.graph.findAllByState('edge', 'selected');
+            const selectedEdges = this.graph.findAllByState('edge', 'edgeSelected');
 
             selectedEdges.forEach(current => {
-                this.graph.setItemState(current, 'selected', false);
+                this.graph.setItemState(current, 'edgeSelected', false);
             });
-            this.graph.emit('after-item-selected');
+            this.graph.emit('after-node-selected');
         },
     });
 };

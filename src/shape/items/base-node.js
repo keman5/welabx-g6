@@ -101,25 +101,16 @@ export default G6 => {
 
                 group.addShape('text', {
                     attrs: {
-                        text: cfg.label,
+                        x:      0,
+                        y:      0,
+                        width:  100,
+                        height: 100,
+                        text:   cfg.label,
                         ...labelCfg,
                     },
                     className: `${type}-text`,
-                    name:      `${type}-text`,
                     draggable: true,
                 });
-
-                // ! 添加事件绑定
-                /* label.on('click', () => {
-                    console.log('text');
-                });
-                label.on('mouseenter', () => {
-                    console.log('text');
-                });
-
-                label.on('dragstart', () => {
-                    console.log('dragstart');
-                }); */
             }
         },
         /* 绘制节点，包含文本 */
@@ -195,9 +186,8 @@ export default G6 => {
             const buildInEvents = [
                 'anchorShow',
                 'anchorActived',
-                'selected',
+                'nodeSelected',
                 'nodeHover',
-                'edgeHover',
                 'nodeOnDragStart',
                 'nodeOnDrag',
                 'nodeOnDragEnd',
@@ -208,7 +198,7 @@ export default G6 => {
                 // 内部this绑定到了当前item实例
                 itemEvents[name].call(this, value, group);
             } else {
-                console.warn(`warning: ${name} 事件回调未注册!`);
+                console.warn(`warning: node ${name} 事件回调未注册!`);
             }
             // 执行自定义状态回调
             this.customStateCall(name, value, item);

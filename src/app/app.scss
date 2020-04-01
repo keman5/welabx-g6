@@ -14,12 +14,17 @@
     position: fixed!important;
     right: 0;
     bottom: 0;
-    left: 0;
     background: #fff;
 }
 
-.root{top: 0;}
-#canvasPanel{top: 40px;}
+.root{
+    left: 0;
+    top: 0;
+}
+#canvasPanel{
+    left: 100px;
+    top: 40px;
+}
 
 #headPanel{
     height: 40px;

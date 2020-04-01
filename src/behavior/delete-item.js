@@ -6,14 +6,27 @@ export default G6 => {
             };
         },
         onKeydown (e) {
-            const items = this.graph.findAllByState('node', 'selectedItems');
+            const nodes = this.graph.findAllByState('node', 'nodeSelected');
+            const edges = this.graph.findAllByState('edge', 'edgeSelected');
 
-            if (e.keyCode === 8 && items && items.length) {
+            /**
+             * TODO:
+             * 删除节点时, 将与该节点连接的后代节点也删除
+             */
+            if (e.keyCode === 8) {
+                if (nodes && nodes.length) {
+                    this.graph.remove(nodes[0]);
+                    this.graph.set('after-item-selected', []);
+                    // 发射事件
+                    this.graph.emit('after-item-selected');
+                }
 
-                this.graph.removeChild(items[0]._cfg.id);
-                this.graph.set('selectedItems', []);
-                // 发射事件
-                this.graph.emit('afteritemselected',[]);
+                if (edges && edges.length) {
+                    this.graph.remove(edges[0]);
+                    this.graph.set('after-edge-selected', []);
+                    // 发射事件
+                    this.graph.emit('after-edge-selected');
+                }
             }
         },
     });

@@ -54,7 +54,16 @@ export default {
     },
     // edge默认样式
     edgeStyles: {
-
+        stroke:          '#aab7c3',
+        lineAppendWidth: 10,
+        startArrow:      {
+            path: 'M 0,0 L 8,4 L 7,0 L 8,-4 Z',
+            fill: '#aab7c3',
+        },
+        endArrow: {
+            path: 'M 0,0 L 8,4 L 7,0 L 8,-4 Z',
+            fill: '#aab7c3',
+        },
     },
     // edge交互样式
     edgeStateStyles: {
