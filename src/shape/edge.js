@@ -9,10 +9,16 @@ import defaultStyles from '../utils/defaultStyles';
 
 const { edgeStyles } = defaultStyles;
 
-// 可点坐标
-/* const dashCorner = [
-    [0, 0],
-]; */
+const uniqBy = (arr,key)=>{
+    const result = [];
+
+    arr.forEach( i => {
+        if (!result.find(r => r[key] === i[key])) {
+            result.push(i);
+        }
+    });
+    return result;
+};
 
 /*
  * flow:
@@ -40,12 +46,12 @@ export default G6 => {
 
             group.addShape('text', {
                 attrs: {
-                    x:      startPoint.x + 20,
-                    y:      startPoint.y - 5,
-                    width:  endPoint.x - startPoint.x,
-                    height: 20,
-                    fill:   '#666',
-                    text:   cfg.label,
+                    x:    startPoint.x + 20,
+                    y:    startPoint.y - 5,
+                    /* width:  endPoint.x - startPoint.x,
+                    height: 20, */
+                    fill: '#666',
+                    text: cfg.label,
                     ...labelCfg,
                 },
                 className: 'edge-label',
@@ -53,21 +59,10 @@ export default G6 => {
         },
         /* 绘制节点，包含文本 */
         drawShape (cfg, group) {
-            const { sourceNode, targetNode, startPoint, endPoint } = cfg;
-            const stroke = (cfg.style && cfg.style.stroke) || edgeStyles.stroke;
-            const lineAppendWidth = (cfg.style && cfg.style.lineAppendWidth) || edgeStyles.lineAppendWidth;
-            // const startArrow = (cfg.style && cfg.style.startArrow) || edgeStyles.startArrow;
-            const endArrow = (cfg.style && cfg.style.endArrow) || edgeStyles.endArrow;
-
-            const path = this._getPath(sourceNode, targetNode, startPoint, endPoint);
+            const shapeStyle = this.getShapeStyle(cfg);
             const keyShape = group.addShape('path', {
                 attrs: {
-                    path,
-                    stroke,
-                    lineWidth: 1,
-                    lineAppendWidth,
-                    // startArrow,
-                    endArrow,
+                    ...shapeStyle,
                 },
                 className: 'base-edge',
             });
@@ -95,117 +90,301 @@ export default G6 => {
         },
         customStateCall (name, value, item) { },
 
-        // 获取锚点坐标
-        _getControlPoints (cfg) {
+        getShapeStyle (cfg) {
+            const { startPoint, endPoint } = cfg;
+            const stroke = (cfg.style && cfg.style.stroke) || edgeStyles.stroke;
+            const lineAppendWidth = (cfg.style && cfg.style.lineAppendWidth) || edgeStyles.lineAppendWidth;
+            // const startArrow = (cfg.style && cfg.style.startArrow) || edgeStyles.startArrow;
+            const endArrow = (cfg.style && cfg.style.endArrow) || edgeStyles.endArrow;
 
+            const controlPoints = this._getControlPoints(cfg);
+
+            let points = [startPoint];
+
+            if (controlPoints) {
+                points = points.concat(controlPoints);
+            }
+            points.push(endPoint);
+            const path = this._getPath(points);
+
+            return {
+                path,
+                stroke,
+                lineAppendWidth,
+                endArrow,
+            };
         },
         /**
-         * @description 根据位置计算线条拐点
-         * path 参见 https://developer.mozilla.org/zh-CN/docs/Web/SVG/Tutorial/Paths
-         * M: Move To       ['M', x, y]
-         * L: Line To       ['L', x, y]
-         * Q: 二次贝塞尔曲线  ['Q', x1, y1, x, y] (x1, y1): 圆弧中心坐标 (x, y) 圆弧终点坐标
-         * 实现效果: 在距结束箭头10个单位处弯曲, 反推折点坐标, 多处弯曲取中间点
+         * 此处用到了寻路算法, 本人算法渣渣
+         * 只好copy大佬现成的代码: https://guozhaolong.github.io/wfd/
+         * 自己折腾两天都没写出来 大佬的代码用起来真香!
          */
-        _getPath (sNode, tNode, s, e) {
-            const sBbox = sNode.getBBox();
-            const eBbox = tNode.getBBox();
-            const radius = 5; // 每个圆弧的半径
+        _getPath (points) {
             const path = [];
 
-            // console.log(tNode.get('id'), s.x, e.x);
+            for (let i = 0; i < points.length; i++) {
+                const point = points[i];
 
-            path.push(['M', s.x, s.y]); // 推入起点坐标
-            // 这里开始计算中间折线的坐标
-            if (e.x !== s.x) {
-                if (e.y > s.y) {
-                    // ↓ 向下
-                    /* (e.x > s.x) => 向右 */
-                    const Q1x1 = s.x;
+                if (i === 0) {
+                    path.push(['M', point.x, point.y]);
+                } else if (i === points.length - 1) {
+                    path.push(['L', point.x, point.y]);
+                } else {
+                    const prevPoint = points[i - 1];
 
-                    let Q1y1 = 0, Qx = 0, Qy = 0;
+                    const nextPoint = points[i + 1];
 
-                    if (s.y === sBbox.centerY - sBbox.height / 2) {
-                        // 上
-                        Q1y1 = s.y - radius;
-                        Qx = s.x;
-                        Qy = Q1y1;
-                    } else if (s.x === sBbox.centerX + sBbox.width / 2) {
-                        // 右
-                        Q1y1 = s.y;
-                        Qx = s.x;
-                        Qy = s.y;
-                    } else if (s.y === sBbox.centerY + sBbox.height / 2) {
-                        // 下
-                        Q1y1 = s.y + radius;
-                        Qx = s.x;
-                        Qy = Q1y1;
-                    } else {
-                        // 左
-                        Q1y1 = s.y;
-                        Qx = s.x;
-                        Qy = s.y;
-                    }
-                    // path.push(['L', Qx, Qy]);
+                    let cornerLen = 5;
 
-                    path.push(['Q', Q1x1, Q1y1, Qx, Qy]); // 距离起始坐标第1个弧线
-                    if (e.x > s.x) {
-                        // 向右
-                        if (e.x === eBbox.centerX - eBbox.width / 2) {
-                            // 指向最左边的位置 需要加个折点
-                            path.push(['L', e.x - radius * 5, Qy]);
-                            path.push(['Q', e.x - radius * 4, Qy, e.x - radius * 4, Qy + radius]);
-                            path.push(['L', e.x - radius * 4, e.y - radius]);
-                            // 距离目标最近的圆弧
-                            path.push(['Q', e.x - radius * 4, e.y, e.x - radius * 3, e.y]);
-                        } else {
-                            path.push(['L', e.x - radius, Qy]);
-                            path.push(['Q', e.x, Q1y1, e.x, Qy + radius]);
-                        }
-                    } else {
-                        // 向左
-                        if (e.y === eBbox.centerY - eBbox.height / 2) {
-                            // 指向最上面的锚点
-                            path.push(['L', e.x + radius, Qy]);
-                            path.push(['Q', e.x, Qy, e.x, Qy + radius]);
-                            /* path.push(['L', e.x + radius * 4, e.y - radius]);
-                            // 距离目标最近的圆弧
-                            path.push(['Q', e.x + radius * 4, e.y, e.x + radius * 3, e.y]); */
-                        } else if (e.x === eBbox.centerX + eBbox.width / 2) {
-                            // 指向最右边的锚点 需要加个折点
-                            path.push(['L', e.x + radius * 5, Qy]);
-                            path.push(['Q', e.x + radius * 4, Qy, e.x + radius * 4, Qy + radius]);
-                            path.push(['L', e.x + radius * 4, e.y - radius]);
-                            // 距离目标最近的圆弧
-                            path.push(['Q', e.x + radius * 4, e.y, e.x + radius * 3, e.y]);
-                        } else if (e.y === eBbox.centerY + eBbox.height / 2) {
-                            // 指向最下面的锚点
-
-                        } else if (e.x === eBbox.centerX - eBbox.width / 2) {
-                            // 指向最左边的锚点
-                            path.push(['L', e.x - radius * 3, Qy]);
-                            path.push(['Q', e.x - radius * 4, Qy, e.x - radius * 4, Qy + radius]);
-                            path.push(['L', e.x - radius * 4, e.y - radius]);
-                            // 距离目标最近的圆弧
-                            path.push(['Q', e.x - radius * 4, e.y, e.x - radius * 3, e.y]);
+                    if (Math.abs(point.y - prevPoint.y) > cornerLen || Math.abs(point.x - prevPoint.x) > cornerLen) {
+                        if (prevPoint.x === point.x) {
+                            path.push(['L', point.x, point.y > prevPoint.y ? point.y - cornerLen : point.y + cornerLen]);
+                        } else if (prevPoint.y === point.y) {
+                            path.push(['L', point.x > prevPoint.x ? point.x - cornerLen : point.x + cornerLen, point.y]);
                         }
                     }
+                    const yLen = Math.abs(point.y - nextPoint.y);
+                    const xLen = Math.abs(point.x - nextPoint.x);
 
-                } else if (e.y < s.y) {
-                    // ↑ 向上
-                }
-            } else if (e.y !== s.y) {
-                if (e.x > s.x) {
-                    // -> 向右
-
-                } else if (e.x < s.x) {
-                    // <- 向左
-
+                    if (yLen > 0 && yLen < cornerLen) {
+                        cornerLen = yLen;
+                    } else if (xLen > 0 && xLen < cornerLen) {
+                        cornerLen = xLen;
+                    }
+                    if (prevPoint.x !== nextPoint.x && nextPoint.x === point.x) {
+                        path.push(['Q', point.x, point.y, point.x, point.y > nextPoint.y ? point.y - cornerLen : point.y + cornerLen]);
+                    } else if (prevPoint.y !== nextPoint.y && nextPoint.y === point.y) {
+                        path.push(['Q', point.x, point.y, point.x > nextPoint.x ? point.x - cornerLen : point.x + cornerLen, point.y]);
+                    }
                 }
             }
-
-            path.push(['L', e.x, e.y]); // 推入终点坐标
             return path;
+        },
+        _getControlPoints (cfg) {
+            if (!cfg.sourceNode) {
+                return cfg.controlPoints;
+            }
+            return this._polylineFinding(cfg.sourceNode, cfg.targetNode, cfg.startPoint, cfg.endPoint, 15);
+        },
+        _getExpandedBBox (bbox, offset) {
+            return 0 === bbox.width && 0 === bbox.height ? bbox : {
+                centerX: bbox.centerX,
+                centerY: bbox.centerY,
+                minX:    bbox.minX - offset,
+                minY:    bbox.minY - offset,
+                maxX:    bbox.maxX + offset,
+                maxY:    bbox.maxY + offset,
+                height:  bbox.height + 2 * offset,
+                width:   bbox.width + 2 * offset,
+            };
+        },
+        _getExpandedPort (bbox, point) {
+            return Math.abs(point.x - bbox.centerX) / bbox.width > Math.abs(point.y - bbox.centerY) / bbox.height
+                ? { x: point.x > bbox.centerX ? bbox.maxX : bbox.minX, y: point.y }
+                : { x: point.x, y: point.y > bbox.centerY ? bbox.maxY : bbox.minY };
+        },
+        _combineBBoxes (sBBox, tBBox) {
+            const minX = Math.min(sBBox.minX, tBBox.minX), minY = Math.min(sBBox.minY, tBBox.minY);
+            const maxX = Math.max(sBBox.maxX, tBBox.maxX), maxY = Math.max(sBBox.maxY, tBBox.maxY);
+
+            return {
+                centerX: (minX + maxX) / 2,
+                centerY: (minY + maxY) / 2,
+                minX,
+                minY,
+                maxX,
+                maxY,
+                height:  maxY - minY,
+                width:   maxX - minX,
+            };
+        },
+        _getBBoxFromVertexes (sPoint, tPoint) {
+            const minX = Math.min(sPoint.x, tPoint.x);
+            const maxX = Math.max(sPoint.x, tPoint.x);
+            const minY = Math.min(sPoint.y, tPoint.y);
+            const maxY = Math.max(sPoint.y, tPoint.y);
+
+            return {
+                centerX: (minX + maxX) / 2,
+                centerY: (minY + maxY) / 2,
+                maxX,
+                maxY,
+                minX,
+                minY,
+                height:  maxY - minY,
+                width:   maxX - minX,
+            };
+        },
+        _vertexOfBBox (bbox) {
+            return [
+                { x: bbox.minX, y: bbox.minY },
+                { x: bbox.maxX, y: bbox.minY },
+                { x: bbox.maxX, y: bbox.maxY },
+                { x: bbox.minX, y: bbox.maxY },
+            ];
+        },
+        _crossPointsByLineAndBBox (bbox, centerPoint) {
+            let crossPoints = [];
+
+            if (!(centerPoint.x < bbox.minX || centerPoint.x > bbox.maxX))
+                crossPoints = crossPoints.concat([
+                    { x: centerPoint.x, y: bbox.minY },
+                    { x: centerPoint.x, y: bbox.maxY },
+                ]);
+            if (!(centerPoint.y < bbox.minY || centerPoint.y > bbox.maxY))
+                crossPoints = crossPoints.concat([
+                    { x: bbox.minX, y: centerPoint.y },
+                    { x: bbox.maxX, y: centerPoint.y },
+                ]);
+            return crossPoints;
+        },
+        _getConnectablePoints (sBBox, tBBox, sPoint, tPoint) {
+            const lineBBox = this._getBBoxFromVertexes(sPoint, tPoint);
+            const outerBBox = this._combineBBoxes(sBBox, tBBox);
+            const sLineBBox = this._combineBBoxes(sBBox, lineBBox);
+            const tLineBBox = this._combineBBoxes(tBBox, lineBBox);
+
+            let points = [];
+
+            points = points.concat(this._vertexOfBBox(sLineBBox), this._vertexOfBBox(tLineBBox), this._vertexOfBBox(outerBBox));
+
+            const centerPoint = { x: outerBBox.centerX, y: outerBBox.centerY };
+
+            [outerBBox, sLineBBox, tLineBBox, lineBBox].forEach(bbox => {
+                points = points.concat(this._crossPointsByLineAndBBox(bbox, centerPoint));
+            });
+            points.push({ x: sPoint.x, y: tPoint.y });
+            points.push({ x: tPoint.x, y: sPoint.y });
+            return points;
+        },
+        _filterConnectablePoints (points, bbox) {
+            return points.filter(point => point.x <= bbox.minX || point.x >= bbox.maxX || point.y <= bbox.minY || point.y >= bbox.maxY);
+        },
+        _AStar (points, sPoint, tPoint, sBBox, tBBox) {
+            const openList = [sPoint];
+            const closeList = [];
+
+            points = uniqBy(this._fillId(points), 'id');
+            points.push(tPoint);
+            let endPoint;
+
+            while (openList.length > 0) {
+                let minCostPoint;
+
+                openList.forEach((p, i) => {
+                    if (!p.parent) {
+                        p.f = 0;
+                    }
+                    if (!minCostPoint) {
+                        minCostPoint = p;
+                    }
+                    if (p.f < minCostPoint.f) {
+                        minCostPoint = p;
+                    }
+                });
+
+                if (minCostPoint.x === tPoint.x && minCostPoint.y === tPoint.y) {
+                    endPoint = minCostPoint;
+                    break;
+                }
+                openList.splice(openList.findIndex(o => o.x === minCostPoint.x && o.y === minCostPoint.y), 1);
+                closeList.push(minCostPoint);
+
+                const neighbor = points.filter(p => (p.x === minCostPoint.x || p.y === minCostPoint.y)
+                    && !(p.x === minCostPoint.x && p.y === minCostPoint.y)
+                    && !this._crossBBox([sBBox, tBBox], minCostPoint, p));
+
+                neighbor.forEach(p => {
+                    const inOpen = openList.find(o => o.x === p.x && o.y === p.y);
+                    const currentG = this._getCost(p, minCostPoint);
+
+                    if (closeList.find(o => o.x === p.x && o.y === p.y)) {
+                        // ?
+                    } else if (inOpen) {
+                        if (p.g > currentG) {
+                            p.parent = minCostPoint;
+                            p.g = currentG;
+                            p.f = p.g + p.h;
+                        }
+                    } else {
+                        p.parent = minCostPoint;
+                        p.g = currentG;
+                        let h = this._getCost(p, tPoint);
+
+                        if (this._crossBBox([tBBox], p, tPoint)) {
+                            h += (tBBox.width / 2 + tBBox.height / 2); //如果穿过bbox则增加该点的预估代价为bbox周长的一半
+                        }
+                        p.h = h;
+                        p.f = p.g + p.h;
+                        openList.push(p);
+                    }
+                });
+            }
+            if (endPoint) {
+                const result = [];
+
+                result.push({ x: endPoint.x, y: endPoint.y });
+                while (endPoint.parent) {
+                    endPoint = endPoint.parent;
+                    result.push({ x: endPoint.x, y: endPoint.y });
+                }
+                return result.reverse();
+            }
+            return [];
+        },
+        _crossBBox (bboxes, p1, p2) {
+            for (let i = 0; i < bboxes.length; i++) {
+                const bbox = bboxes[i];
+
+                if (p1.x === p2.x && bbox.minX < p1.x && bbox.maxX > p1.x) {
+                    if (p1.y < bbox.maxY && p2.y >= bbox.maxY || p2.y < bbox.maxY && p1.y >= bbox.maxY) {
+                        return true;
+                    }
+                } else if (p1.y === p2.y && bbox.minY < p1.y && bbox.maxY > p1.y) {
+                    if (p1.x < bbox.maxX && p2.x >= bbox.maxX || p2.x < bbox.maxX && p1.x >= bbox.maxX) {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        },
+        _getCost (p1, p2) {
+            return Math.abs(p1.x - p2.x) + Math.abs(p1.y - p2.y);
+        },
+        _getPointBBox (t) {
+            return {
+                centerX: t.x,
+                centerY: t.y,
+                minX:    t.x,
+                minY:    t.y,
+                maxX:    t.x,
+                maxY:    t.y,
+                height:  0,
+                width:   0,
+            };
+        },
+        _fillId (points) {
+            points.forEach(p => {
+                p.id = p.x + '-' + p.y;
+            });
+            return points;
+        },
+        _polylineFinding (sNode, tNode, sPort, tPort, offset) {
+            const sourceBBox = sNode && sNode.getBBox() ? sNode.getBBox() : this._getPointBBox(sPort);
+            const targetBBox = tNode && tNode.getBBox() ? tNode.getBBox() : this._getPointBBox(tPort);
+            const sBBox = this._getExpandedBBox(sourceBBox, offset);
+            const tBBox = this._getExpandedBBox(targetBBox, offset);
+            const sPoint = this._getExpandedPort(sBBox, sPort);
+            const tPoint = this._getExpandedPort(tBBox, tPort);
+
+            let points = this._getConnectablePoints(sBBox, tBBox, sPoint, tPoint);
+
+            points = this._filterConnectablePoints(points, sBBox);
+            points = this._filterConnectablePoints(points, tBBox);
+
+            const polylinePoints = this._AStar(points, sPoint, tPoint, sBBox, tBBox);
+
+            return polylinePoints;
         },
     });
 };
