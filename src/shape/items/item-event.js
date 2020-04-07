@@ -32,22 +32,21 @@ const events = {
      */
     anchorActived(value, group) {
         if (value) {
-            const bbox = group.get('children')[0].getBBox();
-            const allAnchors = this.getAnchorPoints();
-
             group.showAnchor(group);
 
-            allAnchors.forEach((p, i) => {
+            this.getAnchorPoints().forEach((p, i) => {
+                const bbox = group.get('children')[0].getBBox();
                 const anchorBg = group.addShape('circle', {
                     attrs: {
                         x:       bbox.minX + bbox.width * p[0],
                         y:       bbox.minY + bbox.height * p[1],
+                        r:       group.anchorShapes[0].get('attrs').r + 6,
                         fill:    '#1890ff',
-                        opacity: '0.5',
-                        r:       10,
+                        opacity: 0.5,
                     },
                     nodeId:    group.get('item')._cfg.id,
                     className: 'node-anchor-bg',
+                    draggable: true,
                     isAnchor:  true,
                     index:     i,
                 });
@@ -57,6 +56,13 @@ const events = {
 
             group.anchorShapes.filter(item => {
                 if (item.get('className') === 'node-anchor') {
+                    item.toFront();
+                }
+                if (item.get('className') === 'node-anchor-group') {
+                    item.attr({
+                        r: item.get('attrs').r + 6,
+                        // opacity: 0.2,
+                    });
                     item.toFront();
                 }
             });

@@ -81,9 +81,10 @@ export default {
         fillOpacity: 0.25,
     },
     anchorPointStyles: {
-        r:      4,
-        fill:   '#fff',
-        stroke: '#1890FF',
+        r:         4,
+        fill:      '#fff',
+        stroke:    '#1890FF',
+        lineWidth: 1,
     },
     anchorPointStateStyles: {
         r:           4,

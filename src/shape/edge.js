@@ -53,6 +53,11 @@ const revertAlign = labelPosition => {
 
 export default G6 => {
     G6.registerEdge('base-edge', {
+        options: {
+            labelCfg: {
+
+            },
+        },
         /**
          * 文本的位置
          * @type {String}
@@ -78,34 +83,36 @@ export default G6 => {
         labelAutoRotate: false,
         /* 绘制文本 */
         drawLabel (cfg, group) {
-            const { startPoint, endPoint } = cfg;
             const { labelCfg } = this.options;
             const labelStyle = this._getLabelStyleByPosition(cfg, labelCfg || {}, group);
 
-            group.addShape('rect', {
+            const label = group.addShape('text', {
                 attrs: {
                     ...labelStyle,
-                    x:      labelStyle.x - 15,
-                    y:      labelStyle.y - 14,
-                    width:  30,
-                    height: 16,
-                    fill:   '#fff',
-                    ...labelCfg,
-                },
-                className: 'edge-label',
-            });
-
-            group.addShape('text', {
-                attrs: {
-                    ...labelStyle,
-                    /* width:  endPoint.x - startPoint.x,
-                    height: 20, */
                     fill: '#666',
                     text: cfg.label,
                     ...labelCfg,
                 },
                 className: 'edge-label',
             });
+
+            const labelBBox = label.getBBox();
+
+            group.addShape('rect', {
+                attrs: {
+                    ...labelStyle,
+                    x:       labelBBox.x - 3,
+                    y:       labelBBox.y - 3,
+                    width:   labelBBox.width + 6,
+                    height:  labelBBox.height + 6,
+                    fill:    '#fff',
+                    opacity: 0.7,
+                    ...labelCfg,
+                },
+                className: 'edge-label',
+            });
+
+            label.toFront();
         },
         /* 绘制节点，包含文本 */
         drawShape (cfg, group) {

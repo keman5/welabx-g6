@@ -16,30 +16,33 @@ export default (anchor, group, p) => {
     });
 
     // 拖拽事件
-    anchor.on('dragstart', e => {
-        const cacheCanvasBBox = group.get('cacheCanvasBBox');
-        const { id, model: { style } } = group.get('item')._cfg;
-        const lineWidth = (style.lineWidth || 0) / 2;
-        const point = [cacheCanvasBBox.width * (p[0] - 0.5) - lineWidth - 2, cacheCanvasBBox.height * (p[1] - 0.5) - lineWidth - 2];
+    anchor.on('dragstart', () => {
+        if (anchorNodeId == null) {
+            const { r } = anchor.get('attrs');
+            const cacheCanvasBBox = group.get('cacheCanvasBBox');
+            const { id, model: { style } } = group.get('item')._cfg;
+            const lineWidth = (style.lineWidth || 0) / 2;
+            const point = [(cacheCanvasBBox.width - r - 6) * (p[0] - 0.5) - lineWidth, (cacheCanvasBBox.height - r - 6) * (p[1] - 0.5) - lineWidth];
 
-        // 添加线条
-        const line = group.addShape('path', {
-            attrs: {
-                stroke:   '#1890FF',
-                lineDash: [5, 5],
-                path:     [
-                    ['M', ...point],
-                    ['L', ...point],
-                ],
-            },
-            className:  'dashed-line',
-            pointStart: point,
-        });
+            // 添加线条
+            const line = group.addShape('path', {
+                attrs: {
+                    stroke:   '#1890FF',
+                    lineDash: [5, 5],
+                    path:     [
+                        ['M', ...point],
+                        ['L', ...point],
+                    ],
+                },
+                className:  'dashed-line',
+                pointStart: point,
+            });
 
-        // 置于顶层
-        group.toFront();
-        line.toFront();
-        anchorNodeId = id;
+            // 置于顶层
+            group.toFront();
+            line.toFront();
+            anchorNodeId = id;
+        }
     });
 
     // 拖拽中
@@ -49,15 +52,15 @@ export default (anchor, group, p) => {
         const pointStart = line.get('pointStart');
 
         line.toFront();
+        /**
+         * 计算方法:
+         * 鼠标位置 - box左上角 - width/2 => 中心坐标
+         * 这里减 2px 是为了让鼠标释放时 node: drag 事件监听到 target, 而不是当前虚线
+         */
         line.attr({
             path: [
-                /**
-                 * 计算方法:
-                 * 鼠标位置 - box左上角 - width/2 => 中心坐标
-                 * 这里减1px 是为了让鼠标释放时 node: drag 事件监听到,而不是当前虚线
-                 */
                 ['M', ...pointStart],
-                ['L', e.x - bboxCache.x - bboxCache.width / 2 - 1, e.y - bboxCache.y - bboxCache.height / 2 - 1],
+                ['L', e.x - bboxCache.x - bboxCache.width / 2 - 2, e.y - bboxCache.y - bboxCache.height / 2 - 2],
             ],
         });
     });
@@ -67,15 +70,16 @@ export default (anchor, group, p) => {
         const item = group.getItem('dashed-line');
 
         item.remove();
+        anchorNodeId = null;
     });
 
     // 拖拽到其他锚点上
-    anchor.on('dragover', e => {
+    anchor.on('dragenter', e => {
         // 排除相同节点的锚点
         if (e.target.cfg.nodeId !== anchorNodeId) {
             const { index } = e.target.cfg;
 
-            group.getAllAnchorBg()[index].attr('opacity', '0.7');
+            group.getAllAnchorBg()[index].attr('opacity', 0.7);
             // group.getAnchor(index)[0].attr('r', '5');
         }
     });
@@ -86,7 +90,7 @@ export default (anchor, group, p) => {
         if (e.target.cfg.nodeId !== anchorNodeId) {
             const { index } = e.target.cfg;
 
-            group.getAllAnchorBg()[index].attr('opacity', '0.5');
+            group.getAllAnchorBg()[index].attr('opacity', 0.5);
             // group.getAnchor(index)[0].attr('r', '5');
         }
     });

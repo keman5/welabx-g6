@@ -1,12 +1,13 @@
 export default G6 => {
-    G6.registerBehavior('active-ahchor', {
+    G6.registerBehavior('active-anchor', {
         getEvents () {
             return {
                 'anchor:mouseenter': 'onAnchorEnter',
-                'anchor:mousemove':  'onAnchorEnter',
+                // 'anchor:mousemove':  'onAnchorEnter',
                 'anchor:mouseleave': 'onAnchorLeave',
                 'anchor:dragstart':  'onDragStart',
                 'anchor:drag':       'onDrag',
+                'anchor:dragenter':  'onDragEnter',
                 'anchor:dragend':    'onDragEnd',
             };
         },
@@ -31,6 +32,11 @@ export default G6 => {
         // 拖拽中
         onDrag (e) {
             this.graph.setItemState(e.item, 'anchorOnDrag', true);
+        },
+        // onDragEnter
+        onDragEnter (e) {
+            console.log(e.target);
+
         },
         // 拖拽结束
         onDragEnd (e) {

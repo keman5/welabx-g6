@@ -16,6 +16,7 @@ export default G6 => {
                 'node:dragstart': 'onDragStart',
                 'node:drag':      'onDrag',
                 'node:dragend':   'onDragEnd',
+                'node:dragenter': 'onDragEnter',
                 'node:drop':      'onDrop',
             };
         },
@@ -46,6 +47,12 @@ export default G6 => {
             if (this.dragMode === 'node') {
                 this._nodeOnDrag(e, e.item.getContainer());
                 // this.graph.setItemState(e.item, 'nodeOnDrag', e);
+            }
+        },
+        onDragEnter (e) {
+            // 给锚点背景绑定事件
+            if (this.dragMode === 'link') {
+                console.log(e);
             }
         },
         // 拖拽结束

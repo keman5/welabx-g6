@@ -164,6 +164,7 @@
                                 type:           'drag-node',
                                 enableDelegate: true,
                             }, */
+                            // 'activate-relations',
                             'delete-item',
                             'select-node',
                             'hover-node',

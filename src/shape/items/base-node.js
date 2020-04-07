@@ -55,6 +55,12 @@ export default G6 => {
 
             // 绘制锚点坐标
             this.getAnchorPoints().forEach((p, i) => {
+                /**
+                 * 绘制三层锚点
+                 * 最底层: 锚点bg
+                 * 中间层: 锚点
+                 * 最顶层: 锚点group, 用于事件触发
+                 */
                 const anchor = group.addShape('circle', {
                     attrs: {
                         x: bbox.minX + bbox.width * p[0],
@@ -68,12 +74,28 @@ export default G6 => {
                     index:     i,
                 });
 
+                const anchorGroup = group.addShape('circle', {
+                    attrs: {
+                        x:       bbox.minX + bbox.width * p[0],
+                        y:       bbox.minY + bbox.height * p[1],
+                        r:       anchorPointStyles.r + anchorPointStyles.lineWidth,
+                        fill:    '#000',
+                        opacity: 0,
+                    },
+                    nodeId:    group.get('item')._cfg.id,
+                    className: 'node-anchor-group',
+                    draggable: true,
+                    isAnchor:  true,
+                    index:     i,
+                });
+
                 /**
                  * ! 添加锚点事件绑定
                  */
-                anchorEvent(anchor, group, p);
+                anchorEvent(anchorGroup, group, p);
 
                 group.anchorShapes.push(anchor);
+                group.anchorShapes.push(anchorGroup);
             });
 
             // 查找所有锚点
