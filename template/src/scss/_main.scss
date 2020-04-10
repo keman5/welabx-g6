@@ -1,0 +1,21 @@
+@import './color';
+@import './element-theme.scss';
+@import './commom';
+@import './mixins';
+@mixin layout() {
+    @include gap('20', 20px);
+    @include gap('15', 15px);
+    @include gap('10', 10px);
+    @include gap('5', 5px);
+    @include gap('0', 0);
+    @include font-size();
+    @include my_flex();
+    @include _flex();
+    @include txt();
+    @include display();
+    @include ico-size('30', 30px);
+    @include border_radius_v(20);
+    @include word-line(1);
+}
+
+@include layout();

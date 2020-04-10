@@ -6,13 +6,9 @@
 
 const boxen = require('boxen');
 const webpack = require('webpack');
-/* const envFile = require('dotenv-extended').load({
-    path: `${process.env.INIT_CWD}/.env`,
-}); */
 // 默认编译 test
 const STAGE = (JSON.parse(process.env.npm_config_argv).cooked[2] || 'test').replace(/(-|--)/, '');
 const { coreConfig, userConfig } = require('./webpack.common');
-// const env = {};
 
 console.log(boxen(`当前运行环境为 ${STAGE}`,
     {
@@ -24,24 +20,18 @@ console.log(boxen(`当前运行环境为 ${STAGE}`,
     }
 ));
 
-/* for (const key in envFile) {
-    env[`process.env.${key}`] = envFile[key];
-}
-
-env['process.env.STAGE'] = STAGE; */
-
 coreConfig.devServer
     .color(true)
 
 coreConfig
     // 注入环境变量
     .plugin('definePlugin')
-        .use(webpack.DefinePlugin, [{
-            'process.env': require('dotenv-extended').load({
-                path: `${process.env.INIT_CWD}/.env`,
-            }),
-            'process.env.STAGE': JSON.stringify(STAGE),
-        }])
+        .use(dotenvWebpack, {
+            path: `${process.env.INIT_CWD}/.env`,
+            defaults: false,
+            systemvars: true,
+            silent: true,
+        })
         .end()
     // 热更新
     .plugin('HotModuleReplacement')
