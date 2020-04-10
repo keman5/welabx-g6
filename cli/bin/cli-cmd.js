@@ -11,9 +11,6 @@ Object.keys(actionMap).forEach(action => {
     if (action === 'create') {
         program
             .command('create <app-name> [options...]')
-            .option(...actions.options[0])
-            .option(...actions.options[1])
-            .option(...actions.options[2])
             .description(actions.description)
             // .alias(actions.alias)
             .action((appName, {}, ...args) => {

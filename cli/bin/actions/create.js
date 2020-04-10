@@ -81,49 +81,33 @@ module.exports = {
         if (response.overwrite === 'n') {
             console.log('\n-------- 已退出 --------\n');
             valid = false;
-            return valid;
         }
-
+        return valid;
     },
     // 检查模版是否有更新
-    async checkUpdate (options, dependency, dependencyPath, projectPath) {
-        let valid = true;
-
-        spinner.start();
-
+    async checkUpdate (tempDependencies, dependencyPath) {
         const template = require(resolve(`${dependencyPath}/package.json`));
         const localVersion = +template.version.replace(/\./g, '');
 
-        const repos = spawnSync(process.platform === 'win32' ? 'npm.cmd' : 'npm', ['view', `${dependency}`, 'version'])
+        const repos = spawnSync(process.platform === 'win32' ? 'npm.cmd' : 'npm', ['view', tempDependencies, 'version']);
         const cloudVersion = +repos.stdout.toString().replace('\n', '').replace('\r\n', '').replace(/\./g, '');
 
         // 有更新
-        if (!options.local && cloudVersion > localVersion) {
+        if (cloudVersion > localVersion) {
             console.log('\n');
-            console.log(boxen(`welabx脚手架项目模版 ${dependency} 有新版可用\n${chalk.white('建议升级脚手架模版后重新创建项目')}\nnpm i ${dependency} -g`,
+            console.log(boxen(`welabx脚手架项目模版 ${tempDependencies} 有新版可用\n${chalk.white('建议升级脚手架模版后重新创建项目')}\nnpm i ${tempDependencies} -g`,
                 {
                     padding: 1,
                     borderColor: 'red',
                     borderStyle: 'double',
-                    backgroundColor: '#808080',
+                    backgroundColor: '#89b537',
                 }
             ));
             console.log('\n');
         }
-
-        // 先清空之前的文件夹
-        try {
-            await emptyDir(projectPath);
-        } catch (err) {
-            console.error(err);
-            valid = false;
-            return valid;
-        }
-        return valid;
     },
     async copyTemplate (appName, dependencyPath, projectPath) {
         spinner.start();
-        console.log("\n\n- 准备创建项目模板...\n");
 
         try {
             await mkdirs(resolve(appName));
@@ -165,12 +149,7 @@ module.exports = {
 
         spinner.stop().succeed('项目创建成功! success!\n');
 
-        console.log(boxen(`tips:\n1. ${chalk.greenBright(`cd ${appName}`)}  访问你的项目\n2. ${chalk.greenBright('npm install')}  安装项目依赖`,
-            {
-                padding: 1,
-                borderColor: 'green',
-                borderStyle: 'round',
-            }
-        ));
+        console.log('正在安装项目依赖...\n');
+
     }
 }

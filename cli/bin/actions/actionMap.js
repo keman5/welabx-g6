@@ -3,18 +3,16 @@
  * @date 2020/03/05
  */
 
-const {
-    existsSync,
-} = require('fs');
 const path = require("path");
-const chalk = require('chalk'); // 彩色命令行提示
+const boxen = require('boxen');
+const chalk = require('chalk');
 const shell = require('shelljs');
-const package = require('../package.json');
+const { existsSync } = require('fs');
+const package = require('../../package.json');
 const resolve = p => path.resolve(__dirname, "../", p);
 const create = require('./create.js');
-const warning = chalk.cyanBright;
 // 模板依赖
-const dependency = package.tempDependencies;
+const { tempDependencies } = package;
 
 const actionMap = {
     /**
@@ -22,7 +20,7 @@ const actionMap = {
      */
     create: {
         options: [
-            ['-l, --local', '创建项目时不检查更新'],
+            // ['-l, --local', '创建项目时不检查更新'],
             // ['-i, --install', '创建项目后自动安装依赖'],
             ['--git', '创建项目后自动执行 git init 命令'],
         ],
@@ -33,39 +31,45 @@ const actionMap = {
             // 初始化自定义模版
             if (!await create.preCheck(appName)) return;
 
-            // 检查全局环境 vs 当前目录下的依赖
-            const welabxEnv = path.resolve(__dirname, "../", `${dependency}`); // 路径有问题?
-            const dependencyPath = existsSync(welabxEnv) ? welabxEnv : resolve(`node_modules/${dependency}`);
+            // 检查全局环境下的依赖
+            const globalDependencyPath = path.join(__dirname, '../../../', tempDependencies);
+            const localDependencyPath = path.resolve(__dirname, '../../node_modules', tempDependencies);
+            const dependencyPath = existsSync(globalDependencyPath) ? globalDependencyPath : localDependencyPath;
 
-            if (existsSync(dependencyPath)) {
-                console.log("\n打包依赖已安装, 正在准备处理...\nDependencies have been installed, hold on ...\n");
+            console.log("\n正在准备创建项目模板... hold on ...\n");
 
-                const projectPath = resolve(`${process.cwd()}/${appName}`);
+            const projectPath = resolve(`${process.cwd()}/${appName}`);
 
-                if (existsSync(projectPath)) {
-                    const result = await create.dependencyCheck();
-                    console.log('result', result);
-
-                    if(!result) return;
-                }
-
-                const result = await create.checkUpdate(options, dependency, dependencyPath, projectPath);
+            if (existsSync(projectPath)) {
+                const result = await create.dependencyCheck();
+                console.log('result', result);
 
                 if(!result) return;
-
-                // 复制项目模板
-                await create.copyTemplate(appName, dependencyPath, projectPath);
-
-                shell.cd(appName);
-                // 自动安装依赖
-                shell.exec('npm install');
-
-                if (options.git) {
-                    shell.exec('git init');
-                }
-            } else {
-                console.log(warning(`去全局安装 ${dependency} 吧\nPlease npm install ${dependency} -g first!\n`));
             }
+
+            // 复制项目模板
+            await create.copyTemplate(appName, dependencyPath, projectPath);
+
+            shell.cd(appName);
+            // 自动安装依赖
+            shell.exec('npm install');
+
+            console.log('\n');
+            console.log(boxen(`tips:\n依赖安装完成\n${chalk.greenBright(`cd ${appName}`)}  访问你的项目\n`,
+                {
+                    padding: 1,
+                    borderColor: 'green',
+                    borderStyle: 'round',
+                }
+            ));
+            console.log('\n');
+
+            if (options.git) {
+                shell.exec('git init');
+            }
+
+            // 检查模板更新
+            await create.checkUpdate(tempDependencies, dependencyPath);
         }
     },
     /**
