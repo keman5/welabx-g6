@@ -1,17 +1,21 @@
 /*!
  * @author claude
- * date 11/09/2019
+ * date 2019/11/09
  * 应用程序入口文件
  */
 import Vue from 'vue';
 import App from './App.vue';
 import VueRouter from 'vue-router';
-import routes from './router';
 import '@styles/base.scss';
 
 const router = new VueRouter({
-    mode: 'history',
-    routes,
+    mode:   'history',
+    routes: [
+        {
+            path:      '*',
+            component: () => import('../pages/graph/graph.vue'),
+        },
+    ],
 });
 
 Vue.use(VueRouter);

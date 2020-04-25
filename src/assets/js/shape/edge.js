@@ -5,7 +5,7 @@
  */
 
 import itemEvents from './items/item-event';
-import defaultStyles from '../utils/defaultStyles';
+import defaultStyles from './defaultStyles';
 
 const { edgeStyles } = defaultStyles;
 const PI = Math.PI,

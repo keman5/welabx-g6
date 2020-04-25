@@ -92,7 +92,7 @@
 <script>
     import G6 from '@antv/g6/es/index';
     import registerFactory from './register-factory';
-    import ItemPanel from '../plugins/ItemPanel.vue';
+    import ItemPanel from './ItemPanel.vue';
     import data from './data.js';
 
     export default {

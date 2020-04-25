@@ -39,12 +39,7 @@ if (webpackEnv.envParams.log !== undefined) {
 const cssloaders = [
     'css-loader',
     'postcss-loader',
-    {
-        loader:  'sass-loader',
-        options: {
-            implementation: require('dart-sass'),
-        },
-    },
+    'sass-loader',
     {
         loader:  'sass-resources-loader',
         options: {
@@ -139,14 +134,8 @@ const webpackConfig = {
             chunkFilename: 'css/[id].[hash:7].css',
         }),
         new HtmlWebpackPlugin({
-            template: resolve('../src/template/index.ejs'),
-            minify:   {
-                removeComments:        true,
-                collapseWhitespace:    true,
-                removeAttributeQuotes: true,
-            },
-            chunksSortMode: 'dependency',
-            inject:         true,
+            template: resolve('../index.html'),
+            inject:   true,
         }),
         new FriendlyErrorsPlugin(),
         new ManifestPlugin(),
@@ -154,11 +143,11 @@ const webpackConfig = {
     ],
     optimization: {
         splitChunks: {
-            minChunks:          2,
+            minChunks:          1,
             name:               true,
             chunks:             'async',
             minSize:            100 * 1024,
-            maxInitialRequests: 6,
+            maxInitialRequests: 5,
         },
     },
 };

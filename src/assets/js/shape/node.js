@@ -4,7 +4,7 @@
  * @param {string} icon 图片 url
  * @param {string} labelCfg 文本节点样式
  */
-import defaultStyles from '../utils/defaultStyles';
+import defaultStyles from './defaultStyles';
 
 const {
     iconStyles,
@@ -19,7 +19,7 @@ export default G6 => {
         shapeType: 'rect',
         // 当前节点默认样式
         options:   {
-            icon: require('../assets/images/TB1_1680x370.png').default,
+            icon: require('../../images/TB1_1680x370.png').default,
             iconStyles,
         },
         // 覆盖 base-node 默认样式

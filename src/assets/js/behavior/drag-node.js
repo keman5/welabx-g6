@@ -3,7 +3,7 @@ export default G6 => {
         getDefaultCfg() {
             return {
                 // 记录当前拖拽模式
-                dragMode:      'node',
+                dragTarget:    'node',
                 dragStartNode: {
                     id:          null,
                     anchorIndex: null,
@@ -24,7 +24,7 @@ export default G6 => {
         onDragStart (e) {
             if (e.target.cfg.isAnchor) {
                 // 拖拽锚点
-                this.dragMode = 'link';
+                this.dragTarget = 'link';
                 this.dragStartNode = {
                     id:          e.item.get('id'),
                     anchorIndex: e.target.cfg.index,
@@ -37,21 +37,21 @@ export default G6 => {
             } else {
                 // 拖拽节点
                 e.item.toFront();
-                this.dragMode = 'node';
+                this.dragTarget = 'node';
                 this._nodeOnDragStart(e, e.item.getContainer());
-                // this.graph.setItemState(e.item, 'nodeOnDragStart', e);
+                // this.graph.setItemState(e.item, 'nodeOnDragStart', e); // 通知外部组件
             }
         },
         // 拖拽中
         onDrag (e) {
-            if (this.dragMode === 'node') {
+            if (this.dragTarget === 'node') {
                 this._nodeOnDrag(e, e.item.getContainer());
-                // this.graph.setItemState(e.item, 'nodeOnDrag', e);
+                // this.graph.setItemState(e.item, 'nodeOnDrag', e); // 通知外部组件
             }
         },
         onDragEnter (e) {
             // 给锚点背景绑定事件
-            if (this.dragMode === 'link') {
+            if (this.dragTarget === 'link') {
                 console.log(e);
             }
         },
@@ -59,13 +59,13 @@ export default G6 => {
         onDragEnd (e) {
             const group = e.item.getContainer();
 
-            if (this.dragMode === 'link') {
+            if (this.dragTarget === 'link') {
                 const nodes = this.graph.findAll('node', node => node);
 
                 nodes.forEach(node => {
                     this.graph.setItemState(node, 'anchorActived', false);
                 });
-            } else if (this.dragMode === 'node') {
+            } else if (this.dragTarget === 'node') {
                 this._nodeOnDragEnd(e, group);
                 // this.graph.setItemState(e.item, 'nodeOnDragEnd', e);
             }

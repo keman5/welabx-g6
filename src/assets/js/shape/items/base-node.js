@@ -6,12 +6,11 @@
 
 import itemEvents from './item-event';
 import anchorEvent from './anchor-event';
-import defaultStyles from '../../utils/defaultStyles';
+import defaultStyles from '../defaultStyles';
 
 const { nodeStateStyles, nodeLabelStateStyles } = defaultStyles;
 
 /*
- * flow:
  * 注册基础node => 添加锚点/图标 => 绘制node => 初始化node状态 => node动画(设置交互动画)
  */
 
