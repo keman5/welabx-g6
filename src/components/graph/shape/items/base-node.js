@@ -136,7 +136,7 @@ export default G6 => {
         },
         /* 绘制节点，包含文本 */
         draw (cfg, group) {
-            const shapeName = this.shapeType || 'rect';
+            const shapeName = (this.shapeType === 'diamond' ? 'rect' : this.shapeType) || 'rect';
             // 合并外部样式和默认样式
             const attrs = Util.deepMix({}, this.getShapeStyle(cfg), cfg);
 
@@ -144,6 +144,7 @@ export default G6 => {
             const shape = group.addShape(shapeName, {
                 attrs: {
                     ...attrs.style,
+                    size:     attrs.size,
                     labelCfg: attrs.labelCfg,
                 },
                 className: `${shapeName}-shape`,

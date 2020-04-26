@@ -90,8 +90,7 @@
 </template>
 
 <script>
-    import G6 from '@antv/g6/es/index';
-    import registerFactory from './register-factory';
+    import G6 from '../../components/graph/graph';
     import ItemPanel from './ItemPanel.vue';
     import data from './data.js';
 
@@ -130,75 +129,14 @@
         },
         methods: {
             createGraphic () {
-                const { innerWidth, innerHeight } = window;
-                // 背景网格
-                const grid = new G6.Grid();
+                const graph = new G6();
 
-                // 注册组件, 行为, 事件等
-                registerFactory(G6);
+                // 自定义注册行为, 事件, 交互
+                /* graph.registerFactory(G6 => {
+                    console.log(G6);
+                }); */
 
-                this.graph = new G6.Graph({
-                    container:      'canvasPanel',
-                    width:          innerWidth - 100,
-                    height:         innerHeight - 40,
-                    // renderer:       'svg',
-                    //fitView:        true,
-                    fitViewPadding: 20,
-                    animate:        true,
-                    layout:         {
-                        type:    'dagre',
-                        // rankdir: 'LR',
-                        nodesep: 30,
-                        ranksep: 50,
-                    },
-                    modes: {
-                        // 允许拖拽画布、缩放画布、拖拽节点
-                        default: [
-                            'drag-canvas',
-                            // 'zoom-canvas',
-                            /* {
-                                type:    'click-select',
-                                trigger: 'ctrl',
-                            }, */
-                            /* {
-                                type:           'drag-node',
-                                enableDelegate: true,
-                            }, */
-                            // 'activate-relations',
-                            'delete-item',
-                            'select-node',
-                            'hover-node',
-                            'drag-node',
-                            'active-edge',
-                        ],
-                    },
-                    defaultNode: {
-                        type: 'circle-node',
-                    },
-                    defaultEdge: {
-                        type: 'base-edge', // base-edge polyline
-                    },
-                    // 节点不同状态下的样式集合
-                    nodeStateStyles: {
-                        hover: {
-                            fill: '#eee',
-                        },
-                        selected: {
-                            stroke: '#1890FF',
-                        },
-                    },
-                    // 节点不同状态下的样式集合
-                    edgeStateStyles: {
-                        selected: {
-                            stroke: 'steelblue',
-                        },
-                        hover: {
-                            fill: 'steelblue',
-                        },
-                    },
-                    plugins: [grid],
-                });
-
+                this.graph = graph.instance;
                 this.graph.read(data);
                 this.graph.paint();
                 // this.graph.fitView();

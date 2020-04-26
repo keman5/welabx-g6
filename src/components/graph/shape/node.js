@@ -19,7 +19,7 @@ export default G6 => {
         shapeType: 'rect',
         // 当前节点默认样式
         options:   {
-            icon: require('../../images/TB1_1680x370.png').default,
+            icon: require('../../../assets/images/TB1_1680x370.png').default,
             iconStyles,
         },
         // 覆盖 base-node 默认样式
@@ -42,7 +42,10 @@ export default G6 => {
                     shadowBlur:    10,
                 },
                 anchorPointStyles,
-                labelCfg: nodeLabelStyles,
+                labelCfg: {
+                    ...nodeLabelStyles,
+                    ...cfg.style.nodeLabelStyles,
+                },
             };
         },
         /* 获取锚点（相关边的连入点） */
@@ -67,9 +70,13 @@ export default G6 => {
                     // 将图形中心坐标移动到图形中心, 用于方便鼠标位置计算
                     x: 0,
                     y: 0,
+                    ...cfg.style,
                 },
                 anchorPointStyles,
-                labelCfg: nodeLabelStyles,
+                labelCfg: {
+                    ...nodeLabelStyles,
+                    ...cfg.style.nodeLabelStyles,
+                },
             };
         },
         getAnchorPoints (cfg) {
@@ -95,7 +102,68 @@ export default G6 => {
                     y: 0,
                 },
                 anchorPointStyles,
-                labelCfg: nodeLabelStyles,
+                labelCfg: {
+                    ...nodeLabelStyles,
+                    ...cfg.style.nodeLabelStyles,
+                },
+            };
+        },
+        getAnchorPoints (cfg) {
+            return [
+                [0.5, 0],
+                [0, 1],
+                [1, 1],
+            ];
+        },
+    }, 'base-node');
+
+    // 扩展椭圆形
+    G6.registerNode('ellipse-node', {
+        shapeType: 'ellipse',
+        getShapeStyle (cfg) {
+
+            return {
+                size:  [130, 80],
+                style: {
+                    ...nodeStyles,
+                    // 将图形中心坐标移动到图形中心, 用于方便鼠标位置计算
+                    x: 0,
+                    y: 0,
+                },
+                anchorPointStyles,
+                labelCfg: {
+                    ...nodeLabelStyles,
+                    ...cfg.style.nodeLabelStyles,
+                },
+            };
+        },
+        getAnchorPoints (cfg) {
+            return [
+                [0.5, 0],
+                [0, 1],
+                [1, 1],
+            ];
+        },
+    }, 'base-node');
+
+    // 扩展菱形
+    G6.registerNode('diamond-node', {
+        shapeType: 'diamond',
+        getShapeStyle (cfg) {
+
+            return {
+                size:  ['100', '80'],
+                style: {
+                    ...nodeStyles,
+                    // 将图形中心坐标移动到图形中心, 用于方便鼠标位置计算
+                    x: 0,
+                    y: 0,
+                },
+                anchorPointStyles,
+                labelCfg: {
+                    ...nodeLabelStyles,
+                    ...cfg.style.nodeLabelStyles,
+                },
             };
         },
         getAnchorPoints (cfg) {

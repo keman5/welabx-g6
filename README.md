@@ -33,3 +33,127 @@
 - ps 旋转和拖拽变形
 - 对齐线如何实现
 - 富文本功能栏
+
+## 使用
+
+```js
+// 此处对G6做了层封装处理
+import WelabxG6 from 'welabx-g6';
+
+const data = {
+    node: [
+        {
+            id: '1',
+            label: 'node1', // 节点上显示的文字
+            data: {
+                // ... 其他属性
+            },
+            type: 'rect-node', // ellipse-node / circle-node / diamond-node
+            style: {
+                // ... 当前节点的样式
+                r:     40, // 圆形节点半径
+                hover: {
+                    fill: '#ccc',
+                },
+                selected: {
+                    stroke: '#ccc',
+                },
+                // node 文本默认样式
+                nodeLabelStyles: {
+                    cursor:       'default',
+                    fill:         'red',
+                    textAlign:    'center',
+                    textBaseline: 'middle',
+                    fontSize:     16,
+                },
+            },
+        },
+    ],
+    edges: [
+        {
+            source: '1', // 来源节点 id
+            target: '2', // 目标节点 id
+            label: '条件', // 边上的文字 / 当前只支持1个文案
+            data:   {   // 当前边的自定义属性
+                type:   'xxx',
+                amount: '100,000 元',
+                date:   '2019-08-03',
+            },
+            style: {
+                // 当前边的样式
+            },
+        },
+    ],
+}
+
+const g6 = new WelabxG6({
+    container: 'id',
+    width: 1000,
+    height: 300,
+    renderer: 'svg', // 默认 canvas
+    // ... 其他G6参数
+});
+
+// 自定义注册行为, 事件, 交互
+g6.registerFactory(G6 => {
+    // G6: antv/G6 es6 版本原对象
+    console.log(G6);
+});
+
+const graph = g6.instance; // G6实例
+graph.read(data);
+graph.paint();
+```
+
+### 事件监听与通知
+
+```js
+// 已支持事件: after-node-selected/after-edge-selected
+graph.on('after-node-selected', data => {
+    if(data) {
+        console.log(data._cfg.id);
+    }
+});
+
+graph.on('after-edge-selected', data => {
+    if(data) {
+        console.log(data._cfg.source);
+    }
+});
+// 自定义事件监听需在 registerFactory 中定义
+```
+
+### 销毁实例
+
+```js
+graph.destroy();
+```
+
+### 添加节点/边
+
+```js
+const model = {
+    label: 'node',
+    id:    '1',
+    // 形状
+    type:  'rect-node', // e.target.dataset.shape
+    // 坐标
+    x:     e.clientX - 50,
+    y:     e.clientY + 200,
+};
+
+graph.addItem('node', model);
+
+graph.addItem('edge', {
+    source: '1',
+    label: 'edge',
+});
+```
+
+## 运行案例
+
+```ssh
+npm install
+npm run dev
+// open 127.0.0.1:4300 in your browser
+```
