@@ -108,18 +108,25 @@ graph.paint();
 ### 事件监听与通知
 
 ```js
-// 已支持事件: after-node-selected/after-edge-selected
-graph.on('after-node-selected', data => {
-    if(data) {
-        console.log(data._cfg.id);
+// 已支持事件: after-node-selected/after-edge-selected/after-node-removed
+graph.on('after-node-selected', node => {
+    if(node) {
+        console.log(node._cfg.id);
     }
 });
 
-graph.on('after-edge-selected', data => {
-    if(data) {
-        console.log(data._cfg.source);
+graph.on('after-edge-selected', edge => {
+    if(edge) {
+        console.log(edge._cfg.source);
     }
 });
+
+graph.on('after-node-removed', node => {
+    if(node) {
+        console.log(node._cfg.source);
+    }
+});
+
 // 自定义事件监听需在 registerFactory 中定义
 ```
 
@@ -157,3 +164,8 @@ npm install
 npm run dev
 // open 127.0.0.1:4300 in your browser
 ```
+
+## 注意事项
+
+> notes: 使用 cnpm 安装可能导致 import 路径报错, 建议使用npm或yarn
+> 有问题请在GitHub上提issue, 目前版本还有大部分功能要完善, 欢迎star

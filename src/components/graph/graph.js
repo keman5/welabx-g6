@@ -62,7 +62,7 @@ class G6 {
             defaultEdge: {
                 type: 'base-edge', // base-edge polyline
             },
-            // 节点不同状态下的样式集合
+            // 默认节点不同状态下的样式集合
             nodeStateStyles: {
                 hover: {
                     fill: '#eee',
@@ -71,7 +71,7 @@ class G6 {
                     stroke: '#1890FF',
                 },
             },
-            // 节点不同状态下的样式集合
+            // 默认边不同状态下的样式集合
             edgeStateStyles: {
                 selected: {
                     stroke: 'steelblue',
