@@ -189,6 +189,18 @@
                         };
                     }
                 });
+
+                this.graph.on('before-node-removed', callback => {
+                    setTimeout(() => {
+                        callback(true);
+                    }, 1000);
+                });
+
+                this.graph.on('after-node-dblclick', data => {
+                    if(data) {
+                        console.log(data._cfg);
+                    }
+                });
             },
         },
     };

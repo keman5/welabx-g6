@@ -15,6 +15,7 @@ export default G6 => {
             return {
                 'canvas:click':    'onCanvasClick',
                 'edge:click':      'onEdgeClick',
+                'edge:dblclick':   'ondblEdgeClick',
                 'edge:mouseenter': 'onMouseEnter',
                 // 'edge:mouseover':  'onMouseOver',
                 'edge:mouseleave': 'onMouseLeave',
@@ -32,6 +33,14 @@ export default G6 => {
             this.graph.setItemState(e.item, 'edgeSelected', true);
             // 将点击事件发送给 graph 实例
             this.graph.emit('after-edge-selected', e.item);
+        },
+        ondblEdgeClick (e) {
+            this._clearSelected();
+            this.editMode = true;
+            // 设置当前节点的 click 状态为 true
+            this.graph.setItemState(e.item, 'edgeSelected', true);
+            // 将点击事件发送给 graph 实例
+            this.graph.emit('after-edge-dblclick', e.item);
         },
         onMouseEnter (e) {
             if (!this.editMode) {

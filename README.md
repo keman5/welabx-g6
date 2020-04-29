@@ -108,7 +108,13 @@ graph.paint();
 ### 事件监听与通知
 
 ```js
-// 已支持事件: after-node-selected/after-edge-selected/after-node-removed
+/* 已支持事件列表:
+* after-node-selected
+* after-edge-selected
+* after-node-removed
+* after-node-dblclick
+* after-edge-dblclick
+*/
 graph.on('after-node-selected', node => {
     if(node) {
         console.log(node._cfg.id);
@@ -117,13 +123,15 @@ graph.on('after-node-selected', node => {
 
 graph.on('after-edge-selected', edge => {
     if(edge) {
-        console.log(edge._cfg.source);
+        console.log(edge._cfg.id);
     }
 });
 
 graph.on('after-node-removed', node => {
     if(node) {
-        console.log(node._cfg.source);
+        setTimeout(() => {
+            callback(true); // 必须传入 true 才能删除
+        }, 1000);
     }
 });
 
@@ -169,3 +177,19 @@ npm run dev
 
 > notes: 使用 cnpm 安装可能导致 import 路径报错, 建议使用npm或yarn
 > 有问题请在GitHub上提issue, 目前版本还有大部分功能要完善, 欢迎star
+
+## 更新日志
+
+所有版本更新日志(仅列出重要的更新):
+
+### [0.1.2] 20202-04-28
+
+- 新增删除事件: after-node-removed 和 after-edge-removed
+- 将 antv/g6 作为生产依赖
+
+> notes: 使用 cnpm 安装可能导致 import 路径报错, 建议使用npm或yarn
+
+### [0.1.3] 20202-04-29
+
+- 按delete键删除节点支持确认回调, 默认不再直接删除
+- 节点和边支持双击事件 after-node-dblclick / after-edge-dblclick, 弊端: 单击事件会被触发两次

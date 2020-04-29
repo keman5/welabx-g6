@@ -15,23 +15,28 @@ export default G6 => {
              */
             if (e.keyCode === 8) {
                 if (nodes && nodes.length) {
-                    const $node = nodes[0];
+                    this.graph.emit('before-node-removed', confirm => {
+                        if (confirm) {
+                            const $node = nodes[0];
 
-                    this.graph.remove(nodes[0]);
-                    this.graph.set('after-item-selected', []);
-                    // 发射事件
-                    this.graph.emit('after-item-selected');
-                    this.graph.emit('after-node-removed', $node);
-                }
+                            this.graph.remove(nodes[0]);
+                            this.graph.set('after-item-selected', []);
+                            // 发射事件
+                            this.graph.emit('after-item-selected');
+                            this.graph.emit('after-node-removed', $node);
 
-                if (edges && edges.length) {
-                    const $edge = edges[0];
+                            // 删除选中的边
+                            if (edges && edges.length) {
+                                const $edge = edges[0];
 
-                    this.graph.remove(edges[0]);
-                    this.graph.set('after-edge-selected', []);
-                    // 发射事件
-                    this.graph.emit('after-edge-selected');
-                    this.graph.emit('after-edge-removed', $edge);
+                                this.graph.remove(edges[0]);
+                                this.graph.set('after-edge-selected', []);
+                                // 发射事件
+                                this.graph.emit('after-edge-selected');
+                                this.graph.emit('after-edge-removed', $edge);
+                            }
+                        }
+                    });
                 }
             }
         },

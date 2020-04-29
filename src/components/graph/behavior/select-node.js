@@ -12,6 +12,7 @@ export default G6 => {
         getEvents () {
             return {
                 'node:click':      'onClick',
+                'node:dblclick':   'ondblClick',
                 'canvas:click':    'onCanvasClick',
                 'node:mouseover':  'onNodeMouseOver',
                 'node:mouseleave': 'onNodeMouseLeave',
@@ -26,6 +27,15 @@ export default G6 => {
             this.graph.setItemState(e.item, 'nodeSelected', true);
             // 将点击事件发送给 graph 实例
             this.graph.emit('after-node-selected', e.item);
+        },
+        ondblClick (e) {
+            // 先将所有当前是 click 状态的节点/edge 置为非 selected 状态
+            this._clearSelected();
+            // 获取被点击的节点元素对象
+            // 设置当前节点的 click 状态为 true
+            this.graph.setItemState(e.item, 'nodeSelected', true);
+            // 将点击事件发送给 graph 实例
+            this.graph.emit('after-node-dblclick', e.item);
         },
         onCanvasClick (e) {
             this._clearSelected();
