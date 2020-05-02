@@ -113,7 +113,7 @@ export default G6 => {
         /* 添加文本节点 */
         addLabel (cfg, group) {
             if (cfg.label) {
-                const { type, labelCfg } = this.options;
+                const { labelCfg } = this.options;
 
                 // 字体小于12时 svg会报错
                 if (labelCfg && labelCfg.fontSize < 12) {
@@ -129,24 +129,20 @@ export default G6 => {
                         text:   cfg.label,
                         ...labelCfg,
                     },
-                    className: `${type}-text`,
+                    className: 'node-text',
                     draggable: true,
                 });
             }
         },
         /* 绘制节点，包含文本 */
         draw (cfg, group) {
-            const shapeName = (this.shapeType === 'diamond' ? 'rect' : this.shapeType) || 'rect';
+            const shapeName = this.shapeType || 'rect';
             // 合并外部样式和默认样式
             const attrs = Util.deepMix({}, this.getShapeStyle(cfg), cfg);
 
             // 添加节点
             const shape = group.addShape(shapeName, {
-                attrs: {
-                    ...attrs.style,
-                    size:     attrs.size,
-                    labelCfg: attrs.labelCfg,
-                },
+                attrs:     this.getShapeStyle(cfg), // shape 属性在定义时返回
                 className: `${shapeName}-shape`,
                 draggable: true,
             });
@@ -188,7 +184,20 @@ export default G6 => {
         },
         /* 更新节点，包含文本 */
         update (cfg, node) {
+            const model = node.get('model');
+            const { attrs } = node.get('keyShape');
+            const text = node.get('group').getItem('node-text');
+            const item = node.get('group').get('children')[0];
 
+            setTimeout(() => {
+                // 更新文本内容
+                text && text.attr({
+                    text:     model.label,
+                    labelCfg: attrs.labelCfg,
+                });
+                // 更新节点属性
+                item.attr({ ...attrs, ...model.style });
+            });
         },
         /* 更新节点后的操作，同 afterDraw 配合使用 */
         afterUpdate (cfg, group) {
@@ -222,10 +231,7 @@ export default G6 => {
             } else {
                 console.warn(`warning: node ${name} 事件回调未注册!`);
             }
-            // 执行自定义状态回调
-            this.customStateCall(name, value, item);
         },
-        customStateCall (name, value, item) {},
         /* 获取锚点（相关边的连入点） */
         getAnchorPoints (cfg) {
             return [

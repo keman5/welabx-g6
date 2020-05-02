@@ -8,20 +8,16 @@ import registerFactory from './register-factory';
 
 class G6 {
     constructor(config = {}) {
-        let grid = null;
-        const plugins = [];
-
-        if (config.grid) {
-            // 背景网格
-            grid = new G6ES.Grid();
-            plugins.push(grid);
-        }
-
-        // 注册组件, 行为, 事件等
+        // 内部注册组件, 行为, 事件等
         registerFactory(G6ES);
-        // 用户自定义行为, 事件等
-        this.registerFactory();
 
+        // 外部自定义行为/事件等
+        config.registerFactory && config.registerFactory(G6ES);
+
+        this.init(config);
+    }
+
+    init (config) {
         const options = Object.assign({
             container:      'canvasPanel',
             width:          window.innerWidth - 100,
@@ -60,7 +56,13 @@ class G6 {
                 type: 'circle-node',
             },
             defaultEdge: {
-                type: 'base-edge', // base-edge polyline
+                type:  'polyline-edge', // polyline
+                style: {
+                    radius:          5,
+                    offset:          10,
+                    stroke:          '#aab7c3',
+                    lineAppendWidth: 10, // 防止线太细没法点中
+                },
             },
             // 默认节点不同状态下的样式集合
             nodeStateStyles: {
@@ -82,21 +84,17 @@ class G6 {
             },
         }, config);
 
-        if (plugins.length) {
-            options.plugins = plugins;
+        if (config.plugins && config.plugins.length) {
+            options.plugins = config.plugins;
         }
 
         this.instance = new G6ES.Graph(options);
     }
 
-    // 注册外部行为等
-    registerFactory (register) {
-        register && register(G6ES);
-    }
-
     // 销毁实例
     destroy () {
         this.instance.destroy();
+        this.instance = null;
     }
 }
 

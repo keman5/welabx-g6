@@ -30,7 +30,7 @@ export default G6 => {
             this._clearSelected();
             this.editMode = true;
             // 设置当前节点的 click 状态为 true
-            this.graph.setItemState(e.item, 'edgeSelected', true);
+            this.graph.setItemState(e.item.get('id'), 'edgeSelected', true);
             // 将点击事件发送给 graph 实例
             this.graph.emit('after-edge-selected', e.item);
         },

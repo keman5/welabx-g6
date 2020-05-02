@@ -28,21 +28,27 @@ export default G6 => {
             const height = cfg.style.height || 40;
 
             return {
-                style: {
+                ...nodeStyles,
+                width,
+                height,
+                // 将图形中心坐标移动到图形中心, 用于方便鼠标位置计算
+                x:      -width/2,
+                y:      -height / 2,
+                $style: {
                     ...nodeStyles,
                     width,
                     height,
                     // 将图形中心坐标移动到图形中心, 用于方便鼠标位置计算
-                    x:             -width/2,
-                    y:             -height/2,
-                    radius:        5,
-                    shadowOffsetX: 0,
-                    shadowOffsetY: 2,
-                    shadowColor:   '#ccc',
-                    shadowBlur:    10,
+                    x: -width / 2,
+                    y: -height / 2,
                 },
+                radius:        5,
+                shadowOffsetX: 0,
+                shadowOffsetY: 2,
+                shadowColor:   '#ccc',
+                shadowBlur:    10,
                 anchorPointStyles,
-                labelCfg: {
+                labelCfg:      {
                     ...nodeLabelStyles,
                     ...cfg.style.nodeLabelStyles,
                 },
@@ -64,13 +70,18 @@ export default G6 => {
             const r = cfg.style.r || 30;
 
             return {
-                style: {
+                ...nodeStyles,
+                r, // 半径
+                // 将图形中心坐标移动到图形中心, 用于方便鼠标位置计算
+                x:      0,
+                y:      0,
+                ...cfg.style,
+                $style: {
                     ...nodeStyles,
                     r, // 半径
                     // 将图形中心坐标移动到图形中心, 用于方便鼠标位置计算
                     x: 0,
                     y: 0,
-                    ...cfg.style,
                 },
                 anchorPointStyles,
                 labelCfg: {
@@ -89,46 +100,25 @@ export default G6 => {
         },
     }, 'base-node');
 
-    // 扩展三角形节点
-    G6.registerNode('triangle-node', {
-        shapeType: 'triangle',
-        getShapeStyle (cfg) {
-
-            return {
-                style: {
-                    ...nodeStyles,
-                    // 将图形中心坐标移动到图形中心, 用于方便鼠标位置计算
-                    x: 0,
-                    y: 0,
-                },
-                anchorPointStyles,
-                labelCfg: {
-                    ...nodeLabelStyles,
-                    ...cfg.style.nodeLabelStyles,
-                },
-            };
-        },
-        getAnchorPoints (cfg) {
-            return [
-                [0.5, 0],
-                [0, 1],
-                [1, 1],
-            ];
-        },
-    }, 'base-node');
-
     // 扩展椭圆形
     G6.registerNode('ellipse-node', {
         shapeType: 'ellipse',
         getShapeStyle (cfg) {
 
             return {
-                size:  [130, 80],
-                style: {
+                rx:     50,
+                ry:     30,
+                ...nodeStyles,
+                // 将图形中心坐标移动到图形中心, 用于方便鼠标位置计算
+                x:      0,
+                y:      0,
+                $style: {
                     ...nodeStyles,
+                    rx: 50,
+                    ry: 30,
                     // 将图形中心坐标移动到图形中心, 用于方便鼠标位置计算
-                    x: 0,
-                    y: 0,
+                    x:  0,
+                    y:  0,
                 },
                 anchorPointStyles,
                 labelCfg: {
@@ -140,21 +130,28 @@ export default G6 => {
         getAnchorPoints (cfg) {
             return [
                 [0.5, 0],
-                [0, 1],
-                [1, 1],
+                [0, 0.5],
+                [1, 0.5],
+                [0.5, 1],
             ];
         },
     }, 'base-node');
 
     // 扩展菱形
     G6.registerNode('diamond-node', {
-        shapeType: 'diamond',
+        shapeType: 'path', // 非内置 shape 要指定为path
         getShapeStyle (cfg) {
+            const path = this.getPath(cfg);
 
             return {
-                size:  ['100', '80'],
-                style: {
+                path,
+                ...nodeStyles,
+                // 将图形中心坐标移动到图形中心, 用于方便鼠标位置计算
+                x:      0,
+                y:      0,
+                $style: {
                     ...nodeStyles,
+                    path,
                     // 将图形中心坐标移动到图形中心, 用于方便鼠标位置计算
                     x: 0,
                     y: 0,
@@ -166,6 +163,53 @@ export default G6 => {
                 },
             };
         },
+        // 返回菱形的路径
+        getPath (cfg) {
+            const size = cfg.size || [80, 80]; // 如果没有 size 时的默认大小
+            const width = size[0];
+            const height = size[1];
+
+            //  / 1 \
+            // 4     2
+            //  \ 3 /
+            return [
+                ['M', 0, -height / 2], // 上部顶点
+                ['L', width / 2, 0], // 右侧顶点
+                ['L', 0, height / 2], // 下部顶点
+                ['L', -width / 2, 0], // 左侧顶点
+                ['Z'], // 封闭
+            ];
+        },
+        getAnchorPoints (cfg) {
+            return [
+                [0.5, 0],
+                [0, 0.5],
+                [1, 0.5],
+                [0.5, 1],
+            ];
+        },
+    }, 'base-node');
+
+    // 扩展三角形节点
+    /* G6.registerNode('triangle-node', {
+        shapeType: 'triangle',
+        getShapeStyle (cfg) {
+
+            return {
+                direction: 'top',
+                size:      [130, 130, 130],
+                ...nodeStyles,
+                // 将图形中心坐标移动到图形中心, 用于方便鼠标位置计算
+                x:         0,
+                y:         0,
+                anchorPointStyles,
+                labelCfg:  {
+                    ...nodeLabelStyles,
+                    ...cfg.style.nodeLabelStyles,
+                },
+                anchorPoints: this.getAnchorPoints(cfg),
+            };
+        },
         getAnchorPoints (cfg) {
             return [
                 [0.5, 0],
@@ -173,5 +217,6 @@ export default G6 => {
                 [1, 1],
             ];
         },
-    }, 'base-node');
+    }, 'base-node'); */
+
 };

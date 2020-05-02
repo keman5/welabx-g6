@@ -1,6 +1,6 @@
 import registerBaseNode from './items/base-node';
+import registerEdge from './base-edge';
 import registerNode from './node';
-import registerEdge from './edge';
 
 export default G6 => {
     // 先注册基础节点

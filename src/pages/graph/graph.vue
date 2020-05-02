@@ -4,7 +4,7 @@
             id="headPanel"
             :class="{ hidden: headVisible }"
         >
-            <span class="logo">logo</span>
+            <span class="logo">Vue 生命周期图示</span>
             <i
                 class="gb-toggle-btn"
                 @click="headVisible = !headVisible"
@@ -129,17 +129,20 @@
         },
         methods: {
             createGraphic () {
-                const graph = new G6();
-
-                // 自定义注册行为, 事件, 交互
-                /* graph.registerFactory(G6 => {
-                    console.log(G6);
-                }); */
+                const graph = new G6({
+                    // 自定义注册行为, 事件, 交互
+                    /* registerFactory: G6 => {
+                        console.log(G6);
+                    }, */
+                    // ... 其他G6原生入参
+                });
 
                 this.graph = graph.instance;
                 this.graph.read(data);
                 this.graph.paint();
                 // this.graph.fitView();
+                // 销毁实例
+                // graph.destroy();
             },
             // 复制节点
             copyNode () { },
@@ -148,13 +151,13 @@
             // 添加节点
             addNode (e) {
                 const model = {
-                    label: 'node',
+                    text: 'node',
                     // id:    Util.uniqueId(),
                     // 形状
-                    type:  'rect-node', // e.target.dataset.shape
+                    type: 'rect-node', // e.target.dataset.shape
                     // 坐标
-                    x:     e.clientX - 50,
-                    y:     e.clientY + 200,
+                    x:    e.clientX - 50,
+                    y:    e.clientY + 200,
                 };
 
                 this.graph.addItem('node', model);
@@ -163,43 +166,67 @@
             addEdge (e) {
                 const model = {
                     // id:    Util.uniqueId(),
-                    label: 'edge',
+                    text:  'edge',
+                    shape: 'line',
+                    style: {
+                        strokeWidth: 1,
+                    },
+                    label:    'xxx',
+                    labelCfg: {},
                 };
 
                 this.graph.addItem('edge', model);
             },
             // 初始化图事件
             initGraphEvent() {
-                this.graph.on('after-node-selected', data => {
-                    this.configVisible = !!data;
+                this.graph.on('after-node-selected', item => {
+                    this.configVisible = !!item;
 
-                    if(data) {
-                        this.config = {
-                            id: data._cfg.id,
-                        };
+                    if(item) {
+                        const id = item.get('id');
+                        const model = item.get('model');
+
+                        this.config = model;
+
+                        model.label = id;
+                        model.style.fill = 'rgba(24, 144, 255, .3)';
+                        this.graph.updateItem(item, model);
                     }
                 });
 
-                this.graph.on('after-edge-selected', data => {
-                    this.configVisible = !!data;
+                this.graph.on('after-edge-selected', item => {
+                    this.configVisible = !!item;
 
-                    if(data) {
-                        this.config = {
-                            id: data._cfg.id,
-                        };
+                    if(item) {
+                        this.config = JSON.stringify(item.get('model'));
+
+                        this.graph.updateItem(item, { label: 'model' });
                     }
                 });
 
-                this.graph.on('before-node-removed', callback => {
+                this.graph.on('before-node-removed', ({ target, callback }) => {
+                    console.log(target);
                     setTimeout(() => {
                         callback(true);
                     }, 1000);
                 });
 
-                this.graph.on('after-node-dblclick', data => {
-                    if(data) {
-                        console.log(data._cfg);
+                this.graph.on('after-node-dblclick', item => {
+                    if(item) {
+                        console.log(item);
                     }
+                });
+
+                this.graph.on('before-edge-add', ({ source, target, sourceAnchor, targetAnchor }) => {
+                    setTimeout(() => {
+                        this.graph.addItem('edge', {
+                            source: source.get('id'),
+                            target: target.get('id'),
+                            sourceAnchor,
+                            targetAnchor,
+                            label:  'edge label',
+                        });
+                    }, 100);
                 });
             },
         },

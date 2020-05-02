@@ -14,7 +14,7 @@ export default {
     // node 交互样式
     nodeStateStyles: {
         // 鼠标 hover 上节点，即 hover 状态为 true 时的样式
-        nodeHover: {
+        hover: {
             cursor:        'pointer',
             shadowOffsetX: 0,
             shadowOffsetY: 4,

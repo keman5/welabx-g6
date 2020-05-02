@@ -76,7 +76,7 @@ const events = {
      * @description 节点selected事件
      */
     nodeSelected (value, group) {
-        const nodeDefault = this.options.style;
+        const nodeDefault = this.options.$style;
         const textDefault = this.options.nodeLabelStyles;
         const nodeHover = this.options.nodeStateStyles.selected;
         const textHover = this.options.nodeLabelStateStyles.selected;

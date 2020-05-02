@@ -86,41 +86,42 @@ export default G6 => {
             const { labelCfg } = this.options;
             const labelStyle = this._getLabelStyleByPosition(cfg, labelCfg || {}, group);
 
+            const text = cfg.label || '';
             const label = group.addShape('text', {
                 attrs: {
-                    ...labelStyle,
                     fill: '#666',
-                    text: cfg.label,
-                    ...labelCfg,
-                },
-                className: 'edge-label',
-            });
-
-            const labelBBox = label.getBBox();
-
-            group.addShape('rect', {
-                attrs: {
                     ...labelStyle,
-                    x:       labelBBox.x - 3,
-                    y:       labelBBox.y - 3,
-                    width:   labelBBox.width + 6,
-                    height:  labelBBox.height + 6,
-                    fill:    '#fff',
-                    opacity: 0.7,
                     ...labelCfg,
+                    text,
                 },
-                className: 'edge-label',
+                className: 'edge-label-text',
             });
+
+            if (text) {
+                const labelBBox = label.getBBox();
+
+                group.addShape('rect', {
+                    attrs: {
+                        ...labelStyle,
+                        x:       labelBBox.x - 3,
+                        y:       labelBBox.y - 3,
+                        width:   labelBBox.width + 6,
+                        height:  labelBBox.height + 6,
+                        fill:    '#fff',
+                        opacity: 0.7,
+                        ...labelCfg,
+                    },
+                    className: 'edge-label',
+                });
+            }
 
             label.toFront();
         },
         /* 绘制节点，包含文本 */
         drawShape (cfg, group) {
-            const shapeStyle = this.getShapeStyle(cfg);
+            const attrs = this.getShapeStyle(cfg);
             const keyShape = group.addShape('path', {
-                attrs: {
-                    ...shapeStyle,
-                },
+                attrs,
                 className: 'base-edge',
             });
 
@@ -129,6 +130,13 @@ export default G6 => {
 
             return keyShape;
         },
+        /* afterUpdate (cfg, edge) {
+            const text = edge.get('group').get('children').find(o => o.get('className') === 'edge-label-text');
+
+            setTimeout(() => {
+                text.attr('text', 'edge');
+            });
+        }, */
         setState (name, value, item) {
             const buildInEvents = [
                 'edgeHover',
@@ -142,11 +150,7 @@ export default G6 => {
             } else {
                 console.warn(`warning: edge ${name} 事件回调未注册!`);
             }
-            // 执行自定义状态回调
-            this.customStateCall(name, value, item);
         },
-        customStateCall (name, value, item) { },
-
         getShapeStyle (cfg) {
             const { startPoint, endPoint } = cfg;
             const stroke = (cfg.style && cfg.style.stroke) || edgeStyles.stroke;
@@ -295,11 +299,6 @@ export default G6 => {
             style.text = cfg.label;
             return style;
         },
-        /**
-         * 此处用到了寻路算法, 本人算法渣渣
-         * 只好copy大佬现成的代码: https://guozhaolong.github.io/wfd/
-         * 自己折腾两天都没写出来 大佬的代码用起来真香!
-         */
         _getPath (points) {
             const path = [];
 

@@ -2,13 +2,12 @@ export default {
   nodes: [
     {
       id:    '1',
-      label: '公司1',
+      label: 'new Vue()',
       data:  {
         date: '2020-04-20',
       },
-      type:  'rect-node',
+      type:  'diamond-node', // 对应注册的节点name
       style: {
-        r:     40,
         hover: {
           fill: '#ccc',
         },
@@ -21,22 +20,23 @@ export default {
           fill:         'red',
           textAlign:    'center',
           textBaseline: 'middle',
-          fontSize:     16,
+          fontSize:     13,
         },
       },
     },
     {
       id:    '2',
-      label: '公司2',
+      label: 'id: 2',
+      type:  'circle-node',
     },
     {
       id:    '3',
-      label: '公司3',
-      type:  'rect-node',
+      label: 'id: 3',
+      // type:  'rect-node',
     },
     {
       id:    '4',
-      label: '公司4',
+      label: 'id: 4',
       style: {
         size: [130, 100],
       },
@@ -44,12 +44,12 @@ export default {
     },
     {
       id:    '5',
-      label: '公司5',
+      label: 'id: 5',
       type:  'diamond-node',
     },
     {
       id:    '8',
-      label: '公司8',
+      label: 'id: 8',
       style: {
         size: [130, 100],
       },
@@ -57,7 +57,7 @@ export default {
     },
     {
       id:    '9',
-      label: '公司9',
+      label: 'id: 9',
     },
   ],
   edges: [
@@ -119,7 +119,6 @@ export default {
         amount: '100,000 元',
         date:   '2019-08-03',
       },
-      label: '大于',
     },
   ],
 };

@@ -91,18 +91,18 @@ const g6 = new WelabxG6({
     width: 1000,
     height: 300,
     renderer: 'svg', // 默认 canvas
+    // 自定义注册行为, 事件, 交互
+    registerFactory: G6 => {
+        console.log(G6);
+    },
     // ... 其他G6参数
-});
-
-// 自定义注册行为, 事件, 交互
-g6.registerFactory(G6 => {
-    // G6: antv/G6 es6 版本原对象
-    console.log(G6);
 });
 
 const graph = g6.instance; // G6实例
 graph.read(data);
 graph.paint();
+// 销毁实例
+g6.destroy();
 ```
 
 ### 事件监听与通知
@@ -114,6 +114,8 @@ graph.paint();
 * after-node-removed
 * after-node-dblclick
 * after-edge-dblclick
+* before-node-removed
+* before-edge-add
 */
 graph.on('after-node-selected', node => {
     if(node) {
@@ -127,14 +129,25 @@ graph.on('after-edge-selected', edge => {
     }
 });
 
-graph.on('after-node-removed', node => {
-    if(node) {
-        setTimeout(() => {
-            callback(true); // 必须传入 true 才能删除
-        }, 1000);
-    }
+graph.on('before-node-removed', ({target, callback}) => {
+    console.log(target);
+    setTimeout(() => {
+        callback(true);
+    }, 1000);
 });
 
+graph.on('before-edge-add', ({ source, target, sourceAnchor, targetAnchor }) => {
+    setTimeout(() => {
+        this.graph.addItem('edge', {
+            source: source.get('id'),
+            target: target.get('id'),
+            sourceAnchor,
+            targetAnchor,
+            label:  'edge label',
+            // ... item 其他属性
+        });
+    }, 1000);
+});
 // 自定义事件监听需在 registerFactory 中定义
 ```
 
@@ -193,3 +206,9 @@ npm run dev
 
 - 按delete键删除节点支持确认回调, 默认不再直接删除
 - 节点和边支持双击事件 after-node-dblclick / after-edge-dblclick, 弊端: 单击事件会被触发两次
+
+### [0.1.8] 20202-04-30
+
+- 优化 before-node-removed, 支持获取要删除的节点信息
+- 拖拽锚点后不再自动添加边, 需在 before-edge-add 事件回调中自行添加
+- *所有事件返回的节点都是 item 实例*
