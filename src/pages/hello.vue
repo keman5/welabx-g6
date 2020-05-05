@@ -1,5 +1,5 @@
 <template>
-    <div class="page">
-        hellow
-    </div>
+  <div class="page">
+    hellow
+  </div>
 </template>

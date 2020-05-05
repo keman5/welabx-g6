@@ -1,30 +1,32 @@
 # g6 流程图
 
+![截图](https://github.com/claudewowo/welabx-g6/blob/develop/screenshot/iShot2020-05-06.png)
+
 - 自定义节点和边
-- 已内置圆形和方形节点
+- 自定义圆形, 方形, 椭圆, 菱形节点
 - 节点支持拖拽连线, 删除, 编辑
-- 边支持标签显示
+- 边自带箭头, 支持标签显示
+- 自定义 tool-tip 内容
 
 ## TODO
 
-- 给节点设置图标
-- 添加 tool-tip
-- 画布缩放时的拖拽兼容
-- 解决拖拽时 null文字残留
-- 拖拽画布后拖拽锚点虚线位置错误
-- 节点多选(shift), 拖动框选节点
-- 拖拽节点到画布边缘时自动滚动画布可见范围
-- 高亮显示与该节点连接的节点
-- 点击节点时将节点层级提升
-- 三角形, 平行四边形节点
-- 锚点禁用状态及相关交互
-- 节点锁定及加锁状态
-- 边标签的位置优化(直接继承line)
-- 双击节点编辑标签
-- 拖拽边高亮及时消失
-- 边支持编辑箭头
-- 边偶尔会被选中
-- 边动态动画
+- [] 给节点设置图标
+- [] 解决拖拽时 null文字残留
+- [] 拖拽画布后拖拽锚点虚线位置错误
+- [] 节点多选(shift), 拖动框选节点
+- [] 拖拽节点到画布边缘时自动滚动画布可见范围
+- [] 高亮显示与该节点连接的节点
+- [] 锚点禁用状态及相关交互
+- [] 节点锁定及加锁状态
+- [] 拖拽边高亮及时消失
+- [] 边偶尔会被选中
+- [] 边动态动画
+
+- [x] 椭圆, 平行四边形节点
+- [x] 边支持编辑箭头
+- [x] 双击节点编辑标签
+- [x] 画布缩放时的拖拽兼容
+- [x] 点击节点时将节点层级提升
 
 ## 深度思考
 
@@ -41,61 +43,61 @@
 import WelabxG6 from 'welabx-g6';
 
 const data = {
-    node: [
-        {
-            id: '1',
-            label: 'node1', // 节点上显示的文字
-            data: {
-                // ... 其他属性
-            },
-            type: 'rect-node', // ellipse-node / circle-node / diamond-node
-            style: {
-                // ... 当前节点的样式
-                r:     40, // 圆形节点半径
-                hover: {
-                    fill: '#ccc',
-                },
-                selected: {
-                    stroke: '#ccc',
-                },
-                // node 文本默认样式
-                nodeLabelStyles: {
-                    cursor:       'default',
-                    fill:         'red',
-                    textAlign:    'center',
-                    textBaseline: 'middle',
-                    fontSize:     16,
-                },
-            },
+  node: [
+    {
+      id: '1',
+      label: 'node1', // 节点上显示的文字
+      data: {
+        // ... 其他属性
+      },
+      type: 'rect-node', // ellipse-node / circle-node / diamond-node
+      style: {
+        // ... 当前节点的样式
+        r:   40, // 圆形节点半径
+        hover: {
+          fill: '#ccc',
         },
-    ],
-    edges: [
-        {
-            source: '1', // 来源节点 id
-            target: '2', // 目标节点 id
-            label: '条件', // 边上的文字 / 当前只支持1个文案
-            data:   {   // 当前边的自定义属性
-                type:   'xxx',
-                amount: '100,000 元',
-                date:   '2019-08-03',
-            },
-            style: {
-                // 当前边的样式
-            },
+        selected: {
+          stroke: '#ccc',
         },
-    ],
+        // node 文本默认样式
+        nodeLabelStyles: {
+          cursor:     'default',
+          fill:     'red',
+          textAlign:  'center',
+          textBaseline: 'middle',
+          fontSize:   16,
+        },
+      },
+    },
+  ],
+  edges: [
+    {
+      source: '1', // 来源节点 id
+      target: '2', // 目标节点 id
+      label: '条件', // 边上的文字 / 当前只支持1个文案
+      data:   {   // 当前边的自定义属性
+        type:   'xxx',
+        amount: '100,000 元',
+        date:   '2019-08-03',
+      },
+      style: {
+        // 当前边的样式
+      },
+    },
+  ],
 }
 
 const g6 = new WelabxG6({
-    container: 'id',
-    width: 1000,
-    height: 300,
-    renderer: 'svg', // 默认 canvas
-    // 自定义注册行为, 事件, 交互
-    registerFactory: G6 => {
-        console.log(G6);
-    },
-    // ... 其他G6参数
+  container: 'id',
+  width: 1000,
+  height: 300,
+  renderer: 'svg', // 默认 canvas
+  // 自定义注册行为, 事件, 交互
+  registerFactory: G6 => {
+    console.log(G6);
+  },
+  // ... 其他G6参数
 });
 
 const graph = g6.instance; // G6实例
@@ -111,6 +113,12 @@ g6.destroy();
 /* 已支持事件列表:
 * after-node-selected
 * after-edge-selected
+* on-node-mouseenter
+* on-node-mousemove
+* on-node-mouseleave
+* on-edge-mouseenter
+* on-edge-mousemove
+* on-edge-mouseleave
 * after-node-removed
 * after-node-dblclick
 * after-edge-dblclick
@@ -118,35 +126,35 @@ g6.destroy();
 * before-edge-add
 */
 graph.on('after-node-selected', node => {
-    if(node) {
-        console.log(node._cfg.id);
-    }
+  if(node) {
+    console.log(node._cfg.id);
+  }
 });
 
 graph.on('after-edge-selected', edge => {
-    if(edge) {
-        console.log(edge._cfg.id);
-    }
+  if(edge) {
+    console.log(edge._cfg.id);
+  }
 });
 
 graph.on('before-node-removed', ({target, callback}) => {
-    console.log(target);
-    setTimeout(() => {
-        callback(true);
-    }, 1000);
+  console.log(target);
+  setTimeout(() => {
+    callback(true);
+  }, 1000);
 });
 
 graph.on('before-edge-add', ({ source, target, sourceAnchor, targetAnchor }) => {
-    setTimeout(() => {
-        this.graph.addItem('edge', {
-            source: source.get('id'),
-            target: target.get('id'),
-            sourceAnchor,
-            targetAnchor,
-            label:  'edge label',
-            // ... item 其他属性
-        });
-    }, 1000);
+  setTimeout(() => {
+    this.graph.addItem('edge', {
+      source: source.get('id'),
+      target: target.get('id'),
+      sourceAnchor,
+      targetAnchor,
+      label:  'edge label',
+      // ... item 其他属性
+    });
+  }, 1000);
 });
 // 自定义事件监听需在 registerFactory 中定义
 ```
@@ -161,20 +169,20 @@ graph.destroy();
 
 ```js
 const model = {
-    label: 'node',
-    id:    '1',
-    // 形状
-    type:  'rect-node', // e.target.dataset.shape
-    // 坐标
-    x:     e.clientX - 50,
-    y:     e.clientY + 200,
+  label: 'node',
+  id:  '1',
+  // 形状
+  type:  'rect-node', // e.target.dataset.shape
+  // 坐标
+  x:   e.clientX - 50,
+  y:   e.clientY + 200,
 };
 
 graph.addItem('node', model);
 
 graph.addItem('edge', {
-    source: '1',
-    label: 'edge',
+  source: '1',
+  label: 'edge',
 });
 ```
 
