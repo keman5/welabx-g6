@@ -4,6 +4,10 @@
  * @description 通通来自于 behavior 里注册的事件
  */
 
+import defaultStyles from '../defaultStyles';
+
+const { anchorHotsoptStyle } = defaultStyles;
+
 const events = {
     /**
      * @description 恢复节点/边/锚点默认样式
@@ -30,7 +34,7 @@ const events = {
     /**
      * @description 锚点激活事件
      */
-    anchorActived(value, group) {
+    anchorActived (value, group) {
         if (value) {
             group.showAnchor(group);
 
@@ -40,7 +44,7 @@ const events = {
                     attrs: {
                         x:       bbox.minX + bbox.width * p[0],
                         y:       bbox.minY + bbox.height * p[1],
-                        r:       group.anchorShapes[0].get('attrs').r + 6,
+                        r:       anchorHotsoptStyle.radius,
                         fill:    '#1890ff',
                         opacity: 0.5,
                     },
@@ -60,7 +64,7 @@ const events = {
                 }
                 if (item.get('className') === 'node-anchor-group') {
                     item.attr({
-                        r: item.get('attrs').r + 6,
+                        r: anchorHotsoptStyle.radius + 2,
                         // opacity: 0.2,
                     });
                     item.toFront();

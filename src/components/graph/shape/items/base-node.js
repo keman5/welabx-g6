@@ -8,7 +8,11 @@ import itemEvents from './item-event';
 import anchorEvent from './anchor-event';
 import defaultStyles from '../defaultStyles';
 
-const { nodeStateStyles, nodeLabelStateStyles } = defaultStyles;
+const {
+    nodeStateStyles,
+    nodeLabelStateStyles,
+    anchorHotsoptStyle,
+} = defaultStyles;
 
 /*
  * 注册基础node => 添加锚点/图标 => 绘制node => 初始化node状态 => node动画(设置交互动画)
@@ -50,7 +54,8 @@ export default G6 => {
         },
         drawAnchor (cfg, group) {
             const { anchorPointStyles } = this.options;
-            const bbox = group.get('children')[0].getBBox();
+            const item = group.get('children')[0];
+            const bbox = item.getBBox();
 
             // 绘制锚点坐标
             this.getAnchorPoints().forEach((p, i) => {
@@ -66,7 +71,7 @@ export default G6 => {
                         y: bbox.minY + bbox.height * p[1],
                         ...anchorPointStyles,
                     },
-                    nodeId:    group.get('item')._cfg.id,
+                    nodeId:    group.get('id'),
                     className: 'node-anchor',
                     draggable: true,
                     isAnchor:  true,
@@ -77,11 +82,11 @@ export default G6 => {
                     attrs: {
                         x:       bbox.minX + bbox.width * p[0],
                         y:       bbox.minY + bbox.height * p[1],
-                        r:       anchorPointStyles.r + anchorPointStyles.lineWidth,
+                        r:       anchorHotsoptStyle.radius,
                         fill:    '#000',
                         opacity: 0,
                     },
-                    nodeId:    group.get('item')._cfg.id,
+                    nodeId:    group.get('id'),
                     className: 'node-anchor-group',
                     draggable: true,
                     isAnchor:  true,
@@ -200,9 +205,9 @@ export default G6 => {
             });
         },
         /* 更新节点后的操作，同 afterDraw 配合使用 */
-        afterUpdate (cfg, group) {
+        afterUpdate (cfg, node) {
             // 显示/隐藏图标
-            const icon = group.get('group').icon;
+            const icon = node.get('group').icon;
 
             if (icon) {
                 if(cfg.hideIcon && icon.get('visible')){

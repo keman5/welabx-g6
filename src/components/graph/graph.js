@@ -59,9 +59,17 @@ class G6 {
                 type:  'polyline-edge', // polyline
                 style: {
                     radius:          5,
-                    offset:          10,
+                    offset:          15,
                     stroke:          '#aab7c3',
                     lineAppendWidth: 10, // 防止线太细没法点中
+                    /* startArrow:      {
+                        path: 'M 0,0 L 8,4 L 7,0 L 8,-4 Z',
+                        fill: '#aab7c3',
+                    }, */
+                    endArrow:        {
+                        path: 'M 0,0 L 8,4 L 7,0 L 8,-4 Z',
+                        fill: '#aab7c3',
+                    },
                 },
             },
             // 默认节点不同状态下的样式集合

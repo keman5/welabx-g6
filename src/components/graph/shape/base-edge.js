@@ -29,4 +29,76 @@ export default G6 => {
             }
         },
     }, 'polyline');
+
+    G6.registerEdge('line-edge', {
+
+        setState (name, value, item) {
+            const buildInEvents = [
+                'edgeHover',
+                'edgeSelected',
+            ];
+            const group = item.getContainer();
+
+            if (buildInEvents.includes(name)) {
+                // 内部this绑定到了当前item实例
+                itemEvents[name].call(this, value, group);
+            } else {
+                console.warn(`warning: edge ${name} 事件回调未注册!`);
+            }
+        },
+    }, 'line');
+
+    G6.registerEdge('quadratic-edge', {
+
+        setState (name, value, item) {
+            const buildInEvents = [
+                'edgeHover',
+                'edgeSelected',
+            ];
+            const group = item.getContainer();
+
+            if (buildInEvents.includes(name)) {
+                // 内部this绑定到了当前item实例
+                itemEvents[name].call(this, value, group);
+            } else {
+                console.warn(`warning: edge ${name} 事件回调未注册!`);
+            }
+        },
+    }, 'quadratic');
+
+    G6.registerEdge('cubic-edge', {
+
+        setState (name, value, item) {
+            const buildInEvents = [
+                'edgeHover',
+                'edgeSelected',
+            ];
+            const group = item.getContainer();
+
+            if (buildInEvents.includes(name)) {
+                // 内部this绑定到了当前item实例
+                itemEvents[name].call(this, value, group);
+            } else {
+                console.warn(`warning: edge ${name} 事件回调未注册!`);
+            }
+        },
+    }, 'cubic');
+
+    G6.registerEdge('arc-edge', {
+        curveOffset: 40,
+        setState (name, value, item) {
+            const buildInEvents = [
+                'edgeHover',
+                'edgeSelected',
+            ];
+            const group = item.getContainer();
+
+            if (buildInEvents.includes(name)) {
+                // 内部this绑定到了当前item实例
+                itemEvents[name].call(this, value, group);
+            } else {
+                console.warn(`warning: edge ${name} 事件回调未注册!`);
+            }
+        },
+    }, 'arc');
 };

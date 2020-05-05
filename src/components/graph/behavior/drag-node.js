@@ -23,7 +23,7 @@ export default G6 => {
         onMousedown (e) {
             if (e.target.cfg.isAnchor) {
                 // 拖拽锚点
-                this.dragTarget = 'link';
+                this.dragTarget = 'anchor';
                 this.dragStartNode = {
                     ...e.item._cfg,
                     anchorIndex: e.target.cfg.index,
@@ -36,11 +36,11 @@ export default G6 => {
             }
         },
         onMouseup (e) {
-            if (this.dragTarget === 'link') {
+            if (this.dragTarget === 'anchor') {
                 const nodes = this.graph.findAll('node', node => node);
 
                 nodes.forEach(node => {
-                    this.graph.setItemState(node, 'anchorActived', false);
+                    node.clearStates('anchorActived');
                 });
             }
         },
@@ -48,16 +48,6 @@ export default G6 => {
         onDragStart (e) {
             if (e.target.cfg.isAnchor) {
                 // 拖拽锚点
-                /* this.dragTarget = 'link';
-                this.dragStartNode = {
-                    ...e.item._cfg,
-                    anchorIndex: e.target.cfg.index,
-                };
-                const nodes = this.graph.findAll('node', node => node);
-
-                nodes.forEach(node => {
-                    this.graph.setItemState(node, 'anchorActived', true);
-                }); */
             } else {
                 // 拖拽节点
                 e.item.toFront();
@@ -73,21 +63,15 @@ export default G6 => {
                 // this.graph.setItemState(e.item, 'nodeOnDrag', e); // 通知外部组件
             }
         },
-        onDragEnter (e) {
-            // 给锚点背景绑定事件
-            if (this.dragTarget === 'link') {
-                console.log(e);
-            }
-        },
         // 拖拽结束
         onDragEnd (e) {
             const group = e.item.getContainer();
 
-            if (this.dragTarget === 'link') {
+            if (this.dragTarget === 'anchor') {
                 const nodes = this.graph.findAll('node', node => node);
 
                 nodes.forEach(node => {
-                    this.graph.setItemState(node, 'anchorActived', false);
+                    node.clearStates('anchorActived');
                 });
             } else if (this.dragTarget === 'node') {
                 this._nodeOnDragEnd(e, group);
@@ -97,7 +81,7 @@ export default G6 => {
         // 锚点拖拽结束添加边
         onDrop (e) {
             // e.item 当前拖拽节点 | e.target 当前释放节点
-            if (this.dragStartNode.id && e.target.cfg.isAnchor) {
+            if (this.dragStartNode.id && e.target.cfg.isAnchor && (this.dragStartNode.id !== e.target.cfg.nodeId)) {
 
                 this.graph.emit('before-edge-add', {
                     source:       this.dragStartNode.group.get('item'),

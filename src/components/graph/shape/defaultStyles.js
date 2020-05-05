@@ -76,7 +76,7 @@ export default {
         },
     },
     anchorHotsoptStyle: {
-        radius:      12,
+        radius:      11,
         fill:        '#1890FF',
         fillOpacity: 0.25,
     },

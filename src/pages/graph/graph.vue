@@ -198,7 +198,7 @@
                     this.configVisible = !!item;
 
                     if(item) {
-                        this.config = JSON.stringify(item.get('model'));
+                        this.config = item.get('model').id;
 
                         this.graph.updateItem(item, { label: 'model' });
                     }

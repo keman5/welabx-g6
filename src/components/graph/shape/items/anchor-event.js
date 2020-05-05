@@ -18,14 +18,11 @@ export default (anchor, group, p) => {
     // 拖拽事件
     anchor.on('dragstart', () => {
         if (anchorNodeId == null) {
-            // 先刷新当前节点的位置, 否则拖拽画布会发生位置错误
-            group.get('item').refresh();
-
             const { r } = anchor.get('attrs');
             const cacheCanvasBBox = group.get('cacheCanvasBBox');
             const { id, model: { style } } = group.get('item')._cfg;
             const lineWidth = (style.lineWidth || 0) / 2;
-            const point = [(cacheCanvasBBox.width - r * 4 - 1) * (p[0] - 0.5) - lineWidth, (cacheCanvasBBox.height - r * 4 - 1) * (p[1] - 0.5) - lineWidth];
+            const point = [(cacheCanvasBBox.width - r * 2 - 4) * (p[0] - 0.5) - lineWidth, (cacheCanvasBBox.height - r * 2 - 4) * (p[1] - 0.5) - lineWidth];
 
             // 添加线条
             const line = group.addShape('path', {
@@ -50,7 +47,7 @@ export default (anchor, group, p) => {
 
     // 拖拽中
     anchor.on('drag', e => {
-        const bboxCache = group.get('item').getBBox(); // 这里要注意有缓存
+        const canvasBox = group.get('children')[0].get('canvasBox');
         const line = group.getItem('dashed-line');
         const pointStart = line.get('pointStart');
 
@@ -58,12 +55,12 @@ export default (anchor, group, p) => {
         /**
          * 计算方法:
          * 鼠标位置 - box左上角 - width/2 => 中心坐标
-         * 这里减 1px 是为了让鼠标释放时 node: drag 事件监听到 target, 而不是当前虚线
+         * 这里减 2px 是为了让鼠标释放时 node: drag 事件监听到 target, 而不是当前虚线
          */
         line.attr({
             path: [
                 ['M', ...pointStart],
-                ['L', e.x - bboxCache.x - bboxCache.width / 2 - 1, e.y - bboxCache.y - bboxCache.height / 2 - 1],
+                ['L', e.x - canvasBox.x - canvasBox.width / 2 - 2, e.y - canvasBox.y - canvasBox.height / 2 - 2],
             ],
         });
     });

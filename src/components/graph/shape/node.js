@@ -32,16 +32,8 @@ export default G6 => {
                 width,
                 height,
                 // 将图形中心坐标移动到图形中心, 用于方便鼠标位置计算
-                x:      -width/2,
-                y:      -height / 2,
-                $style: {
-                    ...nodeStyles,
-                    width,
-                    height,
-                    // 将图形中心坐标移动到图形中心, 用于方便鼠标位置计算
-                    x: -width / 2,
-                    y: -height / 2,
-                },
+                x:             -width/2,
+                y:             -height / 2,
                 radius:        5,
                 shadowOffsetX: 0,
                 shadowOffsetY: 2,
@@ -73,16 +65,9 @@ export default G6 => {
                 ...nodeStyles,
                 r, // 半径
                 // 将图形中心坐标移动到图形中心, 用于方便鼠标位置计算
-                x:      0,
-                y:      0,
+                x:        0,
+                y:        0,
                 ...cfg.style,
-                $style: {
-                    ...nodeStyles,
-                    r, // 半径
-                    // 将图形中心坐标移动到图形中心, 用于方便鼠标位置计算
-                    x: 0,
-                    y: 0,
-                },
                 anchorPointStyles,
                 labelCfg: {
                     ...nodeLabelStyles,
@@ -106,20 +91,12 @@ export default G6 => {
         getShapeStyle (cfg) {
 
             return {
-                rx:     50,
-                ry:     30,
+                rx:       50,
+                ry:       30,
                 ...nodeStyles,
                 // 将图形中心坐标移动到图形中心, 用于方便鼠标位置计算
-                x:      0,
-                y:      0,
-                $style: {
-                    ...nodeStyles,
-                    rx: 50,
-                    ry: 30,
-                    // 将图形中心坐标移动到图形中心, 用于方便鼠标位置计算
-                    x:  0,
-                    y:  0,
-                },
+                x:        0,
+                y:        0,
                 anchorPointStyles,
                 labelCfg: {
                     ...nodeLabelStyles,
@@ -147,15 +124,8 @@ export default G6 => {
                 path,
                 ...nodeStyles,
                 // 将图形中心坐标移动到图形中心, 用于方便鼠标位置计算
-                x:      0,
-                y:      0,
-                $style: {
-                    ...nodeStyles,
-                    path,
-                    // 将图形中心坐标移动到图形中心, 用于方便鼠标位置计算
-                    x: 0,
-                    y: 0,
-                },
+                x:        0,
+                y:        0,
                 anchorPointStyles,
                 labelCfg: {
                     ...nodeLabelStyles,
