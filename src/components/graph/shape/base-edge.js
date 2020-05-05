@@ -12,93 +12,93 @@ import itemEvents from './items/item-event';
  */
 
 export default G6 => {
-    G6.registerEdge('polyline-edge', {
+  G6.registerEdge('polyline-edge', {
 
-        setState (name, value, item) {
-            const buildInEvents = [
-                'edgeHover',
-                'edgeSelected',
-            ];
-            const group = item.getContainer();
+    setState (name, value, item) {
+      const buildInEvents = [
+        'edgeHover',
+        'edgeSelected',
+      ];
+      const group = item.getContainer();
 
-            if (buildInEvents.includes(name)) {
-                // 内部this绑定到了当前item实例
-                itemEvents[name].call(this, value, group);
-            } else {
-                console.warn(`warning: edge ${name} 事件回调未注册!`);
-            }
-        },
-    }, 'polyline');
+      if (buildInEvents.includes(name)) {
+        // 内部this绑定到了当前item实例
+        itemEvents[name].call(this, value, group);
+      } else {
+        console.warn(`warning: edge ${name} 事件回调未注册!`);
+      }
+    },
+  }, 'polyline');
 
-    G6.registerEdge('line-edge', {
+  G6.registerEdge('line-edge', {
 
-        setState (name, value, item) {
-            const buildInEvents = [
-                'edgeHover',
-                'edgeSelected',
-            ];
-            const group = item.getContainer();
+    setState (name, value, item) {
+      const buildInEvents = [
+        'edgeHover',
+        'edgeSelected',
+      ];
+      const group = item.getContainer();
 
-            if (buildInEvents.includes(name)) {
-                // 内部this绑定到了当前item实例
-                itemEvents[name].call(this, value, group);
-            } else {
-                console.warn(`warning: edge ${name} 事件回调未注册!`);
-            }
-        },
-    }, 'line');
+      if (buildInEvents.includes(name)) {
+        // 内部this绑定到了当前item实例
+        itemEvents[name].call(this, value, group);
+      } else {
+        console.warn(`warning: edge ${name} 事件回调未注册!`);
+      }
+    },
+  }, 'line');
 
-    G6.registerEdge('quadratic-edge', {
+  G6.registerEdge('quadratic-edge', {
 
-        setState (name, value, item) {
-            const buildInEvents = [
-                'edgeHover',
-                'edgeSelected',
-            ];
-            const group = item.getContainer();
+    setState (name, value, item) {
+      const buildInEvents = [
+        'edgeHover',
+        'edgeSelected',
+      ];
+      const group = item.getContainer();
 
-            if (buildInEvents.includes(name)) {
-                // 内部this绑定到了当前item实例
-                itemEvents[name].call(this, value, group);
-            } else {
-                console.warn(`warning: edge ${name} 事件回调未注册!`);
-            }
-        },
-    }, 'quadratic');
+      if (buildInEvents.includes(name)) {
+        // 内部this绑定到了当前item实例
+        itemEvents[name].call(this, value, group);
+      } else {
+        console.warn(`warning: edge ${name} 事件回调未注册!`);
+      }
+    },
+  }, 'quadratic');
 
-    G6.registerEdge('cubic-edge', {
+  G6.registerEdge('cubic-edge', {
 
-        setState (name, value, item) {
-            const buildInEvents = [
-                'edgeHover',
-                'edgeSelected',
-            ];
-            const group = item.getContainer();
+    setState (name, value, item) {
+      const buildInEvents = [
+        'edgeHover',
+        'edgeSelected',
+      ];
+      const group = item.getContainer();
 
-            if (buildInEvents.includes(name)) {
-                // 内部this绑定到了当前item实例
-                itemEvents[name].call(this, value, group);
-            } else {
-                console.warn(`warning: edge ${name} 事件回调未注册!`);
-            }
-        },
-    }, 'cubic');
+      if (buildInEvents.includes(name)) {
+        // 内部this绑定到了当前item实例
+        itemEvents[name].call(this, value, group);
+      } else {
+        console.warn(`warning: edge ${name} 事件回调未注册!`);
+      }
+    },
+  }, 'cubic');
 
-    G6.registerEdge('arc-edge', {
-        curveOffset: 40,
-        setState (name, value, item) {
-            const buildInEvents = [
-                'edgeHover',
-                'edgeSelected',
-            ];
-            const group = item.getContainer();
+  G6.registerEdge('arc-edge', {
+    curveOffset: 40,
+    setState (name, value, item) {
+      const buildInEvents = [
+        'edgeHover',
+        'edgeSelected',
+      ];
+      const group = item.getContainer();
 
-            if (buildInEvents.includes(name)) {
-                // 内部this绑定到了当前item实例
-                itemEvents[name].call(this, value, group);
-            } else {
-                console.warn(`warning: edge ${name} 事件回调未注册!`);
-            }
-        },
-    }, 'arc');
+      if (buildInEvents.includes(name)) {
+        // 内部this绑定到了当前item实例
+        itemEvents[name].call(this, value, group);
+      } else {
+        console.warn(`warning: edge ${name} 事件回调未注册!`);
+      }
+    },
+  }, 'arc');
 };

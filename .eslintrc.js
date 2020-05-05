@@ -116,7 +116,7 @@ module.exports = {
         // 允许使用 v-html
         'vue/no-v-html': 0,
         // vue html 中的缩进
-        'vue/html-indent': ['error', 4, {
+        'vue/html-indent': ['error', 2, {
             'attribute': 1,
             'baseIndent': 1,
             'closeBracket': 0,

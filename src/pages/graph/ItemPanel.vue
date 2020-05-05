@@ -1,62 +1,62 @@
 <template>
-    <div
-        id="itemPanel"
-        ref="itemPanel"
-        :class="{'hidden': itemVisible}"
-    >
-        <i class="iconfont icon-h-drag" />
-        <div class="icon-tool">
-            <i
-                draggable="true"
-                data-type="edge"
-                data-shape="line"
-                class="iconfont icon-line"
-            />
-            <i
-                draggable="true"
-                data-type="edge"
-                data-shape="quadratic"
-                class="iconfont icon-quadratic"
-            />
-            <i class="split" />
-            <i
-                draggable="true"
-                data-type="node"
-                data-shape="circle"
-                class="iconfont icon-circle"
-            />
-            <i
-                draggable="true"
-                data-type="node"
-                data-shape="rect"
-                class="iconfont icon-rect"
-            />
-            <i
-                draggable="true"
-                data-type="node"
-                data-shape="ellipse"
-                class="iconfont icon-ellipse"
-            />
-            <i
-                draggable="true"
-                data-type="node"
-                data-shape="diamond"
-                class="iconfont icon-diamond"
-            />
-            <i
-                draggable="true"
-                data-type="node"
-                data-shape="modelRect"
-                class="iconfont icon-model-rect"
-            />
-            <i class="split" />
-            <i
-                draggable="true"
-                class="gb-toggle-btn"
-                @click="itemVisible = !itemVisible"
-            />
-        </div>
+  <div
+    id="itemPanel"
+    ref="itemPanel"
+    :class="{'hidden': itemVisible}"
+  >
+    <i class="iconfont icon-h-drag" />
+    <div class="icon-tool">
+      <i
+        draggable="true"
+        data-type="edge"
+        data-shape="line"
+        class="iconfont icon-line"
+      />
+      <i
+        draggable="true"
+        data-type="edge"
+        data-shape="quadratic"
+        class="iconfont icon-quadratic"
+      />
+      <i class="split" />
+      <i
+        draggable="true"
+        data-type="node"
+        data-shape="circle"
+        class="iconfont icon-circle"
+      />
+      <i
+        draggable="true"
+        data-type="node"
+        data-shape="rect"
+        class="iconfont icon-rect"
+      />
+      <i
+        draggable="true"
+        data-type="node"
+        data-shape="ellipse"
+        class="iconfont icon-ellipse"
+      />
+      <i
+        draggable="true"
+        data-type="node"
+        data-shape="diamond"
+        class="iconfont icon-diamond"
+      />
+      <i
+        draggable="true"
+        data-type="node"
+        data-shape="modelRect"
+        class="iconfont icon-model-rect"
+      />
+      <i class="split" />
+      <i
+        draggable="true"
+        class="gb-toggle-btn"
+        @click="itemVisible = !itemVisible"
+      />
     </div>
+  </div>
 </template>
 
 <script>

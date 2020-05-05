@@ -1,9 +1,9 @@
 # g6 流程图
 
 - 自定义节点和边
-- 已内置圆形和方形节点
+- 自定义圆形, 方形, 椭圆, 菱形节点
 - 节点支持拖拽连线, 删除, 编辑
-- 边支持标签显示
+- 边自带箭头, 支持标签显示
 
 ## TODO
 
@@ -41,61 +41,61 @@
 import WelabxG6 from 'welabx-g6';
 
 const data = {
-    node: [
-        {
-            id: '1',
-            label: 'node1', // 节点上显示的文字
-            data: {
-                // ... 其他属性
-            },
-            type: 'rect-node', // ellipse-node / circle-node / diamond-node
-            style: {
-                // ... 当前节点的样式
-                r:     40, // 圆形节点半径
-                hover: {
-                    fill: '#ccc',
-                },
-                selected: {
-                    stroke: '#ccc',
-                },
-                // node 文本默认样式
-                nodeLabelStyles: {
-                    cursor:       'default',
-                    fill:         'red',
-                    textAlign:    'center',
-                    textBaseline: 'middle',
-                    fontSize:     16,
-                },
-            },
+  node: [
+    {
+      id: '1',
+      label: 'node1', // 节点上显示的文字
+      data: {
+        // ... 其他属性
+      },
+      type: 'rect-node', // ellipse-node / circle-node / diamond-node
+      style: {
+        // ... 当前节点的样式
+        r:   40, // 圆形节点半径
+        hover: {
+          fill: '#ccc',
         },
-    ],
-    edges: [
-        {
-            source: '1', // 来源节点 id
-            target: '2', // 目标节点 id
-            label: '条件', // 边上的文字 / 当前只支持1个文案
-            data:   {   // 当前边的自定义属性
-                type:   'xxx',
-                amount: '100,000 元',
-                date:   '2019-08-03',
-            },
-            style: {
-                // 当前边的样式
-            },
+        selected: {
+          stroke: '#ccc',
         },
-    ],
+        // node 文本默认样式
+        nodeLabelStyles: {
+          cursor:     'default',
+          fill:     'red',
+          textAlign:  'center',
+          textBaseline: 'middle',
+          fontSize:   16,
+        },
+      },
+    },
+  ],
+  edges: [
+    {
+      source: '1', // 来源节点 id
+      target: '2', // 目标节点 id
+      label: '条件', // 边上的文字 / 当前只支持1个文案
+      data:   {   // 当前边的自定义属性
+        type:   'xxx',
+        amount: '100,000 元',
+        date:   '2019-08-03',
+      },
+      style: {
+        // 当前边的样式
+      },
+    },
+  ],
 }
 
 const g6 = new WelabxG6({
-    container: 'id',
-    width: 1000,
-    height: 300,
-    renderer: 'svg', // 默认 canvas
-    // 自定义注册行为, 事件, 交互
-    registerFactory: G6 => {
-        console.log(G6);
-    },
-    // ... 其他G6参数
+  container: 'id',
+  width: 1000,
+  height: 300,
+  renderer: 'svg', // 默认 canvas
+  // 自定义注册行为, 事件, 交互
+  registerFactory: G6 => {
+    console.log(G6);
+  },
+  // ... 其他G6参数
 });
 
 const graph = g6.instance; // G6实例
@@ -118,35 +118,35 @@ g6.destroy();
 * before-edge-add
 */
 graph.on('after-node-selected', node => {
-    if(node) {
-        console.log(node._cfg.id);
-    }
+  if(node) {
+    console.log(node._cfg.id);
+  }
 });
 
 graph.on('after-edge-selected', edge => {
-    if(edge) {
-        console.log(edge._cfg.id);
-    }
+  if(edge) {
+    console.log(edge._cfg.id);
+  }
 });
 
 graph.on('before-node-removed', ({target, callback}) => {
-    console.log(target);
-    setTimeout(() => {
-        callback(true);
-    }, 1000);
+  console.log(target);
+  setTimeout(() => {
+    callback(true);
+  }, 1000);
 });
 
 graph.on('before-edge-add', ({ source, target, sourceAnchor, targetAnchor }) => {
-    setTimeout(() => {
-        this.graph.addItem('edge', {
-            source: source.get('id'),
-            target: target.get('id'),
-            sourceAnchor,
-            targetAnchor,
-            label:  'edge label',
-            // ... item 其他属性
-        });
-    }, 1000);
+  setTimeout(() => {
+    this.graph.addItem('edge', {
+      source: source.get('id'),
+      target: target.get('id'),
+      sourceAnchor,
+      targetAnchor,
+      label:  'edge label',
+      // ... item 其他属性
+    });
+  }, 1000);
 });
 // 自定义事件监听需在 registerFactory 中定义
 ```
@@ -161,20 +161,20 @@ graph.destroy();
 
 ```js
 const model = {
-    label: 'node',
-    id:    '1',
-    // 形状
-    type:  'rect-node', // e.target.dataset.shape
-    // 坐标
-    x:     e.clientX - 50,
-    y:     e.clientY + 200,
+  label: 'node',
+  id:  '1',
+  // 形状
+  type:  'rect-node', // e.target.dataset.shape
+  // 坐标
+  x:   e.clientX - 50,
+  y:   e.clientY + 200,
 };
 
 graph.addItem('node', model);
 
 graph.addItem('edge', {
-    source: '1',
-    label: 'edge',
+  source: '1',
+  label: 'edge',
 });
 ```
 

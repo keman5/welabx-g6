@@ -12,10 +12,10 @@ import hoverNode from './hover-node';
 import dragNode from './drag-node';
 
 export default G6 => {
-    // activeAnchor(G6);
-    selectNode(G6);
-    deleteItem(G6);
-    activeEdge(G6);
-    hoverNode(G6);
-    dragNode(G6);
+  // activeAnchor(G6);
+  selectNode(G6);
+  deleteItem(G6);
+  activeEdge(G6);
+  hoverNode(G6);
+  dragNode(G6);
 };
