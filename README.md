@@ -22,6 +22,7 @@
 - [] 边偶尔会被选中
 - [] 边动态动画
 
+- [x] 节点和边 tooltip
 - [x] 椭圆, 平行四边形节点
 - [x] 边支持编辑箭头
 - [x] 双击节点编辑标签
@@ -97,6 +98,22 @@ const g6 = new WelabxG6({
   registerFactory: G6 => {
     console.log(G6);
   },
+  defaultEdge: {
+    type:  'polyline-edge', // 扩展了内置边, 有边的事件
+    style: {
+      radius:          5,
+      offset:          15,
+      stroke:          '#aab7c3',
+      lineAppendWidth: 10, // 防止线太细没法点中
+      /* startArrow:      {
+          path: 'M 0,0 L 8,4 L 7,0 L 8,-4 Z',
+          fill: '#aab7c3',
+      }, */
+      endArrow:        {
+        path: 'M 0,0 L 8,4 L 7,0 L 8,-4 Z',
+        fill: '#aab7c3',
+      },
+    },
   // ... 其他G6参数
 });
 
@@ -124,16 +141,23 @@ g6.destroy();
 * after-edge-dblclick
 * before-node-removed
 * before-edge-add
+* 自定义 modes:
+* canvas-event
+* delete-item
+* select-node
+* hover-node
+* drag-node
+* active-edge
 */
-graph.on('after-node-selected', node => {
-  if(node) {
-    console.log(node._cfg.id);
+graph.on('after-node-selected', e => {
+  if(e && e.item) {
+    console.log(e.item.get('id'));
   }
 });
 
-graph.on('after-edge-selected', edge => {
-  if(edge) {
-    console.log(edge._cfg.id);
+graph.on('after-edge-selected', e => {
+  if(e && e.item) {
+    console.log(e.item.get('id'));
   }
 });
 
@@ -162,7 +186,7 @@ graph.on('before-edge-add', ({ source, target, sourceAnchor, targetAnchor }) => 
 ### 销毁实例
 
 ```js
-graph.destroy();
+g6.destroy();
 ```
 
 ### 添加节点/边
@@ -215,8 +239,10 @@ npm run dev
 - 按delete键删除节点支持确认回调, 默认不再直接删除
 - 节点和边支持双击事件 after-node-dblclick / after-edge-dblclick, 弊端: 单击事件会被触发两次
 
-### [0.1.8] 20202-04-30
+### [0.2.2] 20202-05-06
 
-- 优化 before-node-removed, 支持获取要删除的节点信息
-- 拖拽锚点后不再自动添加边, 需在 before-edge-add 事件回调中自行添加
-- *所有事件返回的节点都是 item 实例*
+- *所有事件都返回 event 对象*
+- 优化 on-node-mouseenter 等事件
+- 扩展 polyline-edge, line-edge, quadratic-edge, cubic-edge
+- 优化 canvas 鼠标样式
+- 可自定义创建 tooltip

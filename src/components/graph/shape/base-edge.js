@@ -84,7 +84,7 @@ export default G6 => {
     },
   }, 'cubic');
 
-  G6.registerEdge('arc-edge', {
+  /* G6.registerEdge('arc-edge', {
     curveOffset: 40,
     setState (name, value, item) {
       const buildInEvents = [
@@ -100,5 +100,5 @@ export default G6 => {
         console.warn(`warning: edge ${name} 事件回调未注册!`);
       }
     },
-  }, 'arc');
+  }, 'arc'); */
 };

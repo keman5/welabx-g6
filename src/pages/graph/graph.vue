@@ -223,8 +223,8 @@ export default {
       this.graph.on('on-node-mousemove', e => {
         if (e && e.item) {
           this.tooltip = e.item.get('model').id;
-          this.left = e.x + 160;
-          this.top = e.y + 20;
+          this.left = e.clientX + 40;
+          this.top = e.clientY - 20;
         }
       });
 
