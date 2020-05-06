@@ -36,9 +36,11 @@ const events = {
    */
   anchorActived (value, group) {
     if (value) {
+      const { anchorPoints } = group.get('item').getModel();
+
       group.showAnchor(group);
 
-      this.getAnchorPoints().forEach((p, i) => {
+      this.getAnchorPoints({ anchorPoints }).forEach((p, i) => {
         const bbox = group.get('children')[0].getBBox();
         const anchorBg = group.addShape('circle', {
           attrs: {

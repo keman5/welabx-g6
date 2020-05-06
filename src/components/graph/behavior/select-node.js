@@ -11,17 +11,16 @@ export default G6 => {
     // 事件映射
     getEvents () {
       return {
-        'node:click':      'onClick',
+        'node:click':      'onNodeClick',
         'node:dblclick':   'ondblClick',
         'canvas:click':    'onCanvasClick',
         'node:mouseenter': 'onNodeMouseEnter',
         'node:mousemove':  'onNodeMouseMove',
-        'node:mouseover':  'onNodeMouseOver',
         'node:mouseleave': 'onNodeMouseLeave',
       };
     },
     // 点击事件
-    onClick (e) {
+    onNodeClick (e) {
       // 先将所有当前是 click 状态的节点/edge 置为非 selected 状态
       this._clearSelected();
       e.item.toFront();
@@ -41,14 +40,12 @@ export default G6 => {
     },
     onCanvasClick (e) {
       this._clearSelected();
+      this.graph.emit('on-canvas-click', e);
     },
     // hover node
     onNodeMouseEnter (e) {
       this.graph.setItemState(e.item, 'nodeHover', true);
       this.graph.emit('on-node-mouseenter', e);
-    },
-    onNodeMouseOver (e) {
-      this.graph.emit('on-node-mouseover', e);
     },
     onNodeMouseMove (e) {
       this.graph.emit('on-node-mousemove', e);

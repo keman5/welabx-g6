@@ -8,39 +8,26 @@
     <div class="icon-tool">
       <i
         draggable="true"
-        data-type="edge"
-        data-shape="line"
-        class="iconfont icon-line"
-      />
-      <i
-        draggable="true"
-        data-type="edge"
-        data-shape="quadratic"
-        class="iconfont icon-quadratic"
-      />
-      <i class="split" />
-      <i
-        draggable="true"
         data-type="node"
-        data-shape="circle"
+        data-shape="circle-node"
         class="iconfont icon-circle"
       />
       <i
         draggable="true"
         data-type="node"
-        data-shape="rect"
+        data-shape="rect-node"
         class="iconfont icon-rect"
       />
       <i
         draggable="true"
         data-type="node"
-        data-shape="ellipse"
+        data-shape="ellipse-node"
         class="iconfont icon-ellipse"
       />
       <i
         draggable="true"
         data-type="node"
-        data-shape="diamond"
+        data-shape="diamond-node"
         class="iconfont icon-diamond"
       />
       <i

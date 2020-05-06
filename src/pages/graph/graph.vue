@@ -14,7 +14,6 @@
     <item-panel
       :graph="graph"
       @canvas-add-node="addNode"
-      @canvas-add-edge="addEdge"
     />
     <!-- 浮动工具条 -->
     <div id="toolbar">
@@ -162,31 +161,25 @@ export default {
         text: 'node',
         // id:  Util.uniqueId(),
         // 形状
-        type: 'rect-node', // e.target.dataset.shape
+        type: e.target.dataset.shape,
         // 坐标
-        x:    e.clientX - 50,
-        y:    e.clientY + 200,
+        x:    e.clientX - 80,
+        y:    e.clientY - 40,
       };
 
       this.graph.addItem('node', model);
     },
-    // 添加 edge
-    addEdge (e) {
-      const model = {
-        // id:  Util.uniqueId(),
-        text:  'edge',
-        shape: 'line',
-        style: {
-          strokeWidth: 1,
-        },
-        label:    'xxx',
-        labelCfg: {},
-      };
-
-      this.graph.addItem('edge', model);
-    },
     // 初始化图事件
     initGraphEvent () {
+      this.graph.on('on-node-mouseenter', e => {
+        if (e && e.item) {
+          const model = e.item.get('model');
+
+          model.style.fill = 'rgba(24, 144, 255, .3)';
+          this.graph.updateItem(e.item, model);
+        }
+      });
+
       this.graph.on('after-node-selected', e => {
         this.configVisible = !!e;
 
@@ -208,15 +201,18 @@ export default {
         if (e && e.item) {
           this.config = e.item.get('model').id;
 
-          this.graph.updateItem(e.item, { label: 'model' });
+          this.graph.updateItem(e.item, {
+            shape: 'line-edge',
+            label: 'model',
+          });
         }
       });
 
       this.graph.on('on-edge-mousemove', e => {
         if (e && e.item) {
           this.tooltip = e.item.get('model').label;
-          this.left = e.x + 120;
-          this.top = e.y + 20;
+          this.left = e.clientX + 40;
+          this.top = e.clientY - 20;
         }
       });
 

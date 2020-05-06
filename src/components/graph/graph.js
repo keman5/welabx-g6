@@ -53,6 +53,7 @@ class G6 {
           'active-edge',
         ],
       },
+      // linkCenter:  true,
       defaultNode: {
         type: 'circle-node',
       },
