@@ -1,16 +1,19 @@
 # g6 流程图
 
-![截图](https://github.com/claudewowo/welabx-g6/blob/develop/screenshot/iShot2020-05-06.png)
+![截图, 访问不了就点👇链接吧](https://github.com/claudewowo/welabx-g6/blob/develop/screenshot/screenshot.png)
 
 ## 在线案例
 
-[gayhub:](https://claudewowo.github.io/welabx-g6/build)
+[gayhub 案例](https://claudewowo.github.io/welabx-g6/build/)
 
-- 自定义节点和边
+## 已完成功能
+
+- 自定义节点和边, 支持锚点配置
 - 自定义圆形, 方形, 椭圆, 菱形节点
 - 节点支持拖拽连线, 删除, 编辑
-- 边自带箭头, 支持标签显示
-- 自定义 tool-tip 内容
+- 边默认带结束箭头, 支持标签显示
+- 支持自定义 tool-tip 内容
+- 支持画布/节点/边事件监听
 
 ## TODO
 
@@ -109,8 +112,21 @@ const data = {
         amount: '100,000 元',
         date:   '2019-08-03',
       },
+      shape: 'cubic-edge',
       style: {
-        // 当前边的样式
+        stroke:          '#ccc',
+        lineDash:        [5,5],
+        lineWidth:       2,
+        lineAppendWidth: 10,
+      },
+      labelCfg: {
+        position:   'center', // 其实默认就是 center，这里写出来便于理解
+        autoRotate: true,   // 使文本随边旋转
+        style:      {
+          stroke:    'white',  // 给文本添加白边和白色背景
+          fill:      '#722ed1',  // 文本颜色
+          lineWidth: 5,     // 文本白边粗细
+        },
       },
     },
   ],
@@ -193,15 +209,6 @@ g6.destroy();
 
 (回调中有些情况下是空, 有些回调会触发多次, 因为内部也在使用, 如果影响较大, 后期考虑减少空回调和重复回调)
 
-> 自定义的 modes
-
-- canvas-event
-- delete-item
-- select-node
-- hover-node
-- drag-node
-- active-edge
-
 ```js
 graph.on('after-node-selected', e => {
   if(e && e.item) {
@@ -237,12 +244,12 @@ graph.on('before-edge-add', ({ source, target, sourceAnchor, targetAnchor }) => 
 // 自定义事件监听需在 registerFactory 中定义
 ```
 
-### 添加节点/边
+### 添加节点
 
 ```js
 const model = {
   label: 'node',
-  id:  '1',
+  id:  '1', // 非必传
   // 形状
   type:  'rect-node', // e.target.dataset.shape
   // 坐标
@@ -251,12 +258,16 @@ const model = {
 };
 
 graph.addItem('node', model);
-
-graph.addItem('edge', {
-  source: '1',
-  label: 'edge',
-});
 ```
+
+> 自定义的 modes
+
+- canvas-event
+- delete-item
+- select-node
+- hover-node
+- drag-node
+- active-edge
 
 ## 运行案例
 
@@ -271,9 +282,7 @@ npm run dev
 > notes: 使用 cnpm 安装可能导致 import 路径报错, 建议使用npm或yarn
 > 有问题请在GitHub上提issue, 目前版本还有大部分功能要完善, 欢迎star
 
-## 更新日志
-
-所有版本更新日志(仅列出重要的更新):
+## 更新日志(仅列出重要的更新)
 
 ### [0.1.2] 20202-04-28
 
@@ -300,3 +309,7 @@ npm run dev
 - 支持自定义锚点数量和位置(默认4个)
 - 支持自定义边的类型,可通过事件设置
 - 修复文本和节点样式无效
+
+### [0.2.4] 20202-05-08
+
+- 支持锁定节点位置, 防止自动布局位置不符合预期
