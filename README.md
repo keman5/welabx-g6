@@ -109,8 +109,21 @@ const data = {
         amount: '100,000 元',
         date:   '2019-08-03',
       },
+      shape: 'cubic-edge',
       style: {
-        // 当前边的样式
+        stroke:          '#ccc',
+        lineDash:        [5,5],
+        lineWidth:       2,
+        lineAppendWidth: 10,
+      },
+      labelCfg: {
+        position:   'center', // 其实默认就是 center，这里写出来便于理解
+        autoRotate: true,   // 使文本随边旋转
+        style:      {
+          stroke:    'white',  // 给文本添加白边和白色背景
+          fill:      '#722ed1',  // 文本颜色
+          lineWidth: 5,     // 文本白边粗细
+        },
       },
     },
   ],
