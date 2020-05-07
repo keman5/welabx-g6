@@ -32,26 +32,16 @@ export default G6 => {
         width,
         height,
         // 将图形中心坐标移动到图形中心, 用于方便鼠标位置计算
-        x:             -width / 2,
-        y:             -height / 2,
-        radius:        5,
-        shadowOffsetX: 0,
-        shadowOffsetY: 2,
-        shadowColor:   '#ccc',
-        shadowBlur:    10,
+        x:        -width / 2,
+        y:        -height / 2,
         anchorPointStyles,
-        labelCfg:      {
+        labelCfg: {
           ...nodeLabelStyles,
           ...cfg.style.nodeLabelStyles,
         },
+        radius: 5,
+        ...cfg.style,
       };
-    },
-    /* 获取锚点（相关边的连入点） */
-    getAnchorPoints (cfg) {
-      return [
-        [1, 0.5],
-        [0, 0.5],
-      ];
     },
   }, 'base-node');
 
@@ -67,21 +57,13 @@ export default G6 => {
         // 将图形中心坐标移动到图形中心, 用于方便鼠标位置计算
         x:        0,
         y:        0,
-        ...cfg.style,
         anchorPointStyles,
         labelCfg: {
           ...nodeLabelStyles,
           ...cfg.style.nodeLabelStyles,
         },
+        ...cfg.style,
       };
-    },
-    getAnchorPoints (cfg) {
-      return [
-        [0.5, 0],
-        [1, 0.5],
-        [0.5, 1],
-        [0, 0.5],
-      ];
     },
   }, 'base-node');
 
@@ -102,15 +84,8 @@ export default G6 => {
           ...nodeLabelStyles,
           ...cfg.style.nodeLabelStyles,
         },
+        ...cfg.style,
       };
-    },
-    getAnchorPoints (cfg) {
-      return [
-        [0.5, 0],
-        [0, 0.5],
-        [1, 0.5],
-        [0.5, 1],
-      ];
     },
   }, 'base-node');
 
@@ -131,6 +106,7 @@ export default G6 => {
           ...nodeLabelStyles,
           ...cfg.style.nodeLabelStyles,
         },
+        ...cfg.style,
       };
     },
     // 返回菱形的路径
@@ -150,43 +126,27 @@ export default G6 => {
         ['Z'], // 封闭
       ];
     },
-    getAnchorPoints (cfg) {
-      return [
-        [0.5, 0],
-        [0, 0.5],
-        [1, 0.5],
-        [0.5, 1],
-      ];
-    },
   }, 'base-node');
 
   // 扩展三角形节点
   /* G6.registerNode('triangle-node', {
-      shapeType: 'triangle',
-      getShapeStyle (cfg) {
+    shapeType: 'triangle',
+    getShapeStyle (cfg) {
 
-          return {
-              direction: 'top',
-              size:      [130, 130, 130],
-              ...nodeStyles,
-              // 将图形中心坐标移动到图形中心, 用于方便鼠标位置计算
-              x:         0,
-              y:         0,
-              anchorPointStyles,
-              labelCfg:  {
-                  ...nodeLabelStyles,
-                  ...cfg.style.nodeLabelStyles,
-              },
-              anchorPoints: this.getAnchorPoints(cfg),
-          };
-      },
-      getAnchorPoints (cfg) {
-          return [
-              [0.5, 0],
-              [0, 1],
-              [1, 1],
-          ];
-      },
+      return {
+        direction: 'top',
+        size:      [130, 130, 130],
+        ...nodeStyles,
+        // 将图形中心坐标移动到图形中心, 用于方便鼠标位置计算
+        x:         0,
+        y:         0,
+        anchorPointStyles,
+        labelCfg:  {
+            ...nodeLabelStyles,
+            ...cfg.style.nodeLabelStyles,
+        },
+        anchorPoints: this.getAnchorPoints(cfg),
+      };
+    },
   }, 'base-node'); */
-
 };

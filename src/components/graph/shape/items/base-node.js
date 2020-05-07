@@ -58,7 +58,7 @@ export default G6 => {
       const bbox = item.getBBox();
 
       // 绘制锚点坐标
-      this.getAnchorPoints().forEach((p, i) => {
+      this.getAnchorPoints(cfg).forEach((p, i) => {
         /**
          * 绘制三层锚点
          * 最底层: 锚点bg
@@ -144,7 +144,6 @@ export default G6 => {
       const shapeName = this.shapeType || 'rect';
       // 合并外部样式和默认样式
       const attrs = Util.deepMix({}, this.getShapeStyle(cfg), cfg);
-
       // 添加节点
       const shape = group.addShape(shapeName, {
         attrs:     this.getShapeStyle(cfg), // shape 属性在定义时返回
@@ -153,9 +152,7 @@ export default G6 => {
       });
 
       this.options = {
-        labelCfg: {
-          style: {},
-        },
+        labelCfg: attrs.labelCfg,
         nodeStateStyles,
         nodeLabelStateStyles,
         ...attrs,
@@ -239,11 +236,14 @@ export default G6 => {
     },
     /* 获取锚点（相关边的连入点） */
     getAnchorPoints (cfg) {
+      if (cfg && cfg.anchorPoints) {
+        return cfg.anchorPoints;
+      }
       return [
-        [0.5, 0], // top
-        [1, 0.5], // right
-        [0.5, 1], // bottom
-        [0, 0.5], // left
+        [0.5, 0],
+        [1, 0.5],
+        [0.5, 1],
+        [0, 0.5],
       ];
     },
   }, 'single-node');

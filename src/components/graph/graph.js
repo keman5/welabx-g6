@@ -45,6 +45,7 @@ class G6 {
               enableDelegate: true,
           }, */
           // 'activate-relations',
+          'canvas-event',
           'delete-item',
           'select-node',
           'hover-node',
@@ -52,6 +53,7 @@ class G6 {
           'active-edge',
         ],
       },
+      // linkCenter:  true,
       defaultNode: {
         type: 'circle-node',
       },

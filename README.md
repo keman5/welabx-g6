@@ -1,30 +1,40 @@
 # g6 流程图
 
-- 自定义节点和边
+![截图, 访问不了就点👇链接吧](https://github.com/claudewowo/welabx-g6/blob/develop/screenshot/screenshot.png)
+
+## 在线案例
+
+[gayhub 案例](https://claudewowo.github.io/welabx-g6/build/)
+
+## 已完成功能
+
+- 自定义节点和边, 支持锚点配置
 - 自定义圆形, 方形, 椭圆, 菱形节点
 - 节点支持拖拽连线, 删除, 编辑
-- 边自带箭头, 支持标签显示
+- 边默认带结束箭头, 支持标签显示
+- 支持自定义 tool-tip 内容
+- 支持画布/节点/边事件监听
 
 ## TODO
 
-- 给节点设置图标
-- 添加 tool-tip
-- 画布缩放时的拖拽兼容
-- 解决拖拽时 null文字残留
-- 拖拽画布后拖拽锚点虚线位置错误
-- 节点多选(shift), 拖动框选节点
-- 拖拽节点到画布边缘时自动滚动画布可见范围
-- 高亮显示与该节点连接的节点
-- 点击节点时将节点层级提升
-- 三角形, 平行四边形节点
-- 锚点禁用状态及相关交互
-- 节点锁定及加锁状态
-- 边标签的位置优化(直接继承line)
-- 双击节点编辑标签
-- 拖拽边高亮及时消失
-- 边支持编辑箭头
-- 边偶尔会被选中
-- 边动态动画
+- [] 给节点设置图标
+- [] 节点多选(shift), 拖动框选节点
+- [] 拖拽节点到画布边缘时自动滚动画布可见范围
+- [] 高亮显示与该节点连接的节点
+- [] 锚点禁用状态及相关交互
+- [] 节点锁定及加锁状态
+- [] 拖拽边高亮及时消失
+- [] 边偶尔会被选中
+- [] 边动态动画
+
+- [x] 节点和边 tooltip
+- [x] 椭圆, 平行四边形节点
+- [x] 边支持编辑箭头
+- [x] 双击节点编辑标签
+- [x] 画布缩放时的拖拽兼容
+- [x] 解决拖拽时 null文字残留
+- [x] 点击节点时将节点层级提升
+- [x] 拖拽画布后拖拽锚点虚线位置错误
 
 ## 深度思考
 
@@ -44,29 +54,52 @@ const data = {
   node: [
     {
       id: '1',
-      label: 'node1', // 节点上显示的文字
+      label: 'node-1', // 节点上显示的文字
       data: {
         // ... 其他属性
       },
-      type: 'rect-node', // ellipse-node / circle-node / diamond-node
+      type: 'circle-node', // ellipse-node / rect-node / diamond-node
       style: {
         // ... 当前节点的样式
         r:   40, // 圆形节点半径
+        fill:          'orange',
+        lineDash:      [1, 2],
+        shadowOffsetX: 0,
+        shadowOffsetY: 2,
+        shadowColor:   '#666',
+        shadowBlur:    10,
         hover: {
           fill: '#ccc',
         },
         selected: {
           stroke: '#ccc',
         },
-        // node 文本默认样式
-        nodeLabelStyles: {
-          cursor:     'default',
-          fill:     'red',
-          textAlign:  'center',
-          textBaseline: 'middle',
-          fontSize:   16,
-        },
       },
+      // node 文本默认样式
+      labelCfg: {
+        fill:         'green',
+        textAlign:    'center',
+        textBaseline: 'middle',
+        fontWeight:   'bold',
+        fontSize:     13,
+      },
+    },
+    {
+      id:    'node-2',
+      label: 'beforeCreate',
+      type:  'rect-node',
+      style: {
+        radius: 2,
+      },
+      // 自定义锚点数量和位置(二维数组, 含义参见官网)
+      anchorPoints: [
+        [0, 0],
+        [0.5, 0],
+        [0, 1],
+        [0.5, 1],
+        [1, 0],
+        [1, 1],
+      ],
     },
   ],
   edges: [
@@ -79,8 +112,21 @@ const data = {
         amount: '100,000 元',
         date:   '2019-08-03',
       },
+      shape: 'cubic-edge',
       style: {
-        // 当前边的样式
+        stroke:          '#ccc',
+        lineDash:        [5,5],
+        lineWidth:       2,
+        lineAppendWidth: 10,
+      },
+      labelCfg: {
+        position:   'center', // 其实默认就是 center，这里写出来便于理解
+        autoRotate: true,   // 使文本随边旋转
+        style:      {
+          stroke:    'white',  // 给文本添加白边和白色背景
+          fill:      '#722ed1',  // 文本颜色
+          lineWidth: 5,     // 文本白边粗细
+        },
       },
     },
   ],
@@ -95,6 +141,22 @@ const g6 = new WelabxG6({
   registerFactory: G6 => {
     console.log(G6);
   },
+  defaultEdge: {
+    type:  'polyline-edge', // 扩展了内置边, 有边的事件
+    style: {
+      radius:          5,
+      offset:          15,
+      stroke:          '#aab7c3',
+      lineAppendWidth: 10, // 防止线太细没法点中
+      /* startArrow:      {
+          path: 'M 0,0 L 8,4 L 7,0 L 8,-4 Z',
+          fill: '#aab7c3',
+      }, */
+      endArrow:        {
+        path: 'M 0,0 L 8,4 L 7,0 L 8,-4 Z',
+        fill: '#aab7c3',
+      },
+    },
   // ... 其他G6参数
 });
 
@@ -105,27 +167,58 @@ graph.paint();
 g6.destroy();
 ```
 
+### 自定义节点和边(边支持设置箭头)
+
+| 非内置节点和边 | type | 宽高/半径属性 |
+| ---- | ---- | ---- |
+| rect-node | 方形节点 | width, height, radius(圆角) |
+| circle-node | 圆形节点 | r (半径) |
+| ellipse-node | 椭圆节点 | rx, ry 椭圆焦距 |
+| diamond-node | 菱形节点 | size, 默认 [80, 80] |
+| line-edge | 菱形节点 | 默认属性 |
+| polyline-edge | 菱形节点 | 默认属性 |
+| quadratic-edge | 菱形节点 | 默认属性 |
+| cubic-edge | 菱形节点 | 默认属性 |
+
 ### 事件监听与通知
 
+> 已支持事件列表
+
+| 事件名称 | 回调参数 | 说明 |
+| ---- | ---- | ---- |
+| after-node-selected | event 对象 | 节点选中事件 |
+| after-edge-selected | event 对象 | 边选中事件 |
+| on-canvas-click | event 对象 | 鼠标点击画布事件 |
+| on-node-mouseenter | event 对象 | 鼠标移入节点事件 |
+| on-node-mousemove | event 对象 | 鼠标在节点上移动事件(持续触发) |
+| on-node-mouseleave | event 对象 | 鼠标从节点上移开事件 |
+| on-node-mousedown | event 对象 | 鼠标左键按下节点事件 |
+| on-node-mouseup | event 对象 | 鼠标左键抬起节点事件 |
+| on-node-dragstart | event 对象 | 节点拖拽开始事件(也是锚点拖拽事件) |
+| on-node-drag | event 对象 | 节点拖拽中事件(也是锚点拖拽事件) |
+| on-node-dragend | event 对象 | 节点拖拽结束事件(也是锚点拖拽事件) |
+| on-node-drop | event 对象 | 在节点上释放事件(e.item 当前拖拽节点, e.target 当前释放节点) |
+| on-edge-mouseenter | event 对象 | 同节点事件 |
+| on-edge-mousemove | event 对象 | 同节点事件 |
+| on-edge-mouseleave | event 对象 | 同节点事件 |
+| before-node-removed | event 对象 | 节点移除前的事件 |
+| after-node-removed | event 对象 | 节点移除后的事件 |
+| after-node-dblclick | event 对象 | 双击节点事件 |
+| after-edge-dblclick | event 对象 | 双击边事件 |
+| before-edge-add | event 对象 | 添加边之前的事件 |
+
+(回调中有些情况下是空, 有些回调会触发多次, 因为内部也在使用, 如果影响较大, 后期考虑减少空回调和重复回调)
+
 ```js
-/* 已支持事件列表:
-* after-node-selected
-* after-edge-selected
-* after-node-removed
-* after-node-dblclick
-* after-edge-dblclick
-* before-node-removed
-* before-edge-add
-*/
-graph.on('after-node-selected', node => {
-  if(node) {
-    console.log(node._cfg.id);
+graph.on('after-node-selected', e => {
+  if(e && e.item) {
+    console.log(e.item.get('id'));
   }
 });
 
-graph.on('after-edge-selected', edge => {
-  if(edge) {
-    console.log(edge._cfg.id);
+graph.on('after-edge-selected', e => {
+  if(e && e.item) {
+    console.log(e.item.get('id'));
   }
 });
 
@@ -151,18 +244,12 @@ graph.on('before-edge-add', ({ source, target, sourceAnchor, targetAnchor }) => 
 // 自定义事件监听需在 registerFactory 中定义
 ```
 
-### 销毁实例
-
-```js
-graph.destroy();
-```
-
-### 添加节点/边
+### 添加节点
 
 ```js
 const model = {
   label: 'node',
-  id:  '1',
+  id:  '1', // 非必传
   // 形状
   type:  'rect-node', // e.target.dataset.shape
   // 坐标
@@ -171,12 +258,16 @@ const model = {
 };
 
 graph.addItem('node', model);
-
-graph.addItem('edge', {
-  source: '1',
-  label: 'edge',
-});
 ```
+
+> 自定义的 modes
+
+- canvas-event
+- delete-item
+- select-node
+- hover-node
+- drag-node
+- active-edge
 
 ## 运行案例
 
@@ -191,24 +282,34 @@ npm run dev
 > notes: 使用 cnpm 安装可能导致 import 路径报错, 建议使用npm或yarn
 > 有问题请在GitHub上提issue, 目前版本还有大部分功能要完善, 欢迎star
 
-## 更新日志
-
-所有版本更新日志(仅列出重要的更新):
+## 更新日志(仅列出重要的更新)
 
 ### [0.1.2] 20202-04-28
 
 - 新增删除事件: after-node-removed 和 after-edge-removed
 - 将 antv/g6 作为生产依赖
 
-> notes: 使用 cnpm 安装可能导致 import 路径报错, 建议使用npm或yarn
-
 ### [0.1.3] 20202-04-29
 
 - 按delete键删除节点支持确认回调, 默认不再直接删除
 - 节点和边支持双击事件 after-node-dblclick / after-edge-dblclick, 弊端: 单击事件会被触发两次
 
-### [0.1.8] 20202-04-30
+### [0.2.2] 20202-05-06
 
-- 优化 before-node-removed, 支持获取要删除的节点信息
-- 拖拽锚点后不再自动添加边, 需在 before-edge-add 事件回调中自行添加
-- *所有事件返回的节点都是 item 实例*
+- *所有事件都返回 event 对象*
+- 优化 on-node-mouseenter 等事件
+- 扩展 polyline-edge, line-edge, quadratic-edge, cubic-edge
+- 优化 canvas 鼠标样式
+- 可自定义创建 tooltip
+
+### [0.2.3] 20202-05-07
+
+- 将所有已注册节点和边的事件暴露
+- **事件回调中请使用 clientX 和 clientY, 否则拖拽后位置不准**
+- 支持自定义锚点数量和位置(默认4个)
+- 支持自定义边的类型,可通过事件设置
+- 修复文本和节点样式无效
+
+### [0.2.4] 20202-05-08
+
+- 支持锁定节点位置, 防止自动布局位置不符合预期

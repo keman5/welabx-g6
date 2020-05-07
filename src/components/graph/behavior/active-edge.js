@@ -17,7 +17,7 @@ export default G6 => {
         'edge:click':      'onEdgeClick',
         'edge:dblclick':   'ondblEdgeClick',
         'edge:mouseenter': 'onMouseEnter',
-        // 'edge:mouseover':  'onMouseOver',
+        'edge:mousemove':  'onMouseMove',
         'edge:mouseleave': 'onMouseLeave',
       };
     },
@@ -25,14 +25,13 @@ export default G6 => {
       this.editMode = false;
       this._clearSelected();
     },
-    // hover edge
     onEdgeClick (e) {
       this._clearSelected();
       this.editMode = true;
       // 设置当前节点的 click 状态为 true
       this.graph.setItemState(e.item.get('id'), 'edgeSelected', true);
       // 将点击事件发送给 graph 实例
-      this.graph.emit('after-edge-selected', e.item);
+      this.graph.emit('after-edge-selected', e);
     },
     ondblEdgeClick (e) {
       this._clearSelected();
@@ -40,17 +39,27 @@ export default G6 => {
       // 设置当前节点的 click 状态为 true
       this.graph.setItemState(e.item, 'edgeSelected', true);
       // 将点击事件发送给 graph 实例
-      this.graph.emit('after-edge-dblclick', e.item);
+      this.graph.emit('after-edge-dblclick', e);
     },
+    // hover edge
     onMouseEnter (e) {
       if (!this.editMode) {
         this.graph.setItemState(e.item, 'edgeHover', true);
       }
+      this.graph.emit('on-edge-mouseenter', e);
     },
+    onMouseMove (e) {
+      if (!this.editMode) {
+        this.graph.setItemState(e.item, 'edgeHover', true);
+      }
+      this.graph.emit('on-edge-mousemove', e);
+    },
+    // out edge
     onMouseLeave (e) {
       if (!this.editMode) {
         this.graph.setItemState(e.item, 'edgeHover', false);
       }
+      this.graph.emit('on-edge-mouseleave', e);
     },
     // 清空已选
     _clearSelected () {

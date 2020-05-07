@@ -55,12 +55,12 @@ export default (anchor, group, p) => {
     /**
      * 计算方法:
      * 鼠标位置 - box左上角 - width/2 => 中心坐标
-     * 这里减 2px 是为了让鼠标释放时 node: drag 事件监听到 target, 而不是当前虚线
+     * 这里 +2px 是为了让鼠标释放时 node: drag 事件监听到 target, 而不是当前虚线
      */
     line.attr({
       path: [
         ['M', ...pointStart],
-        ['L', e.x - canvasBox.x - canvasBox.width / 2 - 2, e.y - canvasBox.y - canvasBox.height / 2 - 2],
+        ['L', e.x - canvasBox.x - canvasBox.width / 2 + 2, e.y - canvasBox.y - canvasBox.height / 2 + 2],
       ],
     });
   });
@@ -79,7 +79,7 @@ export default (anchor, group, p) => {
     if (e.target.cfg.nodeId !== anchorNodeId) {
       const { index } = e.target.cfg;
 
-      if (index && group.getAllAnchorBg()[index]) {
+      if (group.getAllAnchorBg()[index]) {
         group.getAllAnchorBg()[index].attr('fillOpacity', 0.7);
       }
     }
@@ -91,7 +91,7 @@ export default (anchor, group, p) => {
     if (e.target.cfg.nodeId !== anchorNodeId) {
       const { index } = e.target.cfg;
 
-      if (index && group.getAllAnchorBg()[index]) {
+      if (group.getAllAnchorBg()[index]) {
         group.getAllAnchorBg()[index].attr('fillOpacity', 0.5);
       }
     }

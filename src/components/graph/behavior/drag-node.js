@@ -34,6 +34,7 @@ export default G6 => {
           this.graph.setItemState(node, 'anchorActived', true);
         });
       }
+      this.graph.emit('on-node-mousedown', e);
     },
     onMouseup (e) {
       if (this.dragTarget === 'anchor') {
@@ -43,6 +44,7 @@ export default G6 => {
           node.clearStates('anchorActived');
         });
       }
+      this.graph.emit('on-node-mouseup', e);
     },
     // 拖拽开始
     onDragStart (e) {
@@ -55,6 +57,7 @@ export default G6 => {
         this._nodeOnDragStart(e, e.item.getContainer());
         // this.graph.setItemState(e.item, 'nodeOnDragStart', e); // 通知外部组件
       }
+      this.graph.emit('on-node-dragstart', e);
     },
     // 拖拽中
     onDrag (e) {
@@ -62,6 +65,7 @@ export default G6 => {
         this._nodeOnDrag(e, e.item.getContainer());
         // this.graph.setItemState(e.item, 'nodeOnDrag', e); // 通知外部组件
       }
+      this.graph.emit('on-node-drag', e);
     },
     // 拖拽结束
     onDragEnd (e) {
@@ -75,8 +79,8 @@ export default G6 => {
         });
       } else if (this.dragTarget === 'node') {
         this._nodeOnDragEnd(e, group);
-        // this.graph.setItemState(e.item, 'nodeOnDragEnd', e);
       }
+      this.graph.emit('on-node-dragend', e);
     },
     // 锚点拖拽结束添加边
     onDrop (e) {
@@ -90,6 +94,7 @@ export default G6 => {
           targetAnchor: e.target.cfg.index,
         });
       }
+      this.graph.emit('on-node-drop', e);
     },
 
     /**

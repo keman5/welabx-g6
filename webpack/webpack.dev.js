@@ -22,7 +22,7 @@ const devServer = {
     compress:           true,
     historyApiFallback: true,
     contentBase:        path.join(__dirname, '../dist'),
-    host:               '127.0.0.1',
+    host:               '0.0.0.0',
     port:               4300,
     hot:                true,
     open:               false,
