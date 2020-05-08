@@ -44,7 +44,9 @@ export default G6 => {
     },
     // hover node
     onNodeMouseEnter (e) {
-      this.graph.setItemState(e.item, 'nodeState', 'hover');
+      if (!e.item.hasState('nodeState:selected')) {
+        this.graph.setItemState(e.item, 'nodeState', 'hover');
+      }
       this.graph.emit('on-node-mouseenter', e);
     },
     onNodeMouseMove (e) {
