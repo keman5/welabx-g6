@@ -6,15 +6,17 @@
 export default {
   // node默认样式
   nodeStyles: {
-    cursor:    'default',
-    fill:      '#E7F7FE',
-    stroke:    '#1890FF',
+    fill:      '#E7F7FE', // 浅蓝
+    stroke:    '#1890FF', // 深蓝
     lineWidth: 1,
   },
   // node 交互样式
   nodeStateStyles: {
+    'nodeState:default': {
+      fill: '#E7F7FE',
+    },
     // 鼠标 hover 上节点，即 hover 状态为 true 时的样式
-    hover: {
+    'nodeState:hover': {
       cursor:        'pointer',
       shadowOffsetX: 0,
       shadowOffsetY: 4,
@@ -22,8 +24,8 @@ export default {
       opacity:       0.8,
     },
     // 鼠标点击节点，即 selected 状态为 true 时的样式
-    selected: {
-      fill:   '#f9f9f9',
+    'nodeState:selected': {
+      // fill:   '#f9f9f9',
       stroke: '#1890FF',
       cursor: 'default',
     },
@@ -38,10 +40,13 @@ export default {
   },
   // node 文本交互样式
   nodeLabelStateStyles: {
-    hover: {
+    'nodeLabelState:default': {
 
     },
-    selected: {
+    'nodeLabelState:hover': {
+
+    },
+    'nodeLabelState:selected': {
 
     },
   },

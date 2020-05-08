@@ -10,7 +10,7 @@ import defaultStyles from '../defaultStyles';
 
 const {
   nodeStateStyles,
-  nodeLabelStateStyles,
+  // nodeLabelStateStyles,
   anchorHotsoptStyle,
 } = defaultStyles;
 
@@ -19,8 +19,6 @@ const {
  */
 
 export default G6 => {
-  const { Util } = G6;
-
   G6.registerNode('base-node', {
     // 绘制图标
     drawIcon (cfg, group) {
@@ -143,7 +141,7 @@ export default G6 => {
     draw (cfg, group) {
       const shapeName = this.shapeType || 'rect';
       // 合并外部样式和默认样式
-      const attrs = Util.deepMix({}, this.getShapeStyle(cfg), cfg);
+      const attrs = this.getShapeStyle(cfg);
       // 添加节点
       const shape = group.addShape(shapeName, {
         attrs:     this.getShapeStyle(cfg), // shape 属性在定义时返回
@@ -152,9 +150,8 @@ export default G6 => {
       });
 
       this.options = {
-        labelCfg: attrs.labelCfg,
-        nodeStateStyles,
-        nodeLabelStateStyles,
+        ...nodeStateStyles,
+        // ...nodeLabelStateStyles,
         ...attrs,
       };
 
@@ -219,8 +216,10 @@ export default G6 => {
       const buildInEvents = [
         'anchorShow',
         'anchorActived',
-        'nodeSelected',
-        'nodeHover',
+        'nodeState',
+        'nodeState:default',
+        'nodeState:selected',
+        'nodeState:hover',
         'nodeOnDragStart',
         'nodeOnDrag',
         'nodeOnDragEnd',
@@ -231,7 +230,7 @@ export default G6 => {
         // 内部this绑定到了当前item实例
         itemEvents[name].call(this, value, group);
       } else {
-        console.warn(`warning: node ${name} 事件回调未注册!`);
+        console.warn(`warning: ${name} 事件回调未注册!`);
       }
     },
     /* 获取锚点（相关边的连入点） */

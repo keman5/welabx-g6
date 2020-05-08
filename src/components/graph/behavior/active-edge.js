@@ -29,7 +29,7 @@ export default G6 => {
       this._clearSelected();
       this.editMode = true;
       // 设置当前节点的 click 状态为 true
-      this.graph.setItemState(e.item.get('id'), 'edgeSelected', true);
+      this.graph.setItemState(e.item.get('id'), 'edgeState', 'selected');
       // 将点击事件发送给 graph 实例
       this.graph.emit('after-edge-selected', e);
     },
@@ -37,42 +37,42 @@ export default G6 => {
       this._clearSelected();
       this.editMode = true;
       // 设置当前节点的 click 状态为 true
-      this.graph.setItemState(e.item, 'edgeSelected', true);
+      this.graph.setItemState(e.item, 'edgeState', 'selected');
       // 将点击事件发送给 graph 实例
       this.graph.emit('after-edge-dblclick', e);
     },
     // hover edge
     onMouseEnter (e) {
       if (!this.editMode) {
-        this.graph.setItemState(e.item, 'edgeHover', true);
+        this.graph.setItemState(e.item, 'edgeState', 'hover');
       }
       this.graph.emit('on-edge-mouseenter', e);
     },
     onMouseMove (e) {
       if (!this.editMode) {
-        this.graph.setItemState(e.item, 'edgeHover', true);
+        this.graph.setItemState(e.item, 'edgeState', 'hover');
       }
       this.graph.emit('on-edge-mousemove', e);
     },
     // out edge
     onMouseLeave (e) {
       if (!this.editMode) {
-        this.graph.setItemState(e.item, 'edgeHover', false);
+        this.graph.setItemState(e.item, 'edgeState', 'default');
       }
       this.graph.emit('on-edge-mouseleave', e);
     },
     // 清空已选
     _clearSelected () {
-      const selectedNodes = this.graph.findAllByState('node', 'nodeSelected');
+      const selectedNodes = this.graph.findAllByState('node', 'nodeState:selected');
 
-      selectedNodes.forEach(current => {
-        this.graph.setItemState(current, 'nodeSelected', false);
+      selectedNodes.forEach(node => {
+        this.graph.clearItemStates(node, ['nodeState:selected']);
       });
 
-      const selectedEdges = this.graph.findAllByState('edge', 'edgeSelected');
+      const selectedEdges = this.graph.findAllByState('edge', 'edgeState:selected');
 
-      selectedEdges.forEach(current => {
-        this.graph.setItemState(current, 'edgeSelected', false);
+      selectedEdges.forEach(edge => {
+        this.graph.clearItemStates(edge, ['edgeState:selected']);
       });
       this.graph.emit('after-edge-selected');
     },

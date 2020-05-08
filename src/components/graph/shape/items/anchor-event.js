@@ -4,6 +4,8 @@
  * @description 锚点事件
  */
 
+let dragLog = []; // 记录鼠标坐标
+
 let anchorNodeId = null; // dragover 也会发生在拖拽的锚点上, 用于记录当前拖拽的节点id
 
 export default (anchor, group, p) => {
@@ -16,13 +18,15 @@ export default (anchor, group, p) => {
   });
 
   // 拖拽事件
-  anchor.on('dragstart', () => {
+  anchor.on('dragstart', e => {
     if (anchorNodeId == null) {
       const { r } = anchor.get('attrs');
       const cacheCanvasBBox = group.get('cacheCanvasBBox');
       const { id, model: { style } } = group.get('item')._cfg;
       const lineWidth = (style.lineWidth || 0) / 2;
       const point = [(cacheCanvasBBox.width - r * 2 - 4) * (p[0] - 0.5) - lineWidth, (cacheCanvasBBox.height - r * 2 - 4) * (p[1] - 0.5) - lineWidth];
+
+      dragLog = [e.x, e.y];
 
       // 添加线条
       const line = group.addShape('path', {
@@ -50,17 +54,44 @@ export default (anchor, group, p) => {
     const canvasBox = group.get('children')[0].get('canvasBox');
     const line = group.getItem('dashed-line');
     const pointStart = line.get('pointStart');
+    const endPoint = [e.x - canvasBox.x - canvasBox.width / 2, e.y - canvasBox.y - canvasBox.height / 2];
 
     line.toFront();
     /**
      * 计算方法:
      * 鼠标位置 - box左上角 - width/2 => 中心坐标
-     * 这里 +2px 是为了让鼠标释放时 node: drag 事件监听到 target, 而不是当前虚线
+     * 这里 1px 是为了让鼠标释放时 node: drag 事件监听到 target, 而不是当前虚线
      */
+
+    // 如果鼠标移动距离超过 16px 就开始计算角度
+    if (Math.sqrt(Math.pow(Math.abs(dragLog[0]) - Math.abs(e.x), 2) + Math.pow(Math.abs(dragLog[1]) - Math.abs(e.y), 2)) >= 16) {
+      if (e.x >= dragLog[0]) {
+        // 右下
+        if (e.y >= dragLog[1]) {
+          endPoint[0] -= 1;
+          endPoint[1] -= 1;
+        } else {
+          // 右上
+          endPoint[0] -= 1;
+          endPoint[1] -= 1;
+        }
+      } else {
+        // 左上
+        if (e.y >= dragLog[1]) {
+          endPoint[0] += 1;
+          endPoint[1] += 1;
+        } else {
+          // 左下
+          endPoint[0] += 1;
+          endPoint[1] += 1;
+        }
+      }
+    }
+
     line.attr({
       path: [
         ['M', ...pointStart],
-        ['L', e.x - canvasBox.x - canvasBox.width / 2 + 2, e.y - canvasBox.y - canvasBox.height / 2 + 2],
+        ['L', endPoint[0], endPoint[1]],
       ],
     });
   });

@@ -173,10 +173,10 @@ export default {
     initGraphEvent () {
       this.graph.on('on-node-mouseenter', e => {
         if (e && e.item) {
-          const model = e.item.get('model');
+          // const model = e.item.get('model');
 
-          model.style.fill = 'rgba(24, 144, 255, .3)';
-          this.graph.updateItem(e.item, model);
+          // model.style.fill = 'rgba(24, 144, 255, .3)';
+          // this.graph.updateItem(e.item, model);
         }
       });
 
@@ -191,7 +191,7 @@ export default {
 
           model.label = id;
           // model.style.fill = 'rgba(24, 144, 255, .3)';
-          this.graph.updateItem(e.item, model);
+          // this.graph.updateItem(e.item, model);
         }
       });
 

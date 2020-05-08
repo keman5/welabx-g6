@@ -12,10 +12,10 @@ const events = {
   /**
    * @description 恢复节点/边/锚点默认样式
    */
-  setStyle (node, text, nodeStyle, textStyle) {
-    node.attr(nodeStyle);
+  setStyle (item, text, nodeStyle, textStyle) {
+    item.attr(nodeStyle);
     if (text) {
-      node.attr(textStyle);
+      text.attr(textStyle);
     }
   },
 
@@ -79,64 +79,100 @@ const events = {
   },
 
   /**
+   * @description 边多状态事件
+   */
+  'nodeState' (value, group) {
+    events[`nodeState:${value}`].call(this, value, group);
+  },
+
+  /**
+   * @description 节点恢复默认状态事件
+   */
+  'nodeState:default' (value, group) {
+    if (value) {
+      const nodeDefault = this.options['nodeState:default'];
+      // const textDefault = this.options.labelCfg;
+      const node = group.getChildByIndex(0);
+      const text = group.getChildByIndex(1);
+
+      events.setStyle(node, text, nodeDefault);
+    }
+  },
+
+  /**
    * @description 节点selected事件
    */
-  nodeSelected (value, group) {
-    const nodeDefault = this.options.$style;
-    const textDefault = this.options.nodeLabelStyles;
-    const nodeHover = this.options.nodeStateStyles.selected;
-    const textHover = this.options.nodeLabelStateStyles.selected;
+  'nodeState:selected' (value, group) {
+    const nodeActive = this.options['nodeState:selected'];
+    // const textActive = this.options.labelCfg;
     const node = group.getChildByIndex(0);
     const text = group.getChildByIndex(1);
 
-    if (value) {
-      events.setStyle(node, text, nodeHover, textHover);
-    } else {
-      events.setStyle(node, text, nodeDefault, textDefault);
-    }
+    events.setStyle(node, text, nodeActive);
   },
 
   /**
    * @description 节点hover事件
    */
-  nodeHover (value, group) {
+  'nodeState:hover' (value, group) {
+    const nodeActive = this.options['nodeState:hover'];
+    // const textActive = this.options.labelCfg;
     const node = group.getChildByIndex(0);
     const text = group.getChildByIndex(1);
 
     if (value) {
-      node.attr('cursor', 'move');
-      if (text) {
-        text.attr('cursor', 'default');
-      }
+      events.setStyle(node, text, nodeActive);
     } else {
-      node.attr('cursor', 'default');
-      if (text) {
-        text.attr('cursor', 'default');
-      }
+      events.setStyle(node, null, group.get('item').get('originStyle'));
+    }
+  },
+
+  /**
+   * @description 边多状态事件
+   */
+  'edgeState' (value, group) {
+    events[`edgeState:${value}`].call(this, value, group);
+  },
+
+  /**
+   * @description 边恢复默认状态事件
+   */
+  'edgeState:default' (value, group) {
+    if (value) {
+      const edge = group.getChildByIndex(0);
+      const text = group.getChildByIndex(1);
+      const edgeDefault = this.options['edgeState:default'];
+      const textDefault = this.options['edgeLabelState:default'];
+
+      events.setStyle(edge, text, edgeDefault, textDefault);
     }
   },
 
   /**
    * @description edge hover事件
    */
-  edgeHover (value, group) {
+  'edgeState:hover' (value, group) {
+    const edgeActive = this.options['edgeState:hover'];
+    // const textActive = this.options.labelCfg;
     const edge = group.getChildByIndex(0);
+    const text = group.getChildByIndex(1);
     const { endArrow } = edge.get('attrs');
+    const originStyle = group.get('item').get('originStyle');
 
     if (value) {
-      edge.attr('stroke', '#1890FF');
+      events.setStyle(edge, text, edgeActive);
       if (endArrow) {
         edge.attr('endArrow', {
           path: endArrow.path,
-          fill: '#1890FF',
+          fill: edgeActive.stroke || '#1890FF',
         });
       }
     } else {
-      edge.attr('stroke', '#aab7c3');
+      events.setStyle(edge, null, originStyle);
       if (endArrow) {
         edge.attr('endArrow', {
           path: endArrow.path,
-          fill: '#aab7c3',
+          fill: originStyle.stroke || '#1890FF',
         });
       }
     }
@@ -145,30 +181,27 @@ const events = {
   /**
    * @description edge 选中事件
    */
-  edgeSelected (value, group) {
+  'edgeState:selected' (value, group) {
+    const edgeActive = this.options['edgeState:selected'];
     const edge = group.getChildByIndex(0);
+    const text = group.getChildByIndex(1);
     const { endArrow } = edge.get('attrs');
+    const originStyle = group.get('item').get('originStyle');
 
     if (value) {
-      edge.attr({
-        stroke:    '#1890FF',
-        lineWidth: 2,
-      });
+      events.setStyle(edge, text, edgeActive);
       if (endArrow) {
         edge.attr('endArrow', {
           path: endArrow.path,
-          fill: '#1890FF',
+          fill: edgeActive.stroke || '#1890FF',
         });
       }
     } else {
-      edge.attr({
-        stroke:    '#aab7c3',
-        lineWidth: 1,
-      });
+      events.setStyle(edge, null, originStyle);
       if (endArrow) {
         edge.attr('endArrow', {
           path: endArrow.path,
-          fill: '#aab7c3',
+          fill: originStyle.stroke || '#1890FF',
         });
       }
     }

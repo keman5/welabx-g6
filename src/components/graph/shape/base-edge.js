@@ -11,10 +11,12 @@ import itemEvents from './items/item-event';
  * 注册基础edge => 绘制edge => 初始化edge状态 => dege动画(设置交互动画)
  */
 
-const setState = (name, value, item) => {
+function setState (name, value, item) {
   const buildInEvents = [
-    'edgeHover',
-    'edgeSelected',
+    'edgeState',
+    'edgeState:default',
+    'edgeState:selected',
+    'edgeState:hover',
   ];
   const group = item.getContainer();
 
@@ -24,32 +26,47 @@ const setState = (name, value, item) => {
   } else {
     console.warn(`warning: edge ${name} 事件回调未注册!`);
   }
-};
+}
+
+function afterDraw (cfg, group) {
+  const attrs = this.getShapeStyle(cfg);
+
+  this.options = {
+    ...attrs,
+  };
+}
 
 export default G6 => {
-
+  // 直线
   G6.registerEdge('line-edge', {
 
     setState,
+    afterDraw,
   }, 'line');
 
+  // 折线
   G6.registerEdge('polyline-edge', {
 
     setState,
+    afterDraw,
   }, 'polyline');
 
+  // 二次贝塞尔曲线
   G6.registerEdge('quadratic-edge', {
 
     setState,
+    afterDraw,
   }, 'quadratic');
 
+  // 三次贝塞尔曲线
   G6.registerEdge('cubic-edge', {
 
     setState,
+    afterDraw,
   }, 'cubic');
 
-  /* G6.registerEdge('arc-edge', {
-    curveOffset: 40,
+  G6.registerEdge('arc-edge', {
     setState,
-  }, 'arc'); */
+    afterDraw,
+  }, 'arc');
 };

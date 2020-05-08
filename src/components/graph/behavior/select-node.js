@@ -25,7 +25,7 @@ export default G6 => {
       this._clearSelected();
       e.item.toFront();
       // 获取被点击的节点元素对象, 设置当前节点的 click 状态为 true
-      this.graph.setItemState(e.item, 'nodeSelected', true);
+      this.graph.setItemState(e.item, 'nodeState', 'selected');
       // 将点击事件发送给 graph 实例
       this.graph.emit('after-node-selected', e);
     },
@@ -34,7 +34,7 @@ export default G6 => {
       this._clearSelected();
       e.item.toFront();
       // 获取被点击的节点元素对象, 设置当前节点的 click 状态为 true
-      this.graph.setItemState(e.item, 'nodeSelected', true);
+      this.graph.setItemState(e.item, 'nodeState', 'selected');
       // 将点击事件发送给 graph 实例
       this.graph.emit('after-node-dblclick', e);
     },
@@ -44,7 +44,7 @@ export default G6 => {
     },
     // hover node
     onNodeMouseEnter (e) {
-      this.graph.setItemState(e.item, 'nodeHover', true);
+      this.graph.setItemState(e.item, 'nodeState', 'hover');
       this.graph.emit('on-node-mouseenter', e);
     },
     onNodeMouseMove (e) {
@@ -52,21 +52,23 @@ export default G6 => {
     },
     // 移出 node
     onNodeMouseLeave (e) {
-      this.graph.setItemState(e.item, 'nodeHover', false);
+      if (!e.item.hasState('nodeState:selected')) {
+        this.graph.clearItemStates(e.item, 'nodeState:hover');
+      }
       this.graph.emit('on-node-mouseleave', e);
     },
     // 清空已选
     _clearSelected () {
-      const selectedNodes = this.graph.findAllByState('node', 'nodeSelected');
+      const selectedNodes = this.graph.findAllByState('node', 'nodeState:selected');
 
-      selectedNodes.forEach(current => {
-        this.graph.setItemState(current, 'nodeSelected', false);
+      selectedNodes.forEach(node => {
+        this.graph.clearItemStates(node, ['nodeState:selected', 'nodeState:hover']);
       });
 
       const selectedEdges = this.graph.findAllByState('edge', 'edgeSelected');
 
-      selectedEdges.forEach(current => {
-        this.graph.setItemState(current, 'edgeSelected', false);
+      selectedEdges.forEach(edge => {
+        this.graph.clearItemStates(edge, ['edgeState:selected', 'edgeState:hover']);
       });
       this.graph.emit('after-node-selected');
     },
