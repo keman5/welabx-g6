@@ -29,7 +29,7 @@ class G6 {
         type:    'dagre',
         // rankdir: 'LR',
         nodesep: 30,
-        ranksep: 50,
+        ranksep: 30,
       },
       modes: {
         // 允许拖拽画布、缩放画布、拖拽节点
