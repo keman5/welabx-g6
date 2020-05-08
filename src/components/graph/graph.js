@@ -76,20 +76,28 @@ class G6 {
       },
       // 默认节点不同状态下的样式集合
       nodeStateStyles: {
-        hover: {
-          fill: '#eee',
+        'nodeState:default': {
+          fill:   '#E7F7FE',
+          stroke: '#1890FF',
         },
-        selected: {
+        'nodeState:hover': {
+          fill: '#d5f1fd',
+        },
+        'nodeState:selected': {
+          fill:   '#caebf9',
           stroke: '#1890FF',
         },
       },
       // 默认边不同状态下的样式集合
       edgeStateStyles: {
-        selected: {
-          stroke: 'steelblue',
+        'edgeState:default': {
+          stroke: '#aab7c3',
         },
-        hover: {
-          fill: 'steelblue',
+        'edgeState:selected': {
+          stroke: '#1890FF',
+        },
+        'edgeState:hover': {
+          stroke: '#1890FF',
         },
       },
     }, config);
@@ -99,6 +107,15 @@ class G6 {
     }
 
     this.instance = new G6ES.Graph(options);
+
+    const { el } = this.instance.cfg.canvas.cfg;
+
+    el.id = `${options.container}-canvas`;
+
+    document.addEventListener('click', e => {
+      // 内部键盘事件是否可被触发
+     el.setAttribute('isFocused', e.target.id === el.id);
+    });
   }
 
   // 销毁实例

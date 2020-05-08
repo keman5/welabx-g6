@@ -55,7 +55,6 @@ export default G6 => {
         e.item.toFront();
         this.dragTarget = 'node';
         this._nodeOnDragStart(e, e.item.getContainer());
-        // this.graph.setItemState(e.item, 'nodeOnDragStart', e); // 通知外部组件
       }
       this.graph.emit('on-node-dragstart', e);
     },
@@ -63,7 +62,6 @@ export default G6 => {
     onDrag (e) {
       if (this.dragTarget === 'node') {
         this._nodeOnDrag(e, e.item.getContainer());
-        // this.graph.setItemState(e.item, 'nodeOnDrag', e); // 通知外部组件
       }
       this.graph.emit('on-node-drag', e);
     },

@@ -60,7 +60,7 @@ export default (anchor, group, p) => {
     /**
      * 计算方法:
      * 鼠标位置 - box左上角 - width/2 => 中心坐标
-     * 这里 +2px 是为了让鼠标释放时 node: drag 事件监听到 target, 而不是当前虚线
+     * 这里 1px 是为了让鼠标释放时 node: drag 事件监听到 target, 而不是当前虚线
      */
 
     // 如果鼠标移动距离超过 16px 就开始计算角度
@@ -68,22 +68,22 @@ export default (anchor, group, p) => {
       if (e.x >= dragLog[0]) {
         // 右下
         if (e.y >= dragLog[1]) {
-          endPoint[0] -= 2;
-          endPoint[1] -= 2;
+          endPoint[0] -= 1;
+          endPoint[1] -= 1;
         } else {
           // 右上
-          endPoint[0] -= 2;
-          endPoint[1] -= 2;
+          endPoint[0] -= 1;
+          endPoint[1] -= 1;
         }
       } else {
         // 左上
         if (e.y >= dragLog[1]) {
-          endPoint[0] += 2;
-          endPoint[1] += 2;
+          endPoint[0] += 1;
+          endPoint[1] += 1;
         } else {
           // 左下
-          endPoint[0] += 2;
-          endPoint[1] += 2;
+          endPoint[0] += 1;
+          endPoint[1] += 1;
         }
       }
     }
