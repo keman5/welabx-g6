@@ -4,7 +4,7 @@
 
 ## 在线案例
 
-[gayhub 案例](https://claudewowo.github.io/welabx-g6/build/){:target="_blank"}
+[gayhub 案例](https://claudewowo.github.io/welabx-g6/build/?_blank)
 
 ## 已完成功能
 

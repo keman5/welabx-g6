@@ -120,6 +120,7 @@ const events = {
     const node = group.getChildByIndex(0);
     const { activeStyle, defaultStyle } = getItemStyle('node', group, 'selected');
 
+    if (!activeStyle) return;
     if (value) {
       setStyle(node, activeStyle);
     } else {
@@ -134,6 +135,7 @@ const events = {
     const node = group.getChildByIndex(0);
     const { activeStyle, defaultStyle } = getItemStyle('node', group, 'hover');
 
+    if (!activeStyle) return;
     if (value) {
       setStyle(node, activeStyle);
     } else {
@@ -168,6 +170,7 @@ const events = {
     const { endArrow } = edge.get('attrs');
     const { activeStyle, defaultStyle, originStyle } = getItemStyle('edge', group, 'hover');
 
+    if (!activeStyle) return;
     if (value) {
       setStyle(edge, activeStyle);
       if (endArrow) {
@@ -195,6 +198,7 @@ const events = {
     const { endArrow } = edge.get('attrs');
     const { activeStyle, defaultStyle, originStyle } = getItemStyle('edge', group, 'selected');
 
+    if (!activeStyle) return;
     if (value) {
       setStyle(edge, activeStyle);
       if (endArrow) {
