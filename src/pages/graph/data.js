@@ -14,12 +14,6 @@ export default {
         shadowOffsetY: 2,
         shadowColor:   '#666',
         shadowBlur:    10,
-        hover:         {
-          fill: '#ccc',
-        },
-        selected: {
-          stroke: '#ccc',
-        },
       },
       // node 文本默认样式
       labelCfg: {
@@ -28,6 +22,17 @@ export default {
         textBaseline: 'middle',
         fontWeight:   'bold',
         fontSize:     13,
+      },
+      nodeStateStyles: {
+        'nodeState:default': {
+          fill: 'orange',
+        },
+        'nodeState:hover': {
+          fill: '#ffbd17',
+        },
+        'nodeState:selected': {
+          fill: '#f1ac00',
+        },
       },
     },
     {
@@ -104,9 +109,10 @@ export default {
   ],
   edges: [
     {
-      source: '1',
-      target: '2',
-      data:   {
+      source:       '1',
+      target:       '2',
+      sourceAnchor: 2,
+      data:         {
         type:   'A',
         amount: '100,000 元',
         date:   '2019-08-03',
@@ -128,6 +134,17 @@ export default {
           lineWidth: 5,     // 文本白边粗细
         },
       },
+      edgeStateStyles: {
+        'edgeState:default': {
+          strokeOpacity: 1,
+        },
+        'edgeState:hover': {
+          strokeOpacity: 0.6,
+        },
+        'edgeState:selected': {
+          strokeOpacity: 1,
+        },
+      },
     },
     {
       source: '2',
@@ -137,7 +154,18 @@ export default {
         amount: '100,000 元',
         date:   '2019-08-03',
       },
-      label: '终止',
+      label:           '终止',
+      edgeStateStyles: {
+        'edgeState:default': {
+          strokeOpacity: 1,
+        },
+        'edgeState:hover': {
+          strokeOpacity: 0.6,
+        },
+        'edgeState:selected': {
+          strokeOpacity: 1,
+        },
+      },
     },
     {
       source: '2',
@@ -147,7 +175,21 @@ export default {
         amount: '100,000 元',
         date:   '2019-08-03',
       },
-      label: '循环',
+      label:           '循环',
+      edgeStateStyles: {
+        'edgeState:default': {
+          strokeOpacity: 1,
+          stroke:        '#ccc',
+        },
+        'edgeState:hover': {
+          strokeOpacity: 0.6,
+          stroke:        '#ccc',
+        },
+        'edgeState:selected': {
+          strokeOpacity: 1,
+          stroke:        '#ccc',
+        },
+      },
     },
     {
       source: '4',

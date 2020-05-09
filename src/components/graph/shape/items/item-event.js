@@ -90,7 +90,9 @@ const events = {
    */
   'nodeState:default' (value, group) {
     if (value) {
-      const nodeDefault = this.options['nodeState:default'];
+      const model = group.get('item').get('model');
+      const stateStyle = Object.assign(this.options, model.nodeStateStyles);
+      const nodeDefault = stateStyle['nodeState:default'];
       // const textDefault = this.options.labelCfg;
       const node = group.getChildByIndex(0);
       // const text = group.getChildByIndex(1);
@@ -103,20 +105,29 @@ const events = {
    * @description 节点selected事件
    */
   'nodeState:selected' (value, group) {
-    const nodeActive = this.options['nodeState:selected'];
+    const model = group.get('item').get('model');
+    const stateStyle = Object.assign(this.options, model.nodeStateStyles);
+    const nodeActive = stateStyle['nodeState:selected'];
+    const nodeDefault = stateStyle['nodeState:default'];
     // const textActive = this.options.labelCfg;
     const node = group.getChildByIndex(0);
     // const text = group.getChildByIndex(1);
 
-    events.setStyle(node, nodeActive);
+    if (value) {
+      events.setStyle(node, nodeActive);
+    } else {
+      events.setStyle(node, nodeDefault);
+    }
   },
 
   /**
    * @description 节点hover事件
    */
   'nodeState:hover' (value, group) {
-    const nodeActive = this.options['nodeState:hover'];
-    const nodeDefault = this.options['nodeState:default'];
+    const model = group.get('item').get('model');
+    const stateStyle = Object.assign(this.options, model.nodeStateStyles);
+    const nodeActive = stateStyle['nodeState:hover'];
+    const nodeDefault = stateStyle['nodeState:default'];
     // const textActive = this.options.labelCfg;
     const node = group.getChildByIndex(0);
     // const text = group.getChildByIndex(1);
@@ -140,7 +151,9 @@ const events = {
    */
   'edgeState:default' (value, group) {
     if (value) {
-      const edgeDefault = this.options['edgeState:default'];
+      const model = group.get('item').get('model');
+      const stateStyle = Object.assign(this.options, model.edgeStateStyles);
+      const edgeDefault = stateStyle['edgeState:default'];
       // const textDefault = this.options['edgeLabelState:default'];
       const edge = group.getChildByIndex(0);
       // const text = group.getChildByIndex(1);
@@ -153,8 +166,10 @@ const events = {
    * @description edge hover事件
    */
   'edgeState:hover' (value, group) {
-    const edgeActive = this.options['edgeState:hover'];
-    const edgeDefault = this.options['edgeState:default'];
+    const model = group.get('item').getModel();
+    const stateStyle = Object.assign(this.options, model.edgeStateStyles);
+    const edgeActive = stateStyle['edgeState:hover'];
+    const edgeDefault = stateStyle['edgeState:default'];
     // const textActive = this.options.labelCfg;
     const edge = group.getChildByIndex(0);
     // const text = group.getChildByIndex(1);
@@ -166,7 +181,7 @@ const events = {
       if (endArrow) {
         edge.attr('endArrow', {
           path: endArrow.path,
-          fill: edgeActive.stroke || '#1890FF',
+          fill: edgeActive.stroke || originStyle.stroke,
         });
       }
     } else {
@@ -174,7 +189,7 @@ const events = {
       if (endArrow) {
         edge.attr('endArrow', {
           path: endArrow.path,
-          fill: originStyle.stroke || '#1890FF',
+          fill: edgeDefault.stroke || originStyle.stroke,
         });
       }
     }
@@ -184,8 +199,10 @@ const events = {
    * @description edge 选中事件
    */
   'edgeState:selected' (value, group) {
-    const edgeActive = this.options['edgeState:selected'];
-    const edgeDefault = this.options['edgeState:default'];
+    const model = group.get('item').get('model');
+    const stateStyle = Object.assign(this.options, model.edgeStateStyles);
+    const edgeActive = stateStyle['edgeState:selected'];
+    const edgeDefault = stateStyle['edgeState:default'];
     const edge = group.getChildByIndex(0);
     // const text = group.getChildByIndex(1);
     const { endArrow } = edge.get('attrs');
@@ -196,7 +213,7 @@ const events = {
       if (endArrow) {
         edge.attr('endArrow', {
           path: endArrow.path,
-          fill: edgeActive.stroke || '#1890FF',
+          fill: edgeActive.stroke || originStyle.stroke,
         });
       }
     } else {
@@ -204,7 +221,7 @@ const events = {
       if (endArrow) {
         edge.attr('endArrow', {
           path: endArrow.path,
-          fill: originStyle.stroke || '#1890FF',
+          fill: edgeDefault.stroke || originStyle.stroke,
         });
       }
     }
