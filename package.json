@@ -1,6 +1,6 @@
 {
   "name": "welabx-g6",
-  "version": "0.2.6",
+  "version": "0.2.7",
   "description": "welabx - antv G6",
   "main": "src/components/graph/graph.js",
   "scripts": {
