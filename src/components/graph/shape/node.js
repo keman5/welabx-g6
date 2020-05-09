@@ -19,7 +19,7 @@ export default G6 => {
     shapeType: 'rect',
     // 当前节点默认样式
     options:   {
-      icon: require('../../../assets/images/TB1_1680x370.png').default,
+      // icon: require('../../../assets/images/TB1_1680x370.png').default,
       iconStyles,
     },
     // 覆盖 base-node 默认样式
@@ -37,10 +37,11 @@ export default G6 => {
         anchorPointStyles,
         labelCfg: {
           ...nodeLabelStyles,
-          ...cfg.style.nodeLabelStyles,
+          // ...cfg.nodeLabelStyles,
         },
         radius: 5,
         ...cfg.style,
+        ...cfg.nodeStateStyles,
       };
     },
   }, 'base-node');
@@ -60,9 +61,10 @@ export default G6 => {
         anchorPointStyles,
         labelCfg: {
           ...nodeLabelStyles,
-          ...cfg.style.nodeLabelStyles,
+          // ...cfg.style.nodeLabelStyles,
         },
         ...cfg.style,
+        ...cfg.nodeStateStyles,
       };
     },
   }, 'base-node');
@@ -82,9 +84,10 @@ export default G6 => {
         anchorPointStyles,
         labelCfg: {
           ...nodeLabelStyles,
-          ...cfg.style.nodeLabelStyles,
+          // ...cfg.style.nodeLabelStyles,
         },
         ...cfg.style,
+        ...cfg.nodeStateStyles,
       };
     },
   }, 'base-node');
@@ -104,9 +107,10 @@ export default G6 => {
         anchorPointStyles,
         labelCfg: {
           ...nodeLabelStyles,
-          ...cfg.style.nodeLabelStyles,
+          // ...cfg.style.nodeLabelStyles,
         },
         ...cfg.style,
+        ...cfg.nodeStateStyles,
       };
     },
     // 返回菱形的路径
@@ -143,7 +147,7 @@ export default G6 => {
         anchorPointStyles,
         labelCfg:  {
             ...nodeLabelStyles,
-            ...cfg.style.nodeLabelStyles,
+            // ...cfg.style.nodeLabelStyles,
         },
         anchorPoints: this.getAnchorPoints(cfg),
       };

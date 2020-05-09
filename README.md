@@ -1,6 +1,6 @@
 # g6 流程图
 
-![截图, 访问不了就点👇链接吧](https://github.com/claudewowo/welabx-g6/blob/master/screenshot/screenshot.png)
+![截图, 显示不了就点👇gayhub 案例链接吧](https://github.com/claudewowo/welabx-g6/blob/master/screenshot/screenshot.png)
 
 ## 在线案例
 
@@ -83,6 +83,18 @@ const data = {
         fontWeight:   'bold',
         fontSize:     13,
       },
+      // 当前节点多状态样式, 覆盖全局样式, 仅对当前节点生效
+      nodeStateStyles: {
+        'nodeState:default': {
+          fill: 'orange',
+        },
+        'nodeState:hover': {
+          fill: '#ffbd17',
+        },
+        'nodeState:selected': {
+          fill: '#f1ac00',
+        },
+      },
     },
     {
       id:    'node-2',
@@ -126,6 +138,21 @@ const data = {
           stroke:    'white',  // 给文本添加白边和白色背景
           fill:      '#722ed1',  // 文本颜色
           lineWidth: 5,     // 文本白边粗细
+        },
+      },
+      // 边的多状态样式, 会覆盖全局样式, 仅对这条边生效
+      edgeStateStyles: {
+        'edgeState:default': {
+          strokeOpacity: 1,
+          stroke:        '#ccc',
+        },
+        'edgeState:hover': {
+          strokeOpacity: 0.6,
+          stroke:        '#ccc',
+        },
+        'edgeState:selected': {
+          strokeOpacity: 1,
+          stroke:        '#ccc',
         },
       },
     },
@@ -342,3 +369,7 @@ npm run dev
 - 新增多状态样式管理
 - 解决了锚点偶尔拖拽连接失败
 - 鼠标点击画布外不会再自动响应删除事件
+
+### [0.2.5] 20202-05-09
+
+- 单个节点和边支持多状态样式管理

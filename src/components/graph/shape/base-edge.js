@@ -8,7 +8,7 @@ import itemEvents from './items/item-event';
 
 /*
  * flow:
- * 注册基础edge => 绘制edge => 初始化edge状态 => dege动画(设置交互动画)
+ * 继承 edge => 绘制edge => 设置edge状态
  */
 
 function setState (name, value, item) {
@@ -39,16 +39,14 @@ function afterDraw (cfg, group) {
 export default G6 => {
   // 直线
   G6.registerEdge('line-edge', {
-
-    setState,
     afterDraw,
+    setState,
   }, 'line');
 
   // 折线
   G6.registerEdge('polyline-edge', {
-
-    setState,
     afterDraw,
+    setState,
   }, 'polyline');
 
   // 二次贝塞尔曲线
