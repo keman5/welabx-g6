@@ -8,6 +8,9 @@ import registerFactory from './register-factory';
 
 class G6 {
   constructor(config = {}) {
+    // 注册插件等
+    config.beforeInit && config.beforeInit(config, G6ES);
+
     // 内部注册组件, 行为, 事件等
     registerFactory(G6ES);
 
@@ -111,6 +114,8 @@ class G6 {
     const { el } = this.instance.cfg.canvas.cfg;
 
     el.id = `${options.container}-canvas`;
+    el.setAttribute('dx', 0);
+    el.setAttribute('dy', 0);
 
     document.addEventListener('click', e => {
       // 内部键盘事件是否可被触发

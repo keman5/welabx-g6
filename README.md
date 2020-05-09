@@ -163,6 +163,17 @@ const g6 = new WelabxG6({
   width: 1000,
   height: 300,
   renderer: 'svg', // 默认 canvas
+  // 初始化前的准备
+  beforeInit(cfg, G6) {
+    const minimap = new G6.Minimap({
+      size: [200, 100],
+    });
+
+    cfg.plugins = [minimap];
+    // cfg 会传入G6实例, 并合并当前配置
+    // ! 拖拽画布会引起偏移量变化, 自定义事件需自行计算, 并写入到canvas dx, dy 属性, 便于内部计算
+    // minimap 插件拖拽需写入 canvas dx和dy属性, 请自行实现, 插件那么多谁知道你要用哪个, 也许有空了我会内置进去?
+  },
   // 自定义注册行为, 事件, 交互
   registerFactory: G6 => {
     console.log(G6);
@@ -335,40 +346,32 @@ npm run dev
 > notes: 使用 cnpm 安装可能导致 import 路径报错, 建议使用npm或yarn
 > 有问题请在GitHub上提issue, 目前版本还有大部分功能要完善, 欢迎star
 
-## 更新日志(仅列出重要的更新)
+## 重要更新*
 
-### [0.1.2] 20202-04-28
+### [0.2.3] 20202-05-06
 
 - 新增删除事件: after-node-removed 和 after-edge-removed
 - 将 antv/g6 作为生产依赖
-
-### [0.1.3] 20202-04-29
-
 - 按delete键删除节点支持确认回调, 默认不再直接删除
 - 节点和边支持双击事件 after-node-dblclick / after-edge-dblclick, 弊端: 单击事件会被触发两次
-
-### [0.2.2] 20202-05-06
-
 - *所有事件都返回 event 对象*
 - 优化 on-node-mouseenter 等事件
 - 扩展 polyline-edge, line-edge, quadratic-edge, cubic-edge
 - 优化 canvas 鼠标样式
 - 可自定义创建 tooltip
-
-### [0.2.3] 20202-05-07
-
 - 将所有已注册节点和边的事件暴露
 - **事件回调中请使用 clientX 和 clientY, 否则拖拽后位置不准**
 - 支持自定义锚点数量和位置(默认4个)
 - 支持自定义边的类型,可通过事件设置
 - 修复文本和节点样式无效
 
-### [0.2.4] 20202-05-08
+### [0.2.11] 20202-05-09
 
 - 新增多状态样式管理
 - 解决了锚点偶尔拖拽连接失败
 - 鼠标点击画布外不会再自动响应删除事件
-
-### [0.2.7] 20202-05-09
-
 - 单个节点和边支持多状态样式管理 (边为 cubic-edge 时暂时无效, 如需复杂样式在自定义事件中处理)
+- 新增 beforeInit 方法用于传入其他配置项, 如G6插件
+- 画布拖拽时在画布元素上新增移动 x,y 属性, 方便外部计算
+- **拖拽画布会引起偏移量变化, canvas-event modes 已内置了计算规则, 如未使用需自行计算, 并写入到canvas dx, dy 属性, 便于内部计算**
+- 也可以通过监听 on-canvas-dragend 事件获取画布相对于渲染时的偏移量
