@@ -74,10 +74,10 @@ export default {
   edgeStateStyles: {
     // 鼠标点击边，即 selected 状态为 true 时的样式
     selected: {
-      stroke: 'steelblue',
+      stroke: '#aab7c3',
     },
     hover: {
-      fill: 'steelblue',
+      stroke: '#aab7c3',
     },
   },
   anchorHotsoptStyle: {

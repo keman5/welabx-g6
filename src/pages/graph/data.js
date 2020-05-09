@@ -120,8 +120,8 @@ export default {
       label: '条件',
       shape: 'cubic-edge',
       style: {
-        stroke:          '#ccc',
-        lineDash:        [5,5],
+        stroke:          'red',
+        lineDash:        [5,2],
         lineWidth:       2,
         lineAppendWidth: 10,
       },
@@ -132,17 +132,6 @@ export default {
           stroke:    'white',  // 给文本添加白边和白色背景
           fill:      '#722ed1',  // 文本颜色
           lineWidth: 5,     // 文本白边粗细
-        },
-      },
-      edgeStateStyles: {
-        'edgeState:default': {
-          strokeOpacity: 1,
-        },
-        'edgeState:hover': {
-          strokeOpacity: 0.6,
-        },
-        'edgeState:selected': {
-          strokeOpacity: 1,
         },
       },
     },
@@ -179,7 +168,6 @@ export default {
       edgeStateStyles: {
         'edgeState:default': {
           strokeOpacity: 1,
-          stroke:        '#ccc',
         },
         'edgeState:hover': {
           strokeOpacity: 0.6,

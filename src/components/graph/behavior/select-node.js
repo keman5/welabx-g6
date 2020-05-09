@@ -67,7 +67,7 @@ export default G6 => {
         this.graph.clearItemStates(node, ['nodeState:selected', 'nodeState:hover']);
       });
 
-      const selectedEdges = this.graph.findAllByState('edge', 'edgeSelected');
+      const selectedEdges = this.graph.findAllByState('edge', 'edgeState:selected');
 
       selectedEdges.forEach(edge => {
         this.graph.clearItemStates(edge, ['edgeState:selected', 'edgeState:hover']);
