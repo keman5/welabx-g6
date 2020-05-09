@@ -40,11 +40,16 @@ export default G6 => {
     onCanvasDragEnd (e) {
       e.target.get('el').style.cursor = 'grab';
       const { el } = e.target.cfg;
-      const endX = this.originOffset[0] + e.clientX - this.offset[0];
-      const endY = this.originOffset[1] + e.clientY - this.offset[1];
+      const dx = this.originOffset[0] + e.clientX - this.offset[0];
+      const dy = this.originOffset[1] + e.clientY - this.offset[1];
 
-      el.setAttribute('dx', endX);
-      el.setAttribute('dy', endY);
+      el.setAttribute('dx', dx);
+      el.setAttribute('dy', dy);
+      this.graph.emit('on-canvas-dragend', {
+        ...e,
+        dx,
+        dy,
+      });
     },
   });
 };
