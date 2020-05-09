@@ -137,6 +137,13 @@ export default {
   methods: {
     createGraphic () {
       const graph = new G6({
+        beforeInit(cfg, G6) {
+          const minimap = new G6.Minimap({
+            size: [200, 100],
+          });
+
+          cfg.plugins = [minimap];
+        },
         // 自定义注册行为, 事件, 交互
         /* registerFactory: G6 => {
           console.log(G6);
@@ -278,5 +285,10 @@ export default {
     background-color: rgba(255, 255, 255, 0.9);
     box-shadow: rgb(174, 174, 174) 0 0 10px;
     padding: 10px 8px;
+  }
+  .g6-minimap{
+    position: absolute;
+    right: 0;
+    bottom: 0;
   }
 </style>
