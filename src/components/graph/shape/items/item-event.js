@@ -8,16 +8,32 @@ import defaultStyles from '../defaultStyles';
 
 const { anchorHotsoptStyle } = defaultStyles;
 
+/**
+ * @description 恢复节点/边/锚点默认样式
+ */
+function setStyle (item, nodeStyle, text, textStyle) {
+  item.attr(nodeStyle);
+  if (text) {
+    text.attr(textStyle);
+  }
+}
+
+function getItemStyle (type, group, state = 'hover') {
+  const item = group.get('item');
+  const model = item.getModel();
+  const originStyle = item.get('originStyle');
+  const stateStyle = Object.assign(originStyle, model.edgeStateStyles);
+  const activeStyle = stateStyle[`${type}State:${state}`];
+  const defaultStyle = stateStyle[`${type}State:default`];
+
+  return {
+    activeStyle,
+    defaultStyle,
+    originStyle,
+  };
+}
+
 const events = {
-  /**
-   * @description 恢复节点/边/锚点默认样式
-   */
-  setStyle (item, nodeStyle, text, textStyle) {
-    item.attr(nodeStyle);
-    if (text) {
-      text.attr(textStyle);
-    }
-  },
 
   /**
    * @description 锚点事件
@@ -90,14 +106,10 @@ const events = {
    */
   'nodeState:default' (value, group) {
     if (value) {
-      const model = group.get('item').get('model');
-      const stateStyle = Object.assign(this.options, model.nodeStateStyles);
-      const nodeDefault = stateStyle['nodeState:default'];
-      // const textDefault = this.options.labelCfg;
       const node = group.getChildByIndex(0);
-      // const text = group.getChildByIndex(1);
+      const { defaultStyle } = getItemStyle('node', group);
 
-      events.setStyle(node, nodeDefault);
+      setStyle(node, defaultStyle);
     }
   },
 
@@ -105,18 +117,13 @@ const events = {
    * @description 节点selected事件
    */
   'nodeState:selected' (value, group) {
-    const model = group.get('item').get('model');
-    const stateStyle = Object.assign(this.options, model.nodeStateStyles);
-    const nodeActive = stateStyle['nodeState:selected'];
-    const nodeDefault = stateStyle['nodeState:default'];
-    // const textActive = this.options.labelCfg;
     const node = group.getChildByIndex(0);
-    // const text = group.getChildByIndex(1);
+    const { activeStyle, defaultStyle } = getItemStyle('node', group, 'selected');
 
     if (value) {
-      events.setStyle(node, nodeActive);
+      setStyle(node, activeStyle);
     } else {
-      events.setStyle(node, nodeDefault);
+      setStyle(node, defaultStyle);
     }
   },
 
@@ -124,18 +131,13 @@ const events = {
    * @description 节点hover事件
    */
   'nodeState:hover' (value, group) {
-    const model = group.get('item').get('model');
-    const stateStyle = Object.assign(this.options, model.nodeStateStyles);
-    const nodeActive = stateStyle['nodeState:hover'];
-    const nodeDefault = stateStyle['nodeState:default'];
-    // const textActive = this.options.labelCfg;
     const node = group.getChildByIndex(0);
-    // const text = group.getChildByIndex(1);
+    const { activeStyle, defaultStyle } = getItemStyle('node', group, 'hover');
 
     if (value) {
-      events.setStyle(node, nodeActive);
+      setStyle(node, activeStyle);
     } else {
-      events.setStyle(node, nodeDefault);
+      setStyle(node, defaultStyle);
     }
   },
 
@@ -151,14 +153,10 @@ const events = {
    */
   'edgeState:default' (value, group) {
     if (value) {
-      const model = group.get('item').get('model');
-      const stateStyle = Object.assign(this.options, model.edgeStateStyles);
-      const edgeDefault = stateStyle['edgeState:default'];
-      // const textDefault = this.options['edgeLabelState:default'];
+      const { defaultStyle } = getItemStyle('edge', group);
       const edge = group.getChildByIndex(0);
-      // const text = group.getChildByIndex(1);
 
-      events.setStyle(edge, edgeDefault);
+      setStyle(edge, defaultStyle);
     }
   },
 
@@ -166,30 +164,24 @@ const events = {
    * @description edge hover事件
    */
   'edgeState:hover' (value, group) {
-    const model = group.get('item').getModel();
-    const stateStyle = Object.assign(this.options, model.edgeStateStyles);
-    const edgeActive = stateStyle['edgeState:hover'];
-    const edgeDefault = stateStyle['edgeState:default'];
-    // const textActive = this.options.labelCfg;
     const edge = group.getChildByIndex(0);
-    // const text = group.getChildByIndex(1);
     const { endArrow } = edge.get('attrs');
-    const originStyle = group.get('item').get('originStyle');
+    const { activeStyle, defaultStyle, originStyle } = getItemStyle('edge', group, 'hover');
 
     if (value) {
-      events.setStyle(edge, edgeActive);
+      setStyle(edge, activeStyle);
       if (endArrow) {
         edge.attr('endArrow', {
           path: endArrow.path,
-          fill: edgeActive.stroke || originStyle.stroke,
+          fill: activeStyle.stroke || originStyle.stroke,
         });
       }
     } else {
-      events.setStyle(edge, edgeDefault);
+      setStyle(edge, defaultStyle);
       if (endArrow) {
         edge.attr('endArrow', {
           path: endArrow.path,
-          fill: edgeDefault.stroke || originStyle.stroke,
+          fill: defaultStyle.stroke || activeStyle.stroke || originStyle.stroke,
         });
       }
     }
@@ -199,29 +191,24 @@ const events = {
    * @description edge 选中事件
    */
   'edgeState:selected' (value, group) {
-    const model = group.get('item').get('model');
-    const stateStyle = Object.assign(this.options, model.edgeStateStyles);
-    const edgeActive = stateStyle['edgeState:selected'];
-    const edgeDefault = stateStyle['edgeState:default'];
     const edge = group.getChildByIndex(0);
-    // const text = group.getChildByIndex(1);
     const { endArrow } = edge.get('attrs');
-    const originStyle = group.get('item').get('originStyle');
+    const { activeStyle, defaultStyle, originStyle } = getItemStyle('edge', group, 'selected');
 
     if (value) {
-      events.setStyle(edge, edgeActive);
+      setStyle(edge, activeStyle);
       if (endArrow) {
         edge.attr('endArrow', {
           path: endArrow.path,
-          fill: edgeActive.stroke || originStyle.stroke,
+          fill: activeStyle.stroke || originStyle.stroke,
         });
       }
     } else {
-      events.setStyle(edge, edgeDefault);
+      setStyle(edge, defaultStyle);
       if (endArrow) {
         edge.attr('endArrow', {
           path: endArrow.path,
-          fill: edgeDefault.stroke || originStyle.stroke,
+          fill: defaultStyle.stroke || activeStyle.stroke || originStyle.stroke,
         });
       }
     }

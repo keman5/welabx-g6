@@ -28,43 +28,28 @@ function setState (name, value, item) {
   }
 }
 
-function afterDraw (cfg, group) {
-  const attrs = this.getShapeStyle(cfg);
-
-  this.options = {
-    ...attrs,
-  };
-}
-
 export default G6 => {
   // 直线
   G6.registerEdge('line-edge', {
-    afterDraw,
     setState,
   }, 'line');
 
   // 折线
   G6.registerEdge('polyline-edge', {
-    afterDraw,
     setState,
   }, 'polyline');
 
   // 二次贝塞尔曲线
   G6.registerEdge('quadratic-edge', {
-
     setState,
-    afterDraw,
   }, 'quadratic');
 
   // 三次贝塞尔曲线
   G6.registerEdge('cubic-edge', {
-
     setState,
-    afterDraw,
   }, 'cubic');
 
   G6.registerEdge('arc-edge', {
     setState,
-    afterDraw,
   }, 'arc');
 };

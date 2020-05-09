@@ -21,6 +21,7 @@ export default G6 => {
     },
     // 鼠标按下显示锚点光圈
     onMousedown (e) {
+      this._clearSelected(e);
       if (e.target.cfg.isAnchor) {
         // 拖拽锚点
         this.dragTarget = 'anchor';
@@ -233,6 +234,14 @@ export default G6 => {
 
       // 当节点位置发生变化时，刷新所有节点位置，并重计算边的位置
       this.graph.refreshPositions();
+    },
+    // 清空已选的边
+    _clearSelected (e) {
+      const selectedEdges = this.graph.findAllByState('edge', 'edgeState:selected');
+
+      selectedEdges.forEach(edge => {
+        this.graph.clearItemStates(edge, ['edgeState:selected', 'edgeState:hover']);
+      });
     },
   });
 };
