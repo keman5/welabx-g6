@@ -163,8 +163,8 @@ const g6 = new WelabxG6({
   width: 1000,
   height: 300,
   renderer: 'svg', // 默认 canvas
-  // 初始化前的准备
-  beforeInit(cfg, G6) {
+  // 自定义注册行为, 事件, 交互
+  registerFactory: (G6, cfg) => {
     const minimap = new G6.Minimap({
       size: [200, 100],
     });
@@ -172,11 +172,8 @@ const g6 = new WelabxG6({
     cfg.plugins = [minimap];
     // cfg 会传入G6实例, 并合并当前配置
     // ! 拖拽画布会引起偏移量变化, 自定义事件需自行计算, 并写入到canvas dx, dy 属性, 便于内部计算
-    // minimap 插件拖拽需写入 canvas dx和dy属性, 请自行实现, 插件那么多谁知道你要用哪个, 也许有空了我会内置进去?
-  },
-  // 自定义注册行为, 事件, 交互
-  registerFactory: G6 => {
-    console.log(G6);
+    // 也可以通过监听 on-canvas-dragend 事件获取画布相对于渲染时的偏移量
+    // 另外 minimap 插件拖拽需写入 canvas dx和dy属性, 请自行实现, 插件那么多谁知道你要用哪个, 也许有空了我会内置进去?
   },
   defaultEdge: {
     type:  'polyline-edge', // 扩展了内置边, 有边的事件
@@ -253,6 +250,7 @@ g6.destroy();
 | after-node-selected | event 对象 | 节点选中事件 |
 | after-edge-selected | event 对象 | 边选中事件 |
 | on-canvas-click | event 对象 | 鼠标点击画布事件 |
+| on-canvas-dragend | event 对象(内置了画布偏移量dx, dy) | 画布拖拽结束事件 |
 | on-node-mouseenter | event 对象 | 鼠标移入节点事件 |
 | on-node-mousemove | event 对象 | 鼠标在节点上移动事件(持续触发) |
 | on-node-mouseleave | event 对象 | 鼠标从节点上移开事件 |
@@ -365,13 +363,13 @@ npm run dev
 - 支持自定义边的类型,可通过事件设置
 - 修复文本和节点样式无效
 
-### [0.2.11] 20202-05-09
+### [0.2.30] 20202-05-10
 
 - 新增多状态样式管理
 - 解决了锚点偶尔拖拽连接失败
 - 鼠标点击画布外不会再自动响应删除事件
 - 单个节点和边支持多状态样式管理 (边为 cubic-edge 时暂时无效, 如需复杂样式在自定义事件中处理)
-- 新增 beforeInit 方法用于传入其他配置项, 如G6插件
 - 画布拖拽时在画布元素上新增移动 x,y 属性, 方便外部计算
 - **拖拽画布会引起偏移量变化, canvas-event modes 已内置了计算规则, 如未使用需自行计算, 并写入到canvas dx, dy 属性, 便于内部计算**
 - 也可以通过监听 on-canvas-dragend 事件获取画布相对于渲染时的偏移量
+- 全局样式支持被单个节点或边的配置覆盖了

@@ -13,82 +13,89 @@ const {
   nodeLabelStyles,
 } = defaultStyles;
 
+function getStyle (options, cfg) {
+  return {
+    // 自定义默认样式
+    ...nodeStyles,
+    ...options,
+    anchorPointStyles,
+    // 全局样式
+    ...this.options,
+    // 当前节点样式
+    ...cfg.style,
+    label:    cfg.label,
+    // 文本配置
+    labelCfg: {
+      ...nodeLabelStyles,
+      ...this.options.labelCfg,
+      ...cfg.labelCfg,
+    },
+    // 图标样式
+    iconStyles: {
+      ...iconStyles,
+      ...this.options.iconStyles,
+      ...cfg.iconStyles,
+    },
+    // 多状态样式
+    ...cfg.nodeStateStyles,
+  };
+}
+
 export default G6 => {
   // 从 base-node 中扩展方形节点
   G6.registerNode('rect-node', {
     shapeType: 'rect',
-    // 当前节点默认样式
-    options:   {
-      // icon: require('../../../assets/images/TB1_1680x370.png').default,
-      iconStyles,
-    },
-    // 覆盖 base-node 默认样式
-    getShapeStyle (cfg) {
+    // 当前节点的样式集合
+    attrs:     {},
+    /** 覆盖 base-node 默认样式
+     * this.options => 全局默认样式
+     * cfg => data 样式
+     */
+    getShapeStyle(cfg) {
       const width = cfg.style.width || 80;
       const height = cfg.style.height || 40;
 
-      return {
-        ...nodeStyles,
+      return getStyle.call(this, {
         width,
         height,
-        // 将图形中心坐标移动到图形中心, 用于方便鼠标位置计算
-        x:        -width / 2,
-        y:        -height / 2,
-        anchorPointStyles,
-        labelCfg: {
-          ...nodeLabelStyles,
-          // ...cfg.nodeLabelStyles,
-        },
         radius: 5,
-        ...cfg.style,
-        ...cfg.nodeStateStyles,
-      };
+        // 将图形中心坐标移动到图形中心, 用于方便鼠标位置计算
+        x:      -width / 2,
+        y:      -height / 2,
+      }, cfg);
     },
   }, 'base-node');
 
   // 扩展圆形节点
   G6.registerNode('circle-node', {
     shapeType: 'circle',
-    getShapeStyle (cfg) {
+    attrs:     { },
+    getShapeStyle(cfg) {
       const r = cfg.style.r || 30;
 
-      return {
-        ...nodeStyles,
+      return getStyle.call(this, {
         r, // 半径
         // 将图形中心坐标移动到图形中心, 用于方便鼠标位置计算
-        x:        0,
-        y:        0,
-        anchorPointStyles,
-        labelCfg: {
-          ...nodeLabelStyles,
-          // ...cfg.style.nodeLabelStyles,
-        },
-        ...cfg.style,
-        ...cfg.nodeStateStyles,
-      };
+        x: 0,
+        y: 0,
+      }, cfg);
     },
   }, 'base-node');
 
   // 扩展椭圆形
   G6.registerNode('ellipse-node', {
     shapeType: 'ellipse',
-    getShapeStyle (cfg) {
-
-      return {
-        rx:       50,
-        ry:       30,
-        ...nodeStyles,
+    attrs:     {
+      iconStyles,
+    },
+    getShapeStyle(cfg) {
+      return getStyle.call(this, {
+        rx: 50,
+        ry: 30,
         // 将图形中心坐标移动到图形中心, 用于方便鼠标位置计算
-        x:        0,
-        y:        0,
-        anchorPointStyles,
-        labelCfg: {
-          ...nodeLabelStyles,
-          // ...cfg.style.nodeLabelStyles,
-        },
-        ...cfg.style,
-        ...cfg.nodeStateStyles,
-      };
+        x:  0,
+        y:  0,
+      }, cfg);
     },
   }, 'base-node');
 
@@ -98,24 +105,16 @@ export default G6 => {
     getShapeStyle (cfg) {
       const path = this.getPath(cfg);
 
-      return {
+      return getStyle.call(this, {
         path,
-        ...nodeStyles,
         // 将图形中心坐标移动到图形中心, 用于方便鼠标位置计算
-        x:        0,
-        y:        0,
-        anchorPointStyles,
-        labelCfg: {
-          ...nodeLabelStyles,
-          // ...cfg.style.nodeLabelStyles,
-        },
-        ...cfg.style,
-        ...cfg.nodeStateStyles,
-      };
+        x: 0,
+        y: 0,
+      }, cfg);
     },
     // 返回菱形的路径
     getPath (cfg) {
-      const size = cfg.size || [80, 80]; // 如果没有 size 时的默认大小
+      const size = cfg.style.size || [100, 100]; // 如果没有 size 时的默认大小
       const width = size[0];
       const height = size[1];
 
