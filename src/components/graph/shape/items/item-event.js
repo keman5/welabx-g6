@@ -11,14 +11,14 @@ const { anchorHotsoptStyle } = defaultStyles;
 /**
  * @description 恢复节点/边/锚点默认样式
  */
-function setStyle (item, nodeStyle, text, textStyle) {
+function setStyle(item, nodeStyle, text, textStyle) {
   item.attr(nodeStyle);
   if (text) {
     text.attr(textStyle);
   }
 }
 
-function getItemStyle (type, group, state = 'hover') {
+function getItemStyle(type, group, state = 'hover') {
   const item = group.get('item');
   const model = item.getModel();
   const originStyle = item.get('originStyle');
@@ -34,11 +34,10 @@ function getItemStyle (type, group, state = 'hover') {
 }
 
 const events = {
-
   /**
    * @description 锚点事件
-  */
-  anchorShow (value, group) {
+   */
+  anchorShow(value, group) {
     // 显示/隐藏锚点
     if (value) {
       group.showAnchor(group);
@@ -50,7 +49,7 @@ const events = {
   /**
    * @description 锚点激活事件
    */
-  anchorActived (value, group) {
+  anchorActived(value, group) {
     if (value) {
       const { anchorPoints } = group.get('item').getModel();
 
@@ -97,14 +96,14 @@ const events = {
   /**
    * @description 边多状态事件
    */
-  'nodeState' (value, group) {
+  nodeState(value, group) {
     events[`nodeState:${value}`].call(this, value, group);
   },
 
   /**
    * @description 节点恢复默认状态事件
    */
-  'nodeState:default' (value, group) {
+  'nodeState:default'(value, group) {
     if (value) {
       const node = group.getChildByIndex(0);
       const { defaultStyle } = getItemStyle('node', group);
@@ -116,9 +115,13 @@ const events = {
   /**
    * @description 节点selected事件
    */
-  'nodeState:selected' (value, group) {
+  'nodeState:selected'(value, group) {
     const node = group.getChildByIndex(0);
-    const { activeStyle, defaultStyle } = getItemStyle('node', group, 'selected');
+    const { activeStyle, defaultStyle } = getItemStyle(
+      'node',
+      group,
+      'selected',
+    );
 
     if (!activeStyle) return;
     if (value) {
@@ -131,7 +134,7 @@ const events = {
   /**
    * @description 节点hover事件
    */
-  'nodeState:hover' (value, group) {
+  'nodeState:hover'(value, group) {
     const node = group.getChildByIndex(0);
     const { activeStyle, defaultStyle } = getItemStyle('node', group, 'hover');
 
@@ -146,14 +149,14 @@ const events = {
   /**
    * @description 边多状态事件
    */
-  'edgeState' (value, group) {
+  edgeState(value, group) {
     events[`edgeState:${value}`].call(this, value, group);
   },
 
   /**
    * @description 边恢复默认状态事件
    */
-  'edgeState:default' (value, group) {
+  'edgeState:default'(value, group) {
     if (value) {
       const { defaultStyle } = getItemStyle('edge', group);
       const edge = group.getChildByIndex(0);
@@ -165,10 +168,14 @@ const events = {
   /**
    * @description edge hover事件
    */
-  'edgeState:hover' (value, group) {
+  'edgeState:hover'(value, group) {
     const edge = group.getChildByIndex(0);
     const { endArrow } = edge.get('attrs');
-    const { activeStyle, defaultStyle, originStyle } = getItemStyle('edge', group, 'hover');
+    const { activeStyle, defaultStyle, originStyle } = getItemStyle(
+      'edge',
+      group,
+      'hover',
+    );
 
     if (!activeStyle) return;
     if (value) {
@@ -193,10 +200,14 @@ const events = {
   /**
    * @description edge 选中事件
    */
-  'edgeState:selected' (value, group) {
+  'edgeState:selected'(value, group) {
     const edge = group.getChildByIndex(0);
     const { endArrow } = edge.get('attrs');
-    const { activeStyle, defaultStyle, originStyle } = getItemStyle('edge', group, 'selected');
+    const { activeStyle, defaultStyle, originStyle } = getItemStyle(
+      'edge',
+      group,
+      'selected',
+    );
 
     if (!activeStyle) return;
     if (value) {

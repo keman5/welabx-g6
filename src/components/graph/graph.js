@@ -8,14 +8,11 @@ import registerFactory from './register-factory';
 
 class G6 {
   constructor(config = {}) {
-    // 注册插件等
-    config.beforeInit && config.beforeInit(config, G6ES);
-
     // 内部注册组件, 行为, 事件等
     registerFactory(G6ES);
 
     // 外部自定义行为/事件等
-    config.registerFactory && config.registerFactory(G6ES);
+    config.registerFactory && config.registerFactory(G6ES, config);
 
     this.init(config);
   }
@@ -58,12 +55,15 @@ class G6 {
       },
       // linkCenter:  true,
       defaultNode: {
-        type: 'circle-node',
+        type:  'rect-node',
+        style: {
+          radius: 10,
+        },
       },
       defaultEdge: {
         type:  'polyline-edge', // polyline
         style: {
-          radius:          5,
+          radius:          6,
           offset:          15,
           stroke:          '#aab7c3',
           lineAppendWidth: 10, // 防止线太细没法点中

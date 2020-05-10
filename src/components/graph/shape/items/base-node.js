@@ -9,8 +9,6 @@ import anchorEvent from './anchor-event';
 import defaultStyles from '../defaultStyles';
 
 const {
-  nodeStateStyles,
-  // nodeLabelStateStyles,
   anchorHotsoptStyle,
 } = defaultStyles;
 
@@ -21,42 +19,46 @@ const {
 export default G6 => {
   G6.registerNode('base-node', {
     // 绘制图标
-    drawIcon (cfg, group) {
-      if (this.options.icon) {
+    drawIcon (group) {
+      if (this.attrs.icon) {
+        const iconStyles = {
+          ...this.attrs.iconStyles,
+        };
+
         group.icon = group.addShape('image', {
           attrs: {
-            img:    this.options.icon,
-            x:      this.options.iconStyles.left,
-            y:      this.options.iconStyles.top,
-            width:  this.options.iconStyles.width,
-            height: this.options.iconStyles.height,
+            img:    this.attrs.icon,
+            x:      iconStyles.left,
+            y:      iconStyles.top,
+            width:  iconStyles.width,
+            height: iconStyles.height,
           },
-          className: `${this.options.type}-icon`,
+          className: `${this.attrs.type}-icon`,
         });
 
-        if (cfg.hideIcon) {
+        if (this.attrs.hideIcon) {
           group.icon.hide();
         }
       }
     },
     // 绘制锚点
-    initAnchor (cfg, group) {
+    initAnchor (group) {
       group.anchorShapes = [];
       group.showAnchor = group => {
-        this.drawAnchor(cfg, group);
+        this.drawAnchor(group);
       };
       group.clearAnchor = group => {
         group.anchorShapes && group.anchorShapes.forEach(a => a.remove());
         group.anchorShapes = [];
       };
     },
-    drawAnchor (cfg, group) {
-      const { anchorPointStyles } = this.options;
+    drawAnchor (group) {
+      const { anchorPointStyles } = this.attrs;
       const item = group.get('children')[0];
       const bbox = item.getBBox();
 
       // 绘制锚点坐标
-      this.getAnchorPoints(cfg).forEach((p, i) => {
+      this.getAnchorPoints(this.attrs).forEach((p, i) => {
         /**
          * 绘制三层锚点
          * 最底层: 锚点bg
@@ -114,14 +116,14 @@ export default G6 => {
       };
     },
     /* 添加文本节点 */
-    addLabel (cfg, group) {
-      if (cfg.label) {
-        const { labelCfg } = this.options;
+    addLabel (group) {
+      const { label, labelCfg } = this.attrs;
 
+      if (label) {
         // 字体小于12时 svg会报错
-        if (labelCfg && labelCfg.fontSize < 12) {
+        /* if (labelCfg && labelCfg.fontSize < 12) {
           labelCfg.fontSize = 12;
-        }
+        } */
 
         group.addShape('text', {
           attrs: {
@@ -129,7 +131,7 @@ export default G6 => {
             y:      0,
             width:  100,
             height: 100,
-            text:   cfg.label,
+            text:   label,
             ...labelCfg,
           },
           className: 'node-text',
@@ -140,36 +142,31 @@ export default G6 => {
     /* 绘制节点，包含文本 */
     draw (cfg, group) {
       const shapeName = this.shapeType || 'rect';
+
       // 合并外部样式和默认样式
-      const attrs = this.getShapeStyle(cfg);
+      this.attrs = this.getShapeStyle(cfg);
       // 添加节点
       const shape = group.addShape(shapeName, {
-        attrs:     this.getShapeStyle(cfg), // shape 属性在定义时返回
+        attrs:     this.attrs, // shape 属性在定义时返回
         className: `${shapeName}-shape`,
         draggable: true,
       });
 
-      this.options = {
-        ...nodeStateStyles,
-        // ...nodeLabelStateStyles,
-        ...attrs,
-      };
-
       // 添加文本节点
-      this.addLabel(cfg, group);
+      this.addLabel(group);
 
       // 添加图标
-      this.drawIcon(cfg, group);
+      this.drawIcon(group);
       // 添加锚点
-      this.initAnchor(cfg, group);
+      this.initAnchor(group);
       // 默认不显示
-      // this.drawAnchor(cfg, group);
+      // this.drawAnchor(group);
 
       return shape;
     },
     // 动画函数
-    runAnimate (cfg, group) {
-      if (cfg.active) {
+    runAnimate (group) {
+      if (this.attrs.runAnimate) {
         //
       }
     },
@@ -179,7 +176,7 @@ export default G6 => {
         return group.get('children').find(item => item.get('className') === className);
       };
 
-      this.runAnimate(cfg, group);
+      this.runAnimate(group);
     },
     /* 更新节点，包含文本 */
     update (cfg, node) {
@@ -204,9 +201,9 @@ export default G6 => {
       const icon = node.get('group').icon;
 
       if (icon) {
-        if (cfg.hideIcon && icon.get('visible')) {
+        if (this.attrs.hideIcon && icon.get('visible')) {
           icon.hide();
-        } else if (!cfg.hideIcon && !icon.get('visible')) {
+        } else if (!this.attrs.hideIcon && !icon.get('visible')) {
           icon.show();
         }
       }
@@ -234,11 +231,8 @@ export default G6 => {
       }
     },
     /* 获取锚点（相关边的连入点） */
-    getAnchorPoints (cfg) {
-      if (cfg && cfg.anchorPoints) {
-        return cfg.anchorPoints;
-      }
-      return [
+    getAnchorPoints () {
+      return this.attrs.anchorPoints || [
         [0.5, 0],
         [1, 0.5],
         [0.5, 1],

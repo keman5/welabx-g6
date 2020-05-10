@@ -1,31 +1,33 @@
 export default {
   nodes: [
     {
-      id:    '1',
-      label: 'new Vue()',
-      data:  {
+      id:   '1',
+      data: {
         date: '2020-04-20',
       },
-      type:  'diamond-node', // 对应注册的节点name
+      type:  'rect-node', // 对应注册的节点name
       style: {
-        fill:          'orange',
+        fill:          '#39495b',
         lineDash:      [1, 2],
         shadowOffsetX: 0,
         shadowOffsetY: 2,
         shadowColor:   '#666',
         shadowBlur:    10,
+        width:         160,
+        height:        70,
       },
+      label:    'new Vue()',
       // node 文本默认样式
       labelCfg: {
-        fill:         'green',
+        fill:         '#fff',
         textAlign:    'center',
         textBaseline: 'middle',
         fontWeight:   'bold',
-        fontSize:     13,
+        fontSize:     24,
       },
       nodeStateStyles: {
         'nodeState:default': {
-          fill: 'orange',
+          fill: '#39495b',
         },
         'nodeState:hover': {
           fill: '#ffbd17',
@@ -37,15 +39,36 @@ export default {
     },
     {
       id:    '2',
-      label: '初始化\n事件和生命周期',
       type:  'rect-node',
+      style: {
+        width:     200,
+        height:    60,
+        fill:      '#65b586',
+        lineWidth: 0,
+      },
+      label:    '初始化\n事件和生命周期',
+      labelCfg: {
+        fontSize: 18,
+        fill:     '#fff',
+      },
     },
     {
       id:    '3',
-      label: 'beforeCreate',
       type:  'rect-node',
       style: {
-        radius: 2,
+        fill:      '#fff',
+        stroke:    '#c96164',
+        lineWidth: 3,
+        width:     180,
+        height:    60,
+      },
+      label:    'beforeCreate',
+      labelCfg: {
+        fill:       '#c96164',
+        width:      200,
+        height:     60,
+        fontSize:   20,
+        fontWeight: '700',
       },
       // 自定义锚点数量和位置
       anchorPoints: [
@@ -61,14 +84,28 @@ export default {
       id:    '4',
       label: '初始化\n注入 & 校验',
       style: {
-        size: [130, 100],
+        width:     200,
+        height:    60,
+        fill:      '#65b586',
+        lineWidth: 0,
       },
-      type: 'ellipse-node',
+      labelCfg: {
+        fontSize: 18,
+        fill:     '#fff',
+      },
     },
     {
       id:    '5',
       label: 'created',
       type:  'diamond-node',
+      style: {
+        size:   [160, 100],
+        fill:   '#f1b953',
+        stroke: '#f1b953',
+      },
+      labelCfg: {
+        fill: '#fff',
+      },
     },
     {
       id:    '6',
@@ -76,7 +113,7 @@ export default {
       style: {
         size: [130, 100],
       },
-      type: 'ellipse-node',
+      type: 'diamond-node',
     },
     {
       id:    '7',
@@ -117,21 +154,21 @@ export default {
         amount: '100,000 元',
         date:   '2019-08-03',
       },
-      label: '条件',
+      label: '新建 Vue 实例',
       shape: 'cubic-edge',
       style: {
         stroke:          'red',
-        lineDash:        [5,2],
+        lineDash:        [5, 2],
         lineWidth:       2,
         lineAppendWidth: 10,
       },
       labelCfg: {
         position:   'center', // 其实默认就是 center，这里写出来便于理解
-        autoRotate: true,   // 使文本随边旋转
+        autoRotate: true, // 使文本随边旋转
         style:      {
-          stroke:    'white',  // 给文本添加白边和白色背景
-          fill:      '#722ed1',  // 文本颜色
-          lineWidth: 5,     // 文本白边粗细
+          stroke:    'white', // 给文本添加白边和白色背景
+          fill:      '#722ed1', // 文本颜色
+          lineWidth: 5, // 文本白边粗细
         },
       },
     },
@@ -246,7 +283,7 @@ export default {
     },
     {
       source: '8',
-      target: '12',
+      target: '11',
       data:   {
         type:   'C',
         amount: '100,000 元',

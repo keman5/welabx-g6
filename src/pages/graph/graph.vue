@@ -137,17 +137,32 @@ export default {
   methods: {
     createGraphic () {
       const graph = new G6({
-        beforeInit(cfg, G6) {
+        layout: {
+          type:    'dagre',
+          // rankdir: 'LR',
+          nodesep: 80,
+          ranksep: 40,
+        },
+        // 覆盖全局样式
+        nodeStateStyles: {
+          'nodeState:default': {
+            opacity: 1,
+          },
+          'nodeState:hover': {
+            opacity: 0.8,
+          },
+          'nodeState:selected': {
+            opacity: 0.9,
+          },
+        },
+        // 自定义注册行为, 事件, 交互
+        registerFactory: (G6, cfg) => {
           const minimap = new G6.Minimap({
             size: [200, 100],
           });
 
           cfg.plugins = [minimap];
         },
-        // 自定义注册行为, 事件, 交互
-        /* registerFactory: G6 => {
-          console.log(G6);
-        }, */
         // ... 其他G6原生入参
       });
 
@@ -183,7 +198,6 @@ export default {
           // const model = e.item.get('model');
 
           // model.style.fill = 'rgba(24, 144, 255, .3)';
-          // this.graph.updateItem(e.item, model);
         }
       });
 
@@ -191,14 +205,12 @@ export default {
         this.configVisible = !!e;
 
         if (e && e.item) {
-          const id = e.item.get('id');
+          /* const id = e.item.get('id');
           const model = e.item.get('model');
 
           this.config = model;
 
-          model.label = id;
-          // model.style.fill = 'rgba(24, 144, 255, .3)';
-          // this.graph.updateItem(e.item, model);
+          model.label = id; */
         }
       });
 
@@ -247,7 +259,7 @@ export default {
         console.log(target);
         setTimeout(() => {
           callback(true);
-        }, 1000);
+        }, 100);
       });
 
       this.graph.on('after-node-dblclick', e => {
