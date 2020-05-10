@@ -53,12 +53,11 @@ import WelabxG6 from 'welabx-g6';
 const data = {
   node: [
     {
-      id: '1',
-      label: 'node-1', // 节点上显示的文字
+      id:   '1',
       data: {
-        // ... 其他属性
+        // 业务数据
       },
-      type: 'circle-node', // ellipse-node / rect-node / diamond-node
+      type:  'rect-node', // 对应注册的节点name, 还可以是 ellipse-node / rect-node / diamond-node 等
       style: {
         // ... 当前节点的样式
         r:   40, // 圆形节点半径
@@ -75,13 +74,26 @@ const data = {
           stroke: '#ccc',
         },
       },
+      label:    'new Vue()', // 节点上显示的文字
       // node 文本默认样式
       labelCfg: {
-        fill:         'green',
+        fill:         '#fff',
         textAlign:    'center',
         textBaseline: 'middle',
         fontWeight:   'bold',
-        fontSize:     13,
+        fontSize:     24,
+      },
+      // 当前节点多状态样式, 覆盖全局样式, 仅对当前节点生效
+      nodeStateStyles: {
+        'nodeState:default': {
+          fill: 'orange',
+        },
+        'nodeState:hover': {
+          fill: '#ffbd17',
+        },
+        'nodeState:selected': {
+          fill: '#f1ac00',
+        },
       },
       // 当前节点多状态样式, 覆盖全局样式, 仅对当前节点生效
       nodeStateStyles: {
@@ -236,10 +248,10 @@ g6.destroy();
 | circle-node | 圆形节点 | r (半径) |
 | ellipse-node | 椭圆节点 | rx, ry 椭圆焦距 |
 | diamond-node | 菱形节点 | size, 默认 [80, 80] |
-| line-edge | 菱形节点 | 默认属性 |
-| polyline-edge | 菱形节点 | 默认属性 |
-| quadratic-edge | 菱形节点 | 默认属性 |
-| cubic-edge | 菱形节点 | 默认属性 |
+| line-edge | 自定义边 | 默认属性 |
+| polyline-edge | 自定义边 | 默认属性 |
+| quadratic-edge | 自定义边 | 默认属性 |
+| cubic-edge | 自定义边 | 默认属性 |
 
 ### 事件监听与通知
 

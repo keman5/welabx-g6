@@ -104,7 +104,8 @@ export default {
         stroke: '#f1b953',
       },
       labelCfg: {
-        fill: '#fff',
+        fill:     '#fff',
+        fontSize: 20,
       },
     },
     {

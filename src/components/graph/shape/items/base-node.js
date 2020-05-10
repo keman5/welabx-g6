@@ -71,6 +71,7 @@ export default G6 => {
             y: bbox.minY + bbox.height * p[1],
             ...anchorPointStyles,
           },
+          zIndex:    1,
           nodeId:    group.get('id'),
           className: 'node-anchor',
           draggable: true,
@@ -86,6 +87,7 @@ export default G6 => {
             fill:    '#000',
             opacity: 0,
           },
+          zIndex:    2,
           nodeId:    group.get('id'),
           className: 'node-anchor-group',
           draggable: true,
@@ -141,14 +143,12 @@ export default G6 => {
     },
     /* 绘制节点，包含文本 */
     draw (cfg, group) {
-      const shapeName = this.shapeType || 'rect';
-
       // 合并外部样式和默认样式
       this.attrs = this.getShapeStyle(cfg);
       // 添加节点
-      const shape = group.addShape(shapeName, {
+      const shape = group.addShape(this.shapeType, {
+        className: `${this.shapeType}-shape`,
         attrs:     this.attrs, // shape 属性在定义时返回
-        className: `${shapeName}-shape`,
         draggable: true,
       });
 

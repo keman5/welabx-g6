@@ -143,6 +143,15 @@ export default {
           nodesep: 80,
           ranksep: 40,
         },
+        defaultNode: {
+          type:  'rect-node',
+          style: {
+            radius: 10,
+          },
+          labelCfg: {
+            fontSize: 20,
+          },
+        },
         // 覆盖全局样式
         nodeStateStyles: {
           'nodeState:default': {
@@ -205,12 +214,15 @@ export default {
         this.configVisible = !!e;
 
         if (e && e.item) {
-          /* const id = e.item.get('id');
           const model = e.item.get('model');
 
           this.config = model;
 
-          model.label = id; */
+          // model.label = e.item.get('id');
+          /* this.graph.updateItem(e.item, {
+            x: 100,
+            y: 100,
+          }); */
         }
       });
 
@@ -221,8 +233,11 @@ export default {
           this.config = e.item.get('model').id;
 
           this.graph.updateItem(e.item, {
-            shape: 'line-edge',
-            label: 'model',
+            // shape: 'line-edge',
+            style: {
+              radius:    10,
+              lineWidth: 2,
+            },
           });
         }
       });
