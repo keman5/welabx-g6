@@ -6,6 +6,10 @@
 
 [gayhub 案例](https://claudewowo.github.io/welabx-g6/build/?_blank)
 
+## G6 五十问
+
+[五十个问题及解答](https://github.com/claudewowo/welabx-g6/blob/develop/FAQ.md)
+
 ## 已完成功能
 
 - 自定义节点和边, 支持锚点配置
@@ -53,12 +57,11 @@ import WelabxG6 from 'welabx-g6';
 const data = {
   node: [
     {
-      id: '1',
-      label: 'node-1', // 节点上显示的文字
+      id:   '1',
       data: {
-        // ... 其他属性
+        // 业务数据
       },
-      type: 'circle-node', // ellipse-node / rect-node / diamond-node
+      type:  'rect-node', // 对应注册的节点name, 还可以是 ellipse-node / rect-node / diamond-node 等
       style: {
         // ... 当前节点的样式
         r:   40, // 圆形节点半径
@@ -75,13 +78,14 @@ const data = {
           stroke: '#ccc',
         },
       },
+      label:    'new Vue()', // 节点上显示的文字
       // node 文本默认样式
       labelCfg: {
-        fill:         'green',
+        fill:         '#fff',
         textAlign:    'center',
         textBaseline: 'middle',
         fontWeight:   'bold',
-        fontSize:     13,
+        fontSize:     24,
       },
       // 当前节点多状态样式, 覆盖全局样式, 仅对当前节点生效
       nodeStateStyles: {
@@ -236,10 +240,10 @@ g6.destroy();
 | circle-node | 圆形节点 | r (半径) |
 | ellipse-node | 椭圆节点 | rx, ry 椭圆焦距 |
 | diamond-node | 菱形节点 | size, 默认 [80, 80] |
-| line-edge | 菱形节点 | 默认属性 |
-| polyline-edge | 菱形节点 | 默认属性 |
-| quadratic-edge | 菱形节点 | 默认属性 |
-| cubic-edge | 菱形节点 | 默认属性 |
+| line-edge | 自定义边 | 默认属性 |
+| polyline-edge | 自定义边 | 默认属性 |
+| quadratic-edge | 自定义边 | 默认属性 |
+| cubic-edge | 自定义边 | 默认属性 |
 
 ### 事件监听与通知
 
@@ -353,17 +357,14 @@ npm run dev
 - 按delete键删除节点支持确认回调, 默认不再直接删除
 - 节点和边支持双击事件 after-node-dblclick / after-edge-dblclick, 弊端: 单击事件会被触发两次
 - *所有事件都返回 event 对象*
-- 优化 on-node-mouseenter 等事件
 - 扩展 polyline-edge, line-edge, quadratic-edge, cubic-edge
-- 优化 canvas 鼠标样式
-- 可自定义创建 tooltip
-- 将所有已注册节点和边的事件暴露
 - **事件回调中请使用 clientX 和 clientY, 否则拖拽后位置不准**
 - 支持自定义锚点数量和位置(默认4个)
 - 支持自定义边的类型,可通过事件设置
 - 修复文本和节点样式无效
+- 可自定义创建 tooltip
 
-### [0.2.30] 20202-05-10
+### [0.2.31] 20202-05-12
 
 - 新增多状态样式管理
 - 解决了锚点偶尔拖拽连接失败
@@ -372,4 +373,4 @@ npm run dev
 - 画布拖拽时在画布元素上新增移动 x,y 属性, 方便外部计算
 - **拖拽画布会引起偏移量变化, canvas-event modes 已内置了计算规则, 如未使用需自行计算, 并写入到canvas dx, dy 属性, 便于内部计算**
 - 也可以通过监听 on-canvas-dragend 事件获取画布相对于渲染时的偏移量
-- 全局样式支持被单个节点或边的配置覆盖了
+- !!全局默认样式和多状态样式支持被单个节点或边的配置覆盖了

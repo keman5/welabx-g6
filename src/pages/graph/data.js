@@ -3,8 +3,10 @@ export default {
     {
       id:   '1',
       data: {
-        date: '2020-04-20',
+        action: '初始化',
       },
+      x:     500,
+      y:     100,
       type:  'rect-node', // 对应注册的节点name
       style: {
         fill:          '#39495b',
@@ -39,17 +41,23 @@ export default {
     },
     {
       id:    '2',
-      type:  'rect-node',
+      type:  'circle-node',
       style: {
-        width:     200,
+        r:         50,
+        width:     230,
         height:    60,
         fill:      '#65b586',
         lineWidth: 0,
       },
+      x:        500,
+      y:        250,
       label:    '初始化\n事件和生命周期',
       labelCfg: {
-        fontSize: 18,
-        fill:     '#fff',
+        stroke:    '#ccc',
+        lineWidth: 2,
+        fontSize:  18,
+        fill:      '#fff',
+        textAlign: 'center',
       },
     },
     {
@@ -62,6 +70,8 @@ export default {
         width:     180,
         height:    60,
       },
+      x:        200,
+      y:        170,
       label:    'beforeCreate',
       labelCfg: {
         fill:       '#c96164',
@@ -82,6 +92,8 @@ export default {
     },
     {
       id:    '4',
+      x:     500,
+      y:     450,
       label: '初始化\n注入 & 校验',
       style: {
         width:     200,
@@ -90,33 +102,51 @@ export default {
         lineWidth: 0,
       },
       labelCfg: {
-        fontSize: 18,
-        fill:     '#fff',
+        fontSize:  18,
+        fill:      '#fff',
+        textAlign: 'left',
+        x:         -45,
       },
     },
     {
       id:    '5',
+      x:     200,
+      y:     360,
       label: 'created',
+      type:  'rect-node',
+      style: {
+        fill:      '#fff',
+        stroke:    '#c96164',
+        lineWidth: 3,
+        width:     180,
+        height:    60,
+      },
+      labelCfg: {
+        fill:     '#c96164',
+        fontSize: 20,
+      },
+    },
+    {
+      id:    '6',
+      x:     500,
+      y:     600,
       type:  'diamond-node',
+      label: '是否指定 "el" 选项?',
       style: {
         size:   [160, 100],
         fill:   '#f1b953',
         stroke: '#f1b953',
       },
       labelCfg: {
-        fill: '#fff',
+        fill:     '#fff',
+        stroke:   '#f1b953',
+        fontSize: 20,
       },
-    },
-    {
-      id:    '6',
-      label: '是否指定 "el" 选项?',
-      style: {
-        size: [130, 100],
-      },
-      type: 'diamond-node',
     },
     {
       id:    '7',
+      x:     800,
+      y:     700,
       label: '当调用 vm.$mount(el) 函数时',
       style: {
         size: [130, 100],
@@ -124,24 +154,22 @@ export default {
       type: 'ellipse-node',
     },
     {
+      x:     500,
+      y:     800,
       id:    '8',
       label: '是否指定 "template" 选项',
     },
     {
       id:    '9',
+      x:     250,
+      y:     900,
       label: '将 template 编译\n到 render 函数中',
     },
     {
       id:    '10',
+      x:     800,
+      y:     900,
       label: '将 el 外部的 HTML\n作为 template 编译',
-    },
-    {
-      id:    '11',
-      label: 'beforeMount',
-    },
-    {
-      id:    '12',
-      label: '创建 VM.$el\n并用其替换 "el"',
     },
   ],
   edges: [
@@ -266,24 +294,6 @@ export default {
     {
       source: '8',
       target: '10',
-      data:   {
-        type:   'C',
-        amount: '100,000 元',
-        date:   '2019-08-03',
-      },
-    },
-    {
-      source: '9',
-      target: '12',
-      data:   {
-        type:   'C',
-        amount: '100,000 元',
-        date:   '2019-08-03',
-      },
-    },
-    {
-      source: '8',
-      target: '11',
       data:   {
         type:   'C',
         amount: '100,000 元',

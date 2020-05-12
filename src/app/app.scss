@@ -208,7 +208,7 @@
 }
 
 #canvasPanel {
-  left: 100px;
+  left: 40px;
   top : 40px;
 }
 
@@ -312,15 +312,16 @@
 }
 
 #configPanel {
-  position   : absolute;
-  top        : 0;
-  right      : 0;
-  bottom     : 0;
-  width      : 25%;
-  padding-top: 40px;
-  background : #fff;
-  transition : transform .3s ease-in-out;
-  box-shadow : 0 0 2px 0 rgba(0, 0, 0, .1);
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 25%;
+  overflow: auto;
+  background: #fff;
+  padding:40px 0 10px;
+  transition: transform .3s ease-in-out;
+  box-shadow: 0 0 2px 0 rgba(0, 0, 0, .1);
 
   &.hidden {
     transform: translate(100%, 0);
@@ -329,7 +330,7 @@
   .panel-title {
     font-size    : 16px;
     padding      : 5px 10px;
-    border-bottom: 1px solid #ccc;
+    background: #f0f2f5;
   }
 
   .gb-toggle-btn {
@@ -340,6 +341,32 @@
     border-radius: 10px 0 0 10px;
     box-shadow   : -2px 0 2px 0 rgba(0, 0, 0, .1);
     transform    : translate(0, -50%);
+  }
+
+  .config-data{padding:5px 10px;}
+  .config-item{
+    input{
+      width: 80px;
+      padding: 5px;
+      margin:5px 10px;
+      background: #f4f7fd;
+      border-radius: 4px;
+    }
+  }
+  button{
+    width: 80px;
+    line-height: 24px;
+    display: inline-block;
+    padding:5px 10px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    margin:0 5px;
+    cursor: pointer;
+  }
+  .save{
+    color: #fff;
+    background: #46a0fc;
+    border-color: #46a0fc;
   }
 }
 

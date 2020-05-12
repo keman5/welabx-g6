@@ -58,10 +58,11 @@ const events = {
       this.getAnchorPoints({ anchorPoints }).forEach((p, i) => {
         const bbox = group.get('children')[0].getBBox();
         const anchorBg = group.addShape('circle', {
-          attrs: {
+          zIndex: 0,
+          attrs:  {
             x:       bbox.minX + bbox.width * p[0],
             y:       bbox.minY + bbox.height * p[1],
-            r:       anchorHotsoptStyle.radius,
+            r:       0,
             fill:    '#1890ff',
             opacity: 0.5,
           },
@@ -72,6 +73,14 @@ const events = {
           index:     i,
         });
 
+        // 锚点动画
+        anchorBg.animate({ r: 11 }, {
+          duration: 100,
+          easing:   'easeCubic',
+          delay:    0,
+        });
+
+        group.sort();
         group.anchorShapes.push(anchorBg);
       });
 

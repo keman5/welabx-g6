@@ -21,10 +21,15 @@ export default (anchor, group, p) => {
   anchor.on('dragstart', e => {
     if (anchorNodeId == null) {
       const { r } = anchor.get('attrs');
-      const cacheCanvasBBox = group.get('cacheCanvasBBox');
+      const bBox = group.get('item').getBBox();
       const { id, model: { style } } = group.get('item')._cfg;
       const lineWidth = (style.lineWidth || 0) / 2;
-      const point = [(cacheCanvasBBox.width - r * 2 - 4) * (p[0] - 0.5) - lineWidth, (cacheCanvasBBox.height - r * 2 - 4) * (p[1] - 0.5) - lineWidth];
+      const point = [
+        (bBox.width / 2 - r * 2 - 5) * (p[0] - 0.5) - lineWidth,
+        (bBox.height / 2 - r * 2 - 5) * (p[1] - 0.5) - lineWidth,
+      ];
+
+      console.log(bBox, point);
 
       dragLog = [e.x, e.y];
 

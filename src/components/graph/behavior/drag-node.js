@@ -229,6 +229,7 @@ export default G6 => {
 
       shadowNode.remove();
 
+      /* 添加移动动画? */
       // 更新坐标
       node.updatePosition(coords);
 

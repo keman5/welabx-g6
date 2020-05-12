@@ -71,6 +71,7 @@ export default G6 => {
             y: bbox.minY + bbox.height * p[1],
             ...anchorPointStyles,
           },
+          zIndex:    1,
           nodeId:    group.get('id'),
           className: 'node-anchor',
           draggable: true,
@@ -86,6 +87,7 @@ export default G6 => {
             fill:    '#000',
             opacity: 0,
           },
+          zIndex:    2,
           nodeId:    group.get('id'),
           className: 'node-anchor-group',
           draggable: true,
@@ -116,6 +118,7 @@ export default G6 => {
       };
     },
     /* 添加文本节点 */
+    /* https://g6.antv.vision/zh/docs/manual/advanced/keyconcept/shape-and-properties/#%E6%96%87%E6%9C%AC-text */
     addLabel (group) {
       const { label, labelCfg } = this.attrs;
 
@@ -127,11 +130,9 @@ export default G6 => {
 
         group.addShape('text', {
           attrs: {
-            x:      0,
-            y:      0,
-            width:  100,
-            height: 100,
-            text:   label,
+            x:    0,
+            y:    0,
+            text: label,
             ...labelCfg,
           },
           className: 'node-text',
@@ -141,17 +142,20 @@ export default G6 => {
     },
     /* 绘制节点，包含文本 */
     draw (cfg, group) {
-      const shapeName = this.shapeType || 'rect';
-
       // 合并外部样式和默认样式
       this.attrs = this.getShapeStyle(cfg);
+
       // 添加节点
-      const shape = group.addShape(shapeName, {
+      const shape = group.addShape(this.shapeType, {
+        className: `${this.shapeType}-shape`,
         attrs:     this.attrs, // shape 属性在定义时返回
-        className: `${shapeName}-shape`,
         draggable: true,
       });
 
+      // 按className查找元素
+      group.getItem = className => {
+        return group.get('children').find(item => item.get('className') === className);
+      };
       // 添加文本节点
       this.addLabel(group);
 
@@ -172,10 +176,6 @@ export default G6 => {
     },
     /* 绘制后的附加操作，默认没有任何操作 */
     afterDraw (cfg, group) {
-      group.getItem = className => {
-        return group.get('children').find(item => item.get('className') === className);
-      };
-
       this.runAnimate(group);
     },
     /* 更新节点，包含文本 */
