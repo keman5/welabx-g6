@@ -16,7 +16,7 @@
       @canvas-add-node="addNode"
     />
     <!-- 浮动工具条 -->
-    <div id="toolbar">
+    <!-- <div id="toolbar">
       <i
         class="iconfont icon-undo"
         @click="addNode"
@@ -65,7 +65,7 @@
         class="iconfont icon-full-screen"
         @click="addNode"
       />
-    </div>
+    </div> -->
     <!-- 挂载节点 -->
     <div
       id="canvasPanel"
@@ -76,27 +76,76 @@
       id="configPanel"
       :class="{ hidden: !configVisible }"
     >
-      <h2 class="panel-title">数据配置</h2>
       <i
         class="gb-toggle-btn"
         @click="configVisible = !configVisible"
       />
+      <h2 class="panel-title">数据配置</h2>
       <div class="config-data">
-        {{ config }}
+        id: {{ config.id }}, data: {{ config.data }}
       </div>
+      <h2 class="panel-title">节点样式配置</h2>
+      <div class="config-data">
+        <div class="config-item">
+          形状: <select>
+            <option
+              v-for="(item, index) in nodeShapes"
+              :key="index"
+              :value="item.shape"
+            >
+              {{ item.name }}
+            </option>
+          </select>
+        </div>
+        <div class="config-item">
+          背景色: <input :value="node.fill">
+        </div>
+        <div class="config-item">
+          边框虚线: <input :value="node.lineDash">
+        </div>
+        <div class="config-item">
+          边框颜色: <input :value="node.borderColor">
+        </div>
+        <div class="config-item">
+          宽: <input :value="node.width">px
+        </div>
+        <div class="config-item">
+          高: <input :value="node.height">px
+        </div>
+      </div>
+      <h2 class="panel-title">文字样式配置</h2>
+      <div class="config-data">
+        <div class="config-item">
+          文字: <input :value="label">
+        </div>
+        <div class="config-item">
+          字体大小: <input :value="labelCfg.fontSize">
+        </div>
+        <div class="config-item">
+          颜色: <input :value="labelCfg.fill">
+        </div>
+      </div>
+      <button @click="configVisible = false">取消</button>
+      <button
+        class="save"
+        @click="save"
+      >
+        保存
+      </button>
     </div>
     <div
       v-if="tooltip"
       class="g6-tooltip"
       :style="`top: ${top}px; left: ${left}px;`"
     >
-      label: {{ tooltip }}
+      id: {{ tooltip }}
     </div>
   </div>
 </template>
 
 <script>
 import G6 from '../../components/graph/graph';
+import layout from '../../components/graph/layout/position-remember';
 import ItemPanel from './ItemPanel.vue';
 import data from './data.js';
 
@@ -116,12 +165,47 @@ export default {
         type:  'line',
         width: 1,
       },
+      label:    '',
+      labelCfg: {
+        fontSize: 12,
+        fill:     '#fff',
+      },
+      node: {
+        fill:        '',
+        lineDash:    'none',
+        borderColor: '',
+        width:       160,
+        height:      60,
+        shape:       'rect-node',
+      },
+      nodeShapes: [
+        {
+          name:  '矩形',
+          shape: 'rect-node',
+        },
+        {
+          name:  '圆形',
+          shape: 'circle-node',
+        },
+        {
+          name:  '椭圆',
+          shape: 'ellipise-node',
+        },
+        {
+          name:  '菱形',
+          shape: 'diamond-node',
+        },
+      ],
       headVisible:   false,
       configVisible: false,
       config:        '',
       tooltip:       '',
       top:           0,
       left:          0,
+      canvasOffset:  {
+        x: 0,
+        y: 0,
+      },
     };
   },
   mounted () {
@@ -137,6 +221,8 @@ export default {
   methods: {
     createGraphic () {
       const graph = new G6({
+        width:  window.innerWidth - 40,
+        height: window.innerHeight - 40,
         layout: {
           type:    'dagre',
           // rankdir: 'LR',
@@ -170,6 +256,8 @@ export default {
             size: [200, 100],
           });
 
+          // layout(G6);
+
           cfg.plugins = [minimap];
         },
         // ... 其他G6原生入参
@@ -194,14 +282,19 @@ export default {
         // 形状
         type: e.target.dataset.shape,
         // 坐标
-        x:    e.clientX - 80,
-        y:    e.clientY - 40,
+        x:    e.clientX + this.canvasOffset.x - 80,
+        y:    e.clientY + this.canvasOffset.y - 40,
       };
 
       this.graph.addItem('node', model);
     },
     // 初始化图事件
     initGraphEvent () {
+      this.graph.on('on-canvas-dragend', e => {
+        this.canvasOffset.x = e.dx;
+        this.canvasOffset.y = e.dy;
+      });
+
       this.graph.on('on-node-mouseenter', e => {
         if (e && e.item) {
           // const model = e.item.get('model');
@@ -217,6 +310,19 @@ export default {
           const model = e.item.get('model');
 
           this.config = model;
+          this.label = model.label;
+          this.labelCfg = {
+            fill:     model.labelCfg.fill,
+            fontSize: model.labelCfg.fontSize,
+          };
+          this.node = {
+            fill:        model.style.fill,
+            borderColor: model.style.stroke,
+            lineDash:    model.style.lineDash || 'none',
+            width:       model.style.width,
+            height:      model.style.height,
+            shape:       model.type,
+          };
 
           // model.label = e.item.get('id');
           /* this.graph.updateItem(e.item, {
@@ -290,10 +396,13 @@ export default {
             target: target.get('id'),
             sourceAnchor,
             targetAnchor,
-            label:  'edge label',
+            // label:  'edge label',
           });
         }, 100);
       });
+    },
+    save() {
+
     },
   },
 };

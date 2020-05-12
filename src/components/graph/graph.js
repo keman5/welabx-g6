@@ -23,12 +23,16 @@ class G6 {
   init (config) {
     const options = Object.assign({
       container:      'canvasPanel',
-      width:          window.innerWidth - 100,
-      height:         window.innerHeight - 40,
+      width:          window.innerWidth,
+      height:         window.innerHeight,
       // renderer:       'svg',
       fitViewPadding: 20,
       animate:        true,
-      layout:         {
+      animateCfg:     {
+        duration: 500,
+        easing:   'linearEasing',
+      },
+      layout: {
         type:    'dagre',
         // rankdir: 'LR',
         nodesep: 30,

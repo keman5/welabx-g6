@@ -73,6 +73,7 @@ const events = {
           index:     i,
         });
 
+        // 锚点动画
         anchorBg.animate({ r: 11 }, {
           duration: 100,
           easing:   'easeCubic',

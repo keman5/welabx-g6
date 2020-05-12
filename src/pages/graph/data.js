@@ -3,8 +3,10 @@ export default {
     {
       id:   '1',
       data: {
-        date: '2020-04-20',
+        action: '初始化',
       },
+      x:     10,
+      y:     10,
       type:  'rect-node', // 对应注册的节点name
       style: {
         fill:          '#39495b',
@@ -39,8 +41,9 @@ export default {
     },
     {
       id:    '2',
-      type:  'rect-node',
+      type:  'circle-node',
       style: {
+        r:         50,
         width:     200,
         height:    60,
         fill:      '#65b586',
@@ -48,8 +51,11 @@ export default {
       },
       label:    '初始化\n事件和生命周期',
       labelCfg: {
-        fontSize: 18,
-        fill:     '#fff',
+        stroke:    '#ccc',
+        lineWidth: 2,
+        fontSize:  18,
+        fill:      '#fff',
+        textAlign: 'center',
       },
     },
     {
@@ -90,8 +96,10 @@ export default {
         lineWidth: 0,
       },
       labelCfg: {
-        fontSize: 18,
-        fill:     '#fff',
+        fontSize:  18,
+        fill:      '#fff',
+        textAlign: 'left',
+        x:         -45,
       },
     },
     {
