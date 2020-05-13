@@ -32,7 +32,8 @@ export default G6 => {
         const nodes = this.graph.findAll('node', node => node);
 
         nodes.forEach(node => {
-          this.graph.setItemState(node, 'anchorActived', true);
+          // this.graph.setItemState(node, 'anchorActived', true);
+          node.setState('anchorActived', true);
         });
       }
       this.graph.emit('on-node-mousedown', e);
@@ -86,12 +87,23 @@ export default G6 => {
       // e.item 当前拖拽节点 | e.target 当前释放节点
       if (this.dragStartNode.id && e.target.cfg.isAnchor && (this.dragStartNode.id !== e.target.cfg.nodeId)) {
 
-        this.graph.emit('before-edge-add', {
-          source:       this.dragStartNode.group.get('item'),
-          target:       e.item.getContainer().get('item'),
-          sourceAnchor: this.dragStartNode.anchorIndex,
-          targetAnchor: e.target.cfg.index,
+        const sourceNode = this.dragStartNode.group.get('item');
+        const edges = sourceNode.getOutEdges();
+
+        const hasLinked = edges.find(edge => {
+          if (edge.get('target').get('id') === e.target.cfg.nodeId) {
+            return true;
+          }
         });
+
+        if (!hasLinked) {
+          this.graph.emit('before-edge-add', {
+            source:       sourceNode,
+            target:       e.item.getContainer().get('item'),
+            sourceAnchor: this.dragStartNode.anchorIndex,
+            targetAnchor: e.target.cfg.index,
+          });
+        }
       }
       this.graph.emit('on-node-drop', e);
     },
@@ -156,8 +168,8 @@ export default G6 => {
       }
 
       const shadowNode = group.addShape(shapeType, {
-        attrs,
         className: 'shadow-node',
+        attrs,
       });
 
       shadowNode.toFront();
@@ -241,7 +253,7 @@ export default G6 => {
       const selectedEdges = this.graph.findAllByState('edge', 'edgeState:selected');
 
       selectedEdges.forEach(edge => {
-        this.graph.clearItemStates(edge, ['edgeState:selected', 'edgeState:hover']);
+        edge.clearStates(['edgeState:selected', 'edgeState:hover']);
       });
     },
   });

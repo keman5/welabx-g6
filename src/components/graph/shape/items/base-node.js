@@ -14,7 +14,7 @@ export default G6 => {
   G6.registerNode('base-node', {
     // 绘制图标
     drawIcon (cfg, group) {
-      const attrs = this.getShapeStyle(cfg);
+      const attrs = group.getFirst().attr();
 
       if (attrs.icon) {
         const iconStyles = {
@@ -49,12 +49,14 @@ export default G6 => {
       };
     },
     drawAnchor (cfg, group) {
-      const { anchorPointStyles } = this.getShapeStyle(cfg);
+      const { anchorPointStyles } = group.getFirst().attr();
       const item = group.get('children')[0];
-      const bbox = item.getBBox();
+      const bBox = item.getBBox();
 
       // 绘制锚点坐标
       this.getAnchorPoints(cfg).forEach((p, i) => {
+        const x = bBox.width * (p[0] - 0.5);
+        const y = bBox.height * (p[1] - 0.5);
         /**
          * 绘制三层锚点
          * 最底层: 锚点bg
@@ -63,8 +65,8 @@ export default G6 => {
          */
         const anchor = group.addShape('circle', {
           attrs: {
-            x: bbox.minX + bbox.width * p[0],
-            y: bbox.minY + bbox.height * p[1],
+            x,
+            y,
             ...anchorPointStyles,
           },
           zIndex:    1,
@@ -77,8 +79,8 @@ export default G6 => {
 
         const anchorGroup = group.addShape('circle', {
           attrs: {
-            x:       bbox.minX + bbox.width * p[0],
-            y:       bbox.minY + bbox.height * p[1],
+            x,
+            y,
             r:       11,
             fill:    '#000',
             opacity: 0,
@@ -116,7 +118,7 @@ export default G6 => {
     /* 添加文本节点 */
     /* https://g6.antv.vision/zh/docs/manual/advanced/keyconcept/shape-and-properties/#%E6%96%87%E6%9C%AC-text */
     addLabel (cfg, group) {
-      const { label, labelCfg } = this.getShapeStyle(cfg);
+      const { label, labelCfg } = group.getFirst().attr();
 
       if (label) {
         // 字体小于12时 svg会报错
@@ -139,7 +141,7 @@ export default G6 => {
     /* 绘制节点，包含文本 */
     draw (cfg, group) {
       // 合并外部样式和默认样式
-      const attrs = this.getShapeStyle(cfg);
+      const attrs = this.getShapeStyle(cfg, group);
       // 添加节点
       const shape = group.addShape(this.shapeType, { // shape 属性在定义时返回
         className: `${this.shapeType}-shape`,
@@ -161,15 +163,9 @@ export default G6 => {
 
       return shape;
     },
-    // 动画函数
-    runAnimate (cfg, group) {
-      if (cfg.runAnimate) {
-        //
-      }
-    },
     /* 绘制后的附加操作，默认没有任何操作 */
     afterDraw (cfg, group) {
-      this.runAnimate(cfg, group);
+      //
     },
     /* 更新节点，包含文本 */
     update (cfg, node) {
@@ -187,19 +183,6 @@ export default G6 => {
         // 更新节点属性
         item.attr({ ...attrs, ...model.style });
       });
-    },
-    /* 更新节点后的操作，同 afterDraw 配合使用 */
-    afterUpdate (cfg, node) {
-      // 显示/隐藏图标
-      const icon = node.get('group').icon;
-
-      if (icon) {
-        if (cfg.hideIcon && icon.get('visible')) {
-          icon.hide();
-        } else if (!cfg.hideIcon && !icon.get('visible')) {
-          icon.show();
-        }
-      }
     },
     /* 设置节点的状态，主要是交互状态，业务状态请在 draw 方法中实现 */
     setState (name, value, item) {

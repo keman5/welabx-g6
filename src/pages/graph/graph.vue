@@ -145,7 +145,6 @@
 
 <script>
 import G6 from '../../components/graph/graph';
-import layout from '../../components/graph/layout/position-remember';
 import ItemPanel from './ItemPanel.vue';
 import data from './data.js';
 
@@ -224,10 +223,7 @@ export default {
         width:  window.innerWidth - 40,
         height: window.innerHeight - 40,
         layout: {
-          type:    'position-remember',
-          // rankdir: 'LR',
-          nodesep: 80,
-          ranksep: 40,
+          type: 'xxx', // 位置将固定
         },
         defaultNode: {
           type:  'rect-node',
@@ -250,13 +246,24 @@ export default {
             opacity: 0.9,
           },
         },
+        // 默认边不同状态下的样式集合
+        edgeStateStyles: {
+          'edgeState:default': {
+            stroke: '#aab7c3',
+          },
+          'edgeState:selected': {
+            stroke: '#1890FF',
+          },
+          'edgeState:hover': {
+            stroke:  '#1890FF',
+            animate: true,
+          },
+        },
         // 自定义注册行为, 事件, 交互
         registerFactory: (G6, cfg) => {
           const minimap = new G6.Minimap({
             size: [200, 100],
           });
-
-          layout(G6);
 
           cfg.plugins = [minimap];
         },

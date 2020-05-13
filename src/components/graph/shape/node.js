@@ -15,33 +15,28 @@ const {
 
 function getStyle (options, cfg) {
   return {
+    ...cfg,
     // 自定义默认样式
     ...nodeStyles,
     ...options,
-    // 全局样式
-    ...this.options,
     // 当前节点样式
     ...cfg.style,
-    label:    cfg.label,
     // 文本配置
     labelCfg: {
       ...nodeLabelStyles,
-      ...this.options.labelCfg,
       ...cfg.labelCfg,
     },
     // 图标样式
     iconStyles: {
       ...iconStyles,
-      ...this.options.iconStyles,
       ...cfg.iconStyles,
     },
-    // 多状态样式
-    ...cfg.nodeStateStyles,
     // 锚点样式
     anchorPointStyles: {
       ...anchorPointStyles,
       ...cfg.anchorPointStyles,
     },
+    ...cfg.nodeStateStyles,
     // 锚点高亮样式
     anchorHotsoptStyles: cfg.anchorHotsoptStyles,
   };
@@ -52,11 +47,6 @@ export default G6 => {
   G6.registerNode('rect-node', {
     shapeType: 'rect',
     // 当前节点的样式集合
-    attrs:     {},
-    /** 覆盖 base-node 默认样式
-     * this.options => 全局默认样式
-     * cfg => data 样式
-     */
     getShapeStyle(cfg) {
       const width = cfg.style.width || 80;
       const height = cfg.style.height || 40;
@@ -75,7 +65,6 @@ export default G6 => {
   // 扩展圆形节点
   G6.registerNode('circle-node', {
     shapeType: 'circle',
-    attrs:     { },
     getShapeStyle(cfg) {
       const r = cfg.style.r || 30;
 
@@ -91,9 +80,9 @@ export default G6 => {
   // 扩展椭圆形
   G6.registerNode('ellipse-node', {
     shapeType: 'ellipse',
-    attrs:     {
+    /* attrs:     {
       iconStyles,
-    },
+    }, */
     getShapeStyle(cfg) {
       return getStyle.call(this, {
         rx: 50,
