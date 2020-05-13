@@ -80,21 +80,10 @@ export default {
       stroke: '#aab7c3',
     },
   },
-  anchorHotsoptStyle: {
-    radius:      11,
-    fill:        '#1890FF',
-    fillOpacity: 0.25,
-  },
   anchorPointStyles: {
     r:         4,
     fill:      '#fff',
     stroke:    '#1890FF',
     lineWidth: 1,
-  },
-  anchorPointStateStyles: {
-    r:           4,
-    stroke:      '#1890FF',
-    fill:        '#1890FF',
-    fillOpacity: 1,
   },
 };

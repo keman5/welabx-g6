@@ -18,7 +18,6 @@ function getStyle (options, cfg) {
     // 自定义默认样式
     ...nodeStyles,
     ...options,
-    anchorPointStyles,
     // 全局样式
     ...this.options,
     // 当前节点样式
@@ -38,6 +37,13 @@ function getStyle (options, cfg) {
     },
     // 多状态样式
     ...cfg.nodeStateStyles,
+    // 锚点样式
+    anchorPointStyles: {
+      ...anchorPointStyles,
+      ...cfg.anchorPointStyles,
+    },
+    // 锚点高亮样式
+    anchorHotsoptStyles: cfg.anchorHotsoptStyles,
   };
 }
 
@@ -134,22 +140,5 @@ export default G6 => {
   // 扩展三角形节点
   /* G6.registerNode('triangle-node', {
     shapeType: 'triangle',
-    getShapeStyle (cfg) {
-
-      return {
-        direction: 'top',
-        size:      [130, 130, 130],
-        ...nodeStyles,
-        // 将图形中心坐标移动到图形中心, 用于方便鼠标位置计算
-        x:         0,
-        y:         0,
-        anchorPointStyles,
-        labelCfg:  {
-            ...nodeLabelStyles,
-            // ...cfg.style.nodeLabelStyles,
-        },
-        anchorPoints: this.getAnchorPoints(cfg),
-      };
-    },
   }, 'base-node'); */
 };

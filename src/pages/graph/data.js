@@ -38,6 +38,15 @@ export default {
           fill: '#f1ac00',
         },
       },
+      // 自定义锚点数量和位置
+      anchorPoints: [
+        [0, 0],
+        [0.5, 0],
+        [0, 1],
+        [0.5, 1],
+        [1, 0],
+        [1, 1],
+      ],
     },
     {
       id:    '2',
@@ -80,15 +89,16 @@ export default {
         fontSize:   20,
         fontWeight: '700',
       },
-      // 自定义锚点数量和位置
-      anchorPoints: [
-        [0, 0],
-        [0.5, 0],
-        [0, 1],
-        [0.5, 1],
-        [1, 0],
-        [1, 1],
-      ],
+      anchorHotsoptStyles: {
+        r:    11,
+        fill: 'green',
+      },
+      anchorPointStyles: {
+        r:         4,
+        fill:      '#fff',
+        stroke:    '#1890FF',
+        lineWidth: 2,
+      },
     },
     {
       id:    '4',
@@ -107,6 +117,11 @@ export default {
         textAlign: 'left',
         x:         -45,
       },
+      /* anchorPointsStyles: [
+        {
+          fill: '#fff',
+        },
+      ], */
     },
     {
       id:    '5',
@@ -176,7 +191,7 @@ export default {
     {
       source:       '1',
       target:       '2',
-      sourceAnchor: 2,
+      sourceAnchor: 3,
       data:         {
         type:   'A',
         amount: '100,000 元',
@@ -201,9 +216,11 @@ export default {
       },
     },
     {
-      source: '2',
-      target: '3',
-      data:   {
+      source:       '1',
+      target:       '3',
+      sourceAnchor: 3,
+      targetAnchor: 4,
+      data:         {
         type:   'B',
         amount: '100,000 元',
         date:   '2019-08-03',
@@ -245,9 +262,11 @@ export default {
       },
     },
     {
-      source: '4',
-      target: '5',
-      data:   {
+      source:       '2',
+      target:       '5',
+      sourceAnchor: 2,
+      targetAnchor: 1,
+      data:         {
         type:   'C',
         amount: '100,000 元',
         date:   '2019-08-03',
