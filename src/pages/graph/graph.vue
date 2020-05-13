@@ -224,7 +224,7 @@ export default {
         width:  window.innerWidth - 40,
         height: window.innerHeight - 40,
         layout: {
-          type:    'dagre',
+          type:    'position-remember',
           // rankdir: 'LR',
           nodesep: 80,
           ranksep: 40,
@@ -256,7 +256,7 @@ export default {
             size: [200, 100],
           });
 
-          // layout(G6);
+          layout(G6);
 
           cfg.plugins = [minimap];
         },

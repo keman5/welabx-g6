@@ -14,7 +14,7 @@
 
 - 自定义节点和边, 支持锚点配置
 - 自定义圆形, 方形, 椭圆, 菱形节点
-- 节点支持拖拽连线, 删除, 编辑
+- 节点支持拖拽连线, 删除(按delete键), 编辑
 - 边默认带结束箭头, 支持标签显示
 - 支持自定义 tool-tip 内容
 - 支持画布/节点/边事件监听
@@ -166,7 +166,7 @@ const g6 = new WelabxG6({
   container: 'id',
   width: 1000,
   height: 300,
-  renderer: 'svg', // 默认 canvas
+  renderer: 'canvas', // 默认 canvas, 也可选用 svg, 但有些事件没有兼容, 也不打算兼容了, 只维护canvas版本
   // 自定义注册行为, 事件, 交互
   registerFactory: (G6, cfg) => {
     const minimap = new G6.Minimap({
@@ -374,3 +374,9 @@ npm run dev
 - **拖拽画布会引起偏移量变化, canvas-event modes 已内置了计算规则, 如未使用需自行计算, 并写入到canvas dx, dy 属性, 便于内部计算**
 - 也可以通过监听 on-canvas-dragend 事件获取画布相对于渲染时的偏移量
 - !!全局默认样式和多状态样式支持被单个节点或边的配置覆盖了
+
+### [0.3.3] 20202-05-13
+
+- 锚点支持自定义样式啦!
+- 优化锚点中心计算位置, 看起来更居中
+- 修复字体过多超出节点锚点拖拽异常

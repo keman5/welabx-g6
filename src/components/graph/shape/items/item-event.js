@@ -6,8 +6,6 @@
 
 import defaultStyles from '../defaultStyles';
 
-const { anchorHotsoptStyle } = defaultStyles;
-
 /**
  * @description 恢复节点/边/锚点默认样式
  */
@@ -51,13 +49,17 @@ const events = {
    */
   anchorActived(value, group) {
     if (value) {
-      const { anchorPoints } = group.get('item').getModel();
+      const model = group.get('item').getModel();
+      const {
+        anchorPoints,
+        anchorHotsoptStyles,
+      } = model;
 
       group.showAnchor(group);
 
       this.getAnchorPoints({ anchorPoints }).forEach((p, i) => {
         const bbox = group.get('children')[0].getBBox();
-        const anchorBg = group.addShape('circle', {
+        const hotspot = group.addShape('circle', {
           zIndex: 0,
           attrs:  {
             x:       bbox.minX + bbox.width * p[0],
@@ -65,6 +67,7 @@ const events = {
             r:       0,
             fill:    '#1890ff',
             opacity: 0.5,
+            ...anchorHotsoptStyles,
           },
           nodeId:    group.get('item').get('id'),
           className: 'node-anchor-bg',
@@ -74,14 +77,14 @@ const events = {
         });
 
         // 锚点动画
-        anchorBg.animate({ r: 11 }, {
+        hotspot.animate({ r: 11 }, {
           duration: 100,
           easing:   'easeCubic',
           delay:    0,
         });
 
         group.sort();
-        group.anchorShapes.push(anchorBg);
+        group.anchorShapes.push(hotspot);
       });
 
       group.anchorShapes.filter(item => {
@@ -90,8 +93,7 @@ const events = {
         }
         if (item.get('className') === 'node-anchor-group') {
           item.attr({
-            r: anchorHotsoptStyle.radius + 2,
-            // opacity: 0.2,
+            r: (anchorHotsoptStyles && anchorHotsoptStyles.r || 11) + 2,
           });
           item.toFront();
         }

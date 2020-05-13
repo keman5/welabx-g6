@@ -18,14 +18,13 @@ export default G6 => {
      * 初始化
      * @param {object} data 数据
      */
-    init (data) {
-      console.log(data);
+    init(data) {
 
     },
     /**
      * 执行布局
      */
-    execute () {
+    execute() {
 
     },
     /**

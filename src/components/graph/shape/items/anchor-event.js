@@ -20,11 +20,12 @@ export default (anchor, group, p) => {
   // 拖拽事件
   anchor.on('dragstart', e => {
     if (anchorNodeId == null) {
-      const { r } = anchor.get('attrs');
-      const cacheCanvasBBox = group.get('cacheCanvasBBox');
-      const { id, model: { style } } = group.get('item')._cfg;
-      const lineWidth = (style.lineWidth || 0) / 2;
-      const point = [(cacheCanvasBBox.width - r * 2 - 4) * (p[0] - 0.5) - lineWidth, (cacheCanvasBBox.height - r * 2 - 4) * (p[1] - 0.5) - lineWidth];
+      const bBox = group.get('item').getBBox();
+      const id = group.get('item').get('id');
+      const point = [
+        bBox.width * (p[0] - 0.5), // x
+        bBox.height * (p[1] - 0.5), // y
+      ];
 
       dragLog = [e.x, e.y];
 
@@ -63,8 +64,8 @@ export default (anchor, group, p) => {
      * 这里 1px 是为了让鼠标释放时 node: drag 事件监听到 target, 而不是当前虚线
      */
 
-    // 如果鼠标移动距离超过 16px 就开始计算角度
-    if (Math.sqrt(Math.pow(Math.abs(dragLog[0]) - Math.abs(e.x), 2) + Math.pow(Math.abs(dragLog[1]) - Math.abs(e.y), 2)) >= 16) {
+    // 如果鼠标移动距离超过 10px 就开始计算角度
+    if (Math.sqrt(Math.pow(Math.abs(dragLog[0]) - Math.abs(e.x), 2) + Math.pow(Math.abs(dragLog[1]) - Math.abs(e.y), 2)) >= 10) {
       if (e.x >= dragLog[0]) {
         // 右下
         if (e.y >= dragLog[1]) {
