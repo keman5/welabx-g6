@@ -29,7 +29,8 @@ export default G6 => {
       this._clearSelected();
       this.editMode = true;
       // 设置当前节点的 click 状态为 true
-      this.graph.setItemState(e.item.get('id'), 'edgeState', 'selected');
+      e.item.setState('edgeState', 'selected');
+      // this.graph.setItemState(e.item, 'edgeState', 'selected');
       // 将点击事件发送给 graph 实例
       this.graph.emit('after-edge-selected', e);
     },
@@ -37,27 +38,24 @@ export default G6 => {
       this._clearSelected();
       this.editMode = true;
       // 设置当前节点的 click 状态为 true
-      this.graph.setItemState(e.item, 'edgeState', 'selected');
+      e.item.setState('edgeState', 'selected');
       // 将点击事件发送给 graph 实例
       this.graph.emit('after-edge-dblclick', e);
     },
     // hover edge
     onMouseEnter(e) {
       if (!this.editMode) {
-        this.graph.setItemState(e.item, 'edgeState', 'hover');
+        e.item.setState('edgeState', 'hover');
       }
       this.graph.emit('on-edge-mouseenter', e);
     },
     onMouseMove(e) {
-      if (!this.editMode) {
-        this.graph.setItemState(e.item, 'edgeState', 'hover');
-      }
       this.graph.emit('on-edge-mousemove', e);
     },
     // out edge
     onMouseLeave(e) {
       if (!this.editMode) {
-        this.graph.setItemState(e.item, 'edgeState', 'default');
+        e.item.setState('edgeState', 'default');
       }
       this.graph.emit('on-edge-mouseleave', e);
     },
@@ -69,7 +67,7 @@ export default G6 => {
       );
 
       selectedNodes.forEach(node => {
-        this.graph.clearItemStates(node, ['nodeState:selected']);
+        node.clearStates('nodeState:selected');
       });
 
       const selectedEdges = this.graph.findAllByState(
@@ -78,7 +76,7 @@ export default G6 => {
       );
 
       selectedEdges.forEach(edge => {
-        this.graph.clearItemStates(edge, ['edgeState:selected']);
+        edge.clearStates('edgeState:selected');
       });
       this.graph.emit('after-edge-selected');
     },

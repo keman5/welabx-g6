@@ -7,7 +7,6 @@ export default {
       },
       x:     500,
       y:     100,
-      type:  'rect-node', // 对应注册的节点name
       style: {
         fill:          '#39495b',
         lineDash:      [1, 2],
@@ -204,6 +203,7 @@ export default {
         lineDash:        [5, 2],
         lineWidth:       2,
         lineAppendWidth: 10,
+        cursor:          'hand',
       },
       labelCfg: {
         position:   'center', // 其实默认就是 center，这里写出来便于理解
@@ -212,6 +212,20 @@ export default {
           stroke:    'white', // 给文本添加白边和白色背景
           fill:      '#722ed1', // 文本颜色
           lineWidth: 5, // 文本白边粗细
+        },
+      },
+      edgeStateStyles: {
+        'edgeState:default': {
+          strokeOpacity: 1,
+          cursor:        'default',
+        },
+        'edgeState:hover': {
+          strokeOpacity: 0.6,
+          cursor:        'pointer',
+        },
+        'edgeState:selected': {
+          strokeOpacity: 1,
+          cursor:        'pointer',
         },
       },
     },
@@ -225,16 +239,19 @@ export default {
         amount: '100,000 元',
         date:   '2019-08-03',
       },
-      label:           '终止',
+      label:           '',
       edgeStateStyles: {
         'edgeState:default': {
           strokeOpacity: 1,
+          cursor:        'default',
         },
         'edgeState:hover': {
           strokeOpacity: 0.6,
+          cursor:        'pointer',
         },
         'edgeState:selected': {
           strokeOpacity: 1,
+          cursor:        'pointer',
         },
       },
     },
@@ -246,14 +263,16 @@ export default {
         amount: '100,000 元',
         date:   '2019-08-03',
       },
-      label:           '循环',
+      label:           '',
       edgeStateStyles: {
         'edgeState:default': {
           strokeOpacity: 1,
+          animate:       false,
         },
         'edgeState:hover': {
           strokeOpacity: 0.6,
           stroke:        '#ccc',
+          animate:       false,
         },
         'edgeState:selected': {
           strokeOpacity: 1,
@@ -271,7 +290,7 @@ export default {
         amount: '100,000 元',
         date:   '2019-08-03',
       },
-      label: '否',
+      label: '准备',
     },
     {
       source: '4',
@@ -281,7 +300,7 @@ export default {
         amount: '100,000 元',
         date:   '2019-08-03',
       },
-      label: '小于',
+      label: '继续',
     },
     {
       source: '6',

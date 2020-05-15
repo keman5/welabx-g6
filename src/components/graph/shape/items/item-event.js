@@ -4,7 +4,7 @@
  * @description 通通来自于 behavior 里注册的事件
  */
 
-import defaultStyles from '../defaultStyles';
+// import defaultStyles from '../defaultStyles';
 
 /**
  * @description 恢复节点/边/锚点默认样式
@@ -18,11 +18,14 @@ function setStyle(item, nodeStyle, text, textStyle) {
 
 function getItemStyle(type, group, state = 'hover') {
   const item = group.get('item');
-  const model = item.getModel();
-  const originStyle = item.get('originStyle');
-  const stateStyle = Object.assign(originStyle, model.edgeStateStyles);
-  const activeStyle = stateStyle[`${type}State:${state}`];
-  const defaultStyle = stateStyle[`${type}State:default`];
+  const attrs = group.getFirst().attr();
+  const originStyle = type === 'node' ? item.get('originStyle') : item.get('originStyle')['edge-shape'];
+  const activeStyle = attrs[`${type}State:${state}`];
+  const defaultStyle = attrs[`${type}State:default`];
+
+  if (type === 'edge' && defaultStyle && defaultStyle.lineWidth == null) {
+    defaultStyle.lineWidth = 1;
+  }
 
   return {
     activeStyle,
@@ -78,9 +81,7 @@ const events = {
 
         // 锚点动画
         hotspot.animate({ r: 11 }, {
-          duration: 100,
-          easing:   'easeCubic',
-          delay:    0,
+          duration: 200,
         });
 
         group.sort();
@@ -117,7 +118,7 @@ const events = {
   'nodeState:default'(value, group) {
     if (value) {
       const node = group.getChildByIndex(0);
-      const { defaultStyle } = getItemStyle('node', group);
+      const { defaultStyle } = getItemStyle.call(this, 'node', group);
 
       setStyle(node, defaultStyle);
     }
@@ -128,11 +129,7 @@ const events = {
    */
   'nodeState:selected'(value, group) {
     const node = group.getChildByIndex(0);
-    const { activeStyle, defaultStyle } = getItemStyle(
-      'node',
-      group,
-      'selected',
-    );
+    const { activeStyle, defaultStyle } = getItemStyle.call(this, 'node', group, 'selected');
 
     if (!activeStyle) return;
     if (value) {
@@ -147,7 +144,7 @@ const events = {
    */
   'nodeState:hover'(value, group) {
     const node = group.getChildByIndex(0);
-    const { activeStyle, defaultStyle } = getItemStyle('node', group, 'hover');
+    const { activeStyle, defaultStyle } = getItemStyle.call(this, 'node', group, 'hover');
 
     if (!activeStyle) return;
     if (value) {
@@ -169,41 +166,54 @@ const events = {
    */
   'edgeState:default'(value, group) {
     if (value) {
-      const { defaultStyle } = getItemStyle('edge', group);
+      const { defaultStyle } = getItemStyle.call(this, 'edge', group);
       const edge = group.getChildByIndex(0);
 
-      setStyle(edge, defaultStyle);
+      if (defaultStyle) {
+        // 停止内部动画
+        this.stopAnimate(group);
+        setStyle(edge, defaultStyle);
+      }
     }
   },
 
   /**
    * @description edge hover事件
    */
-  'edgeState:hover'(value, group) {
-    const edge = group.getChildByIndex(0);
-    const { endArrow } = edge.get('attrs');
-    const { activeStyle, defaultStyle, originStyle } = getItemStyle(
-      'edge',
-      group,
-      'hover',
-    );
+  'edgeState:hover' (value, group) {
+    const path = group.getChildByIndex(0);
+    const { endArrow } = path.get('attrs');
+    const { activeStyle, defaultStyle, originStyle } = getItemStyle.call(this, 'edge', group, 'hover');
 
     if (!activeStyle) return;
     if (value) {
-      setStyle(edge, activeStyle);
-      if (endArrow) {
-        edge.attr('endArrow', {
-          path: endArrow.path,
-          fill: activeStyle.stroke || originStyle.stroke,
-        });
+      if (activeStyle.animate === true) {
+        this.runAnimate(group);
+      } else if (typeof activeStyle.animate === 'function') {
+        activeStyle.animate(group);
+      } else {
+        setStyle(path, activeStyle);
+        if (endArrow) {
+          path.attr('endArrow', {
+            path: endArrow.path,
+            fill: activeStyle.stroke || originStyle.stroke,
+          });
+        }
       }
     } else {
-      setStyle(edge, defaultStyle);
-      if (endArrow) {
-        edge.attr('endArrow', {
-          path: endArrow.path,
-          fill: defaultStyle.stroke || activeStyle.stroke || originStyle.stroke,
-        });
+      if (activeStyle.animate === true) {
+        // 停止动画
+        this.stopAnimate(group);
+      } else if (typeof activeStyle.animate === 'function') {
+        activeStyle.animate(group, 'stop');
+      } else {
+        setStyle(path, defaultStyle);
+        if (endArrow) {
+          path.attr('endArrow', {
+            path: endArrow.path,
+            fill: defaultStyle.stroke || activeStyle.stroke || originStyle.stroke,
+          });
+        }
       }
     }
   },
@@ -212,30 +222,42 @@ const events = {
    * @description edge 选中事件
    */
   'edgeState:selected'(value, group) {
-    const edge = group.getChildByIndex(0);
-    const { endArrow } = edge.get('attrs');
-    const { activeStyle, defaultStyle, originStyle } = getItemStyle(
-      'edge',
-      group,
-      'selected',
-    );
+    const path = group.getChildByIndex(0);
+    const { endArrow } = path.get('attrs');
+    const { activeStyle, defaultStyle, originStyle } = getItemStyle.call(this, 'edge', group, 'selected');
 
     if (!activeStyle) return;
     if (value) {
-      setStyle(edge, activeStyle);
-      if (endArrow) {
-        edge.attr('endArrow', {
-          path: endArrow.path,
-          fill: activeStyle.stroke || originStyle.stroke,
-        });
+      if (activeStyle.animate === true) {
+        // 执行内部动画
+        this.runAnimate(group);
+      } else if (typeof activeStyle.animate === 'function') {
+        // 执行外部动画
+        activeStyle.animate(group);
+      } else {
+        setStyle(path, activeStyle);
+        if (endArrow) {
+          path.attr('endArrow', {
+            path: endArrow.path,
+            fill: activeStyle.stroke || originStyle.stroke,
+          });
+        }
       }
     } else {
-      setStyle(edge, defaultStyle);
-      if (endArrow) {
-        edge.attr('endArrow', {
-          path: endArrow.path,
-          fill: defaultStyle.stroke || activeStyle.stroke || originStyle.stroke,
-        });
+      if (activeStyle.animate === true) {
+        // 停止内部动画
+        this.stopAnimate(group);
+      } else if (typeof activeStyle.animate === 'function') {
+        // 停止外部动画
+        activeStyle.animate(group, 'stop');
+      } else {
+        setStyle(path, defaultStyle);
+        if (endArrow) {
+          path.attr('endArrow', {
+            path: endArrow.path,
+            fill: defaultStyle.stroke || activeStyle.stroke || originStyle.stroke,
+          });
+        }
       }
     }
   },

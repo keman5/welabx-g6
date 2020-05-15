@@ -135,7 +135,8 @@ const webpackConfig = {
       chunkFilename: 'css/[id].[hash:7].css',
     }),
     new HtmlWebpackPlugin({
-      template: resolve('../index.html'),
+      template: resolve('../public/index.html'),
+      favicon:  resolve('../public/logo.png'),
       inject:   true,
     }),
     new FriendlyErrorsPlugin(),
