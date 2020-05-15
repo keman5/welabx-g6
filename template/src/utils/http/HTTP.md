@@ -11,7 +11,7 @@
 
 - 新增 urltail, btnState, isCancel, isLogin, systemError 自定义参数
 - 支持动态 url, 使用 urltail 传入字符串, 将自动合并到 url 末尾
-- 请求响应无论怎样报错都会返回 code 和 msg, 所以你可以根据 code 进行不同错误的后续处理, 前台 code 提供了 'cancelled', 'timeout'
+- 请求响应无论怎样报错都会返回 code 和 message, 所以你可以根据 code 进行不同错误的后续处理, 前台 code 提供了 'cancelled', 'timeout'
 
 ## 书写案例
 
@@ -53,6 +53,6 @@ config = {
 // @param {isCancel} Object 使用方法:
 isCancel: {
     state: true / 'all', true 时只取消当前请求, 'all' 将取消所有请求
-    msg: String, 主动取消时弹窗提示语, 非必传
+    message: String, 主动取消时弹窗提示语, 非必传
 }
 ```

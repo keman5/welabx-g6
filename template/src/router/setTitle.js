@@ -7,8 +7,8 @@ const setTitle = (title) => {
 
         iframe.style.display = 'none';
         iframe.setAttribute('src', '/favicon.ico');
-        const iframeCallback = function() {
-            setTimeout(function() {
+        const iframeCallback = function () {
+            setTimeout(function () {
                 iframe.removeEventListener('load', iframeCallback);
                 document.body.removeChild(iframe);
             }, 0);

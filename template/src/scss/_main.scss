@@ -1,7 +1,8 @@
 @import './color';
 @import './element-theme.scss';
-@import './commom';
+@import './common';
 @import './mixins';
+
 @mixin layout() {
     @include gap('20', 20px);
     @include gap('15', 15px);

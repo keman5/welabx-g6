@@ -1,26 +1,26 @@
 export default {
     props: {
         data: {
-            type: Array,
-            default: ()=>{
+            type:    Array,
+            default: () => {
                 return [];
-            }
+            },
         },
         showPage: {
-            type: Boolean,
-            default: true
+            type:    Boolean,
+            default: true,
         },
         pageSize: [String, Number],
-        total: [String, Number]
+        total:    [String, Number],
     },
-    data() {
+    data () {
         return {
-            
-        }
+
+        };
     },
     methods: {
-        changePage(page) {
-            this.$emit('change-page',page)
-        }
+        changePage (page) {
+            this.$emit('change-page', page);
+        },
     },
-}
+};

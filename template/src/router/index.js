@@ -1,11 +1,10 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
 import { setTitle } from './setTitle';
-import Home from '../views/home/Home.vue';
-import Http from '../services/http/http.js';
+import Http from '../utils/http/http.js';
 import {
-  handleCookies, query,
-} from '../services/common.js';
+    handleCookies, query,
+} from '../utils/common.js';
 
 Vue.use(VueRouter);
 
@@ -20,7 +19,7 @@ const getUserData = async (next) => {
     }
     const btnList = [];
 
-    for(const item of res.data.buttonlist) {
+    for (const item of res.data.buttonlist) {
         btnList.push(item.moduleCode);
     }
     const username = res.data.user.username,
@@ -30,28 +29,29 @@ const getUserData = async (next) => {
         username,
         roleName,
     });
-    if(query.token) {
+    let curSysCode = window.sysCode;
+    if (query.token) {
         handleCookies.setCookies({
-            token:    query.token,
-            sysCode:  query.sysCode
+            [`${curSysCode}-token`]: query.token,
+            [`${curSysCode}-sysCode`]: query.sysCode
         });
     }
     handleCookies.setCookies({
-        username,
-        roleName,
-        btnList,
-        menuList: res.data.menulist,
+        [`${curSysCode}-username`]: username,
+        [`${curSysCode}-roleName`]: roleName,
+        [`${curSysCode}-btnList`]: btnList,
+        [`${curSysCode}-menuList`]: res.data.menulist
     });
     const loopFuc = (list) => {
         for (const item of list) {
-        const permission = res.data.menulist.find((lst, index, obj) => {
-            return lst.moduleCode === item.meta.menuCode;
-        });
+            const permission = res.data.menulist.find((lst, index, obj) => {
+                return lst.moduleCode === item.meta.menuCode;
+            });
 
-        if (permission) {
-            item.meta.permission = true;
-        }
-        if (item.children) loopFuc(item.children);
+            if (permission) {
+                item.meta.permission = true;
+            }
+            if (item.children) loopFuc(item.children);
         }
     };
 
@@ -63,33 +63,37 @@ const getUserData = async (next) => {
  * 路由配置
  * @param {meta: menuCode} String    路由（菜单）唯一的code
  * @param {meta: menuName} String    路由（菜单）名称
- * @param {meta: permission} Boolean    访问路由的权限
  * @param {meta: title} String     当前页面title
+ * @param {meta: permission} Boolean    访问路由的权限
+ * @param {meta: asOneMenu} Boolean     隐藏二级路由
  */
 const routes = [
     {
-        path:      '/',
-        component: Home,
-        children:  [
+        path: '/',
+        meta: {
+            menuCode: 'dashboard',
+            activeMenuCode: 'dashboard',
+            menuName: '主面板',
+            title: '主面板',
+            permission: true,
+            asOneMenu: true,
+        },
+        component: () => import('../views/home/Home.vue'),
+        children: [
             {
                 path: '/',
-                name: 'rule',
-                component: () => import('../views/home/rule/Rule.vue'),
+                name: 'dashboard',
                 meta: {
-                    menuCode: 'rule',
-                    menuName: '规则字段',
-                    title: '基础信息管理-规则字段',
-                    station: '基础信息管理-规则字段',
+                    menuCode: 'dashboard',
+                    activeMenuCode: 'dashboard',
+                    menuName: '主面板',
+                    title: '主面板',
+                    station: '主面板',
                     permission: false,
                 },
+                component: () => import('../views/home/dashboard/dashboard.vue'),
             },
         ],
-        meta: {
-            menuCode:   'baseInfo',
-            menuName:   '基础信息管理',
-            permission: true,
-            title:      '基础信息管理',
-        },
     },
 ];
 
@@ -100,6 +104,10 @@ const router = new VueRouter({
 });
 
 router.beforeEach((to, from, next) => {
+    if(window.isGetMenu) {
+        next();
+        return;
+    }
     getUserData(next);
 });
 

@@ -49,7 +49,7 @@ httpInstance.interceptors.request.use(config => {
 }, error => {
     window.$app.$message.error(error);
     return {
-        msg: error,
+        message: error,
     };
 });
 
@@ -58,7 +58,7 @@ httpInstance.interceptors.response.use(
     response => {
         // console.log('response:', response);
         const { config, data } = response;
-        
+
         // 登录信息失效或需要重新登录
         /* if (data.redirect) {
             // 跳转到登录页
@@ -81,26 +81,26 @@ httpInstance.interceptors.response.use(
         if (systemError !== false) {
             if (isCancel) {
                 // 主动取消弹窗提示
-                const msg = isCancel.msg ? `Cancel menually: ${isCancel.msg}` : 'Cancel menually';
+                const message = isCancel.message ? `Cancel menually: ${isCancel.message}` : 'Cancel menually';
 
-                $message.error(msg);
+                $message.error(message);
                 return {
                     code: 'canceled',
-                    msg,
+                    message,
                 };
             } else if (code === 'ECONNABORTED') {
                 // 捕获错误处理
-                const msg = 'request timeout !';
+                const message = 'request timeout !';
 
-                $message.error(msg);
+                $message.error(message);
                 return {
                     code: 'timeout',
-                    msg,
+                    message,
                 };
             } else if (response) {
                 // 全局错误处理
                 const status = +response.status;
-                const msg = `${status}: ${response.statusText}`;
+                const message = `${status}: ${response.statusText || message}`;
 
                 switch (status) {
                     case 401:
@@ -116,14 +116,14 @@ httpInstance.interceptors.response.use(
                         }, 500);
                         break;
                     /* case 504:
-                        $message.error(msg);
+                        $message.error(message);
                         break; */
                     default:
-                        $message.error(msg);
+                        $message.error(message);
                 }
                 return {
                     code: status,
-                    msg,
+                    message,
                 };
             } else if (message) {
                 // 跨域, 网络错误等情况
@@ -142,14 +142,14 @@ httpInstance.interceptors.response.use(
 let loadingCount = 0; // loading 层计数
 const btnQueue = {};  // 请求按钮队列
 const policy = {
-    isCancel(options, state, msg) {
+    isCancel (options, state, message) {
         if (state === true) {
             const cancelToken = cancelTokenQueue[`${options.url}`];
 
             if (cancelToken) {
                 cancelToken.cancel();
-                if (msg) {
-                    window.$app.$message.error(msg);
+                if (message) {
+                    window.$app.$message.error(message);
                 }
             }
         } else if (state === 'all') {
@@ -159,14 +159,14 @@ const policy = {
             }
         }
     },
-    urlTail(options) {
+    urlTail (options) {
         if (options.urltail) {
             const { url, urltail } = options;
 
             options.url = `${url}/${urltail.substr(0, 1) === '/' ? urltail.substr(1) : urltail}`;
         }
     },
-    btnState(btnState) {
+    btnState (btnState) {
         if (!btnState || !btnState.target) return;
 
         let srcElement = btnState.target.srcElement;
@@ -200,7 +200,7 @@ const policy = {
 
         return srcElement;
     },
-    loading(options) {
+    loading (options) {
         let loadingInstance = null;
 
         if (options.loading && loadingCount === 0) {
@@ -224,7 +224,7 @@ const baseService = (config = {}) => {
 
     policy.isCancel(options, isCancel);
     if (isCancel && isCancel.state) {
-        policy.isCancel(options, isCancel.state, isCancel.msg);
+        policy.isCancel(options, isCancel.state, isCancel.message);
     }
 
     const source = axios.CancelToken.source();
@@ -246,8 +246,8 @@ const baseService = (config = {}) => {
     // 默认设置 headers
     if (options.headers !== false) {
         options.headers = {
-            Authorization: query.token || handleCookies.getCookie('token') || '',
-            sysCode:       query.sysCode || handleCookies.getCookie('sysCode') || '',
+            Authorization: query.token || handleCookies.getCookie(`${window.sysCode}-token`) || '',
+            sysCode:       query.sysCode || handleCookies.getCookie(`${window.sysCode}-sysCode`) || '',
         };
     }
 

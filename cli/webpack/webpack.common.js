@@ -41,8 +41,6 @@ function resolveEntry () {
                             collapseWhitespace: true,
                             removeAttributeQuotes: true,
                         },
-                        chunksSortMode: 'dependency',
-                        inject: true,
                     }])
         }
     }

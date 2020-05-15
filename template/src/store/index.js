@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
-import { handleCookies } from '../services/common';
+import { handleCookies } from '../utils/common';
 Vue.use(Vuex);
 
 const state = {};
@@ -41,9 +41,9 @@ const actions = {
 
 const getters = {
     btnAuthority: (state) => (btnName) => {
-        const btnList = handleCookies.getCookie('btnList');
+        const btnList = handleCookies.getCookie(`${window.sysCode}-btnList`);
 
-        if(btnList && btnList.indexOf(btnName) > -1) {
+        if (btnList && btnList.indexOf(btnName) > -1) {
             return true;
         }
         return false;

@@ -25,29 +25,26 @@ const handleCookies = {
 
 const mapQuery = () => {
     const href = location.href;
-
     const queryIndex = href.indexOf('?');
-
     const result = {};
 
     if (queryIndex === -1) {
-      return false;
+        return false;
     } else {
-      const query = href.substring(queryIndex + 1);
+        const query = href.substring(queryIndex + 1);
+        const queryArr = query.split('&');
 
-      const queryArr = query.split('&');
+        for (const item of queryArr) {
+            const eq = item.indexOf('=');
 
-      for (const item of queryArr) {
-        const eq = item.indexOf('=');
+            const key = item.substring(0, eq),
+                value = item.substring(eq + 1);
 
-        const key = item.substring(0, eq),
-          value = item.substring(eq + 1);
-
-        result[key] = value;
-      }
+            result[key] = value;
+        }
     }
     return result;
-  };
+};
 
 const query = mapQuery();
 
@@ -61,7 +58,7 @@ export const isArray = (val) => {
     return toString.call(val) === '[object Array]';
 };
 
-function forEach(obj, fn) {
+function forEach (obj, fn) {
     // Don't bother if no value provided
     if (obj === null || typeof obj === 'undefined') {
         return;
@@ -100,7 +97,7 @@ export const deepMerge = (/* obj1, obj2, obj3, ... */...args) => {
     return target; */
     const result = {};
 
-    function assignValue(val, key) {
+    function assignValue (val, key) {
         if (typeof result[key] === 'object' && typeof val === 'object') {
             result[key] = deepMerge(result[key], val);
         } else {

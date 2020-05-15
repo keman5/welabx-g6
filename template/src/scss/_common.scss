@@ -1,8 +1,10 @@
 @import '_color.scss';
+
 * {
     padding: 0;
-    margin: 0;
+    margin : 0;
 }
+
 html,
 body {
     height: 100%;
@@ -10,34 +12,43 @@ body {
 
 // element ui menu
 .el-menu {
-    width: 100%;
+    width           : 100%;
     background-color: $aside-bg;
-    font-weight: bold;
+    font-weight     : bold;
+
     .el-submenu__title {
-        height: 40px;
+        height     : 40px;
         line-height: 40px;
-        color: $nav-text;
+        color      : $nav-text;
+
         &:hover {
             background-color: $nav-on-bg;
-            color: $nav-text; 
+            color           : $nav-text;
         }
+
         i {
             color: $nav-text;
         }
     }
+
     .el-menu-item {
-        height: 35px;
-        line-height: 35px;
+        height          : 35px;
+        line-height     : 35px;
         background-color: $aside-bg;
-        color: $nav-text;
-        &.is-active, &:hover {
+        color           : $nav-text;
+
+        &.is-active,
+        &:hover {
             background-color: $nav-on-bg;
-            color: $nav-text;
+            .menu-link {
+                color: $nav-on-text;
+            }
         }
     }
+
     .menu-link {
-        display: block;
-        color: $nav-text; 
+        display        : block;
+        color          : $nav-text;
         text-decoration: none;
     }
 }
@@ -46,13 +57,14 @@ body {
 .el-dialog__body {
     padding: 25px 20px;
 }
+
 .el-dialog__footer {
     padding-top: 0;
 }
 
 // element ui tab
 .el-tabs__item {
-    height: 30px;
+    height     : 30px;
     line-height: 30px;
 }
 
@@ -60,12 +72,15 @@ body {
 .text--primary {
     color: $primary;
 }
+
 .text--success {
     color: $success;
 }
+
 .text--warning {
     color: $warning;
 }
+
 .text--danger {
     color: $danger;
 }

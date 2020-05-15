@@ -2,7 +2,7 @@ import Vue from 'vue';
 import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
 import DyTable from './components/table/DyTable.vue';
-import Http from './services/http/http.js';
+import Http from './utils/http/http.js';
 import App from './App.vue';
 import router from './router';
 import store from './store/index';
@@ -11,8 +11,9 @@ import './scss/_main.scss';
 Vue.config.productionTip = false;
 
 Vue.use(ElementUI);
-Vue.component('dy-table',DyTable); // 全局注册自定义带分页的table组件
+Vue.component('dy-table', DyTable); // 全局注册自定义带分页的table组件
 
+window.sysCode = process.env.APP_SYSCODE;
 /**
  * api 请求地址
  */
@@ -39,7 +40,10 @@ window.loginLink = process.env[loginLink] + `?to=${href}`;
 window.tagLink = process.env[loginLink] + '/user';
 
 window.$app = new Vue({
-  router,
-  store,
-  render: h => h(App),
+    router,
+    store,
+    render: h => h(App),
+    mounted() {
+        window.isGetMenu = true;
+    }
 }).$mount('#app');

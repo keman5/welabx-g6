@@ -3,7 +3,7 @@
  * @date 2020/03/05
  */
 
-const path = require("path");
+const path = require('path');
 const boxen = require('boxen');
 const chalk = require('chalk');
 const shell = require('shelljs');

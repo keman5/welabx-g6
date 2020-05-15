@@ -26,12 +26,13 @@ coreConfig.devServer
 coreConfig
     // 注入环境变量
     .plugin('definePlugin')
-        .use(dotenvWebpack, {
-            path: `${process.env.INIT_CWD}/.env`,
-            defaults: false,
-            systemvars: true,
-            silent: true,
-        })
+        .use(webpack.DefinePlugin, [{
+            'process.env': require('dotenv-extended').load({
+                path: `${process.env.INIT_CWD}/.env`,
+            }),
+            'process.env.NODE_ENV':   JSON.stringify('development'),
+            'process.env.STAGE': JSON.stringify(`${STAGE.toUpperCase()}`),
+        }])
         .end()
     // 热更新
     .plugin('HotModuleReplacement')

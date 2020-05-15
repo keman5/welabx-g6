@@ -1,7 +1,8 @@
-import MenuList from './MenuList.vue'
+import MenuList from './MenuList.vue';
+
 export default {
     components: {
-        'menu-list': MenuList 
+        'menu-list': MenuList
     },
     data() {
         return {
@@ -11,15 +12,14 @@ export default {
     },
     mounted() {
         this.menuList = this.$router.options.routes;
-        this.currentMenu = this.$route.meta.menuCode;
-        console.log();
+        this.currentMenu = this.$route.meta.activeMenuCode;
     },
     watch: {
         '$route.path': function (val, oldVal) {
-          this.menuActive = this.$route.meta.menuCode;
+            this.menuActive = this.$route.meta.activeMenuCode;
         }
     },
     methods: {
-        
+
     },
 }

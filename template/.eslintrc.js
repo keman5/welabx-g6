@@ -102,7 +102,7 @@ module.exports = {
         // 强制提供基数 parseInt("071", 10)
         'radix': 2,
         // 不允许使用原子级变量更新, 例如 ctx.body = xxx; 改为 const _ctx = ctx; _ctx.body = xxx;
-        'require-atomic-updates': 2,
+        'require-atomic-updates': 0,
         // 强制使用分号
         'semi': [2, 'always'],
         // 一元运算符前后空格

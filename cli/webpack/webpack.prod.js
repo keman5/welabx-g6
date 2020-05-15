@@ -16,7 +16,6 @@ const WebpackMerge = require('webpack-merge');
 // 默认编译 prod
 const STAGE = (JSON.parse(process.env.npm_config_argv).cooked[2] || 'prod').replace(/(-|--)/,'');
 const { coreConfig, userConfig } = require('./webpack.common');
-// const env = {};
 
 console.log(boxen(`当前运行环境为 ${STAGE}`,
     {
@@ -31,12 +30,13 @@ console.log(boxen(`当前运行环境为 ${STAGE}`,
 coreConfig
     // 注入环境变量
     .plugin('definePlugin')
-        .use(dotenvWebpack, {
-            path: `${process.env.INIT_CWD}/.env`,
-            defaults: false,
-            systemvars: true,
-            silent: true,
-        })
+        .use(webpack.DefinePlugin, [{
+            'process.env': require('dotenv-extended').load({
+                path: `${process.env.INIT_CWD}/.env`,
+            }),
+            'process.env.NODE_ENV':   JSON.stringify('production'),
+            'process.env.STAGE': JSON.stringify(`${STAGE.toUpperCase()}`),
+        }])
         .end()
     .plugin('extra-css')
         .use(MiniCssExtractPlugin, [{
@@ -145,7 +145,8 @@ module.exports = WebpackMerge(finalConfig, {
                 loader:  'url-loader',
                 options: {
                     limit: 8192,    // 8k
-                    name:  'images/[name].[hash:7].[ext]',
+                    name: 'images/[name].[hash:7].[ext]',
+                    esModule: false,
                 },
             }],
             exclude: [],
@@ -156,6 +157,7 @@ module.exports = WebpackMerge(finalConfig, {
                 options: {
                     limit: 8192,    // 8k
                     name:  'fonts/[name].[hash:7].[ext]',
+                    esModule: false,
                 },
             }],
             exclude: [],

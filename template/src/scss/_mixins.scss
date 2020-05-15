@@ -1,52 +1,66 @@
 @mixin p($v, $n:0) {
+
     /*padding 处理*/
     @if $v=='t' {
         padding-top: $n;
     }
+
     @else if $v=='r' {
         padding-right: $n;
     }
+
     @else if $v=='b' {
         padding-bottom: $n;
     }
+
     @else if $v=='l' {
         padding-left: $n;
     }
+
     @else if $v=='tb' {
-        padding-top: $n;
+        padding-top   : $n;
         padding-bottom: $n;
     }
+
     @else if $v=='lr' {
-        padding-left: $n;
+        padding-left : $n;
         padding-right: $n;
     }
+
     @else {
         padding: $v;
     }
 }
 
 @mixin m($v, $n:0) {
+
     /*margin处理*/
     @if $v=='t' {
         margin-top: $n;
     }
+
     @else if $v=='r' {
         margin-right: $n;
     }
+
     @else if $v=='b' {
         margin-bottom: $n;
     }
+
     @else if $v=='l' {
         margin-left: $n;
     }
+
     @else if $v=='lr' {
-        margin-left: $n;
+        margin-left : $n;
         margin-right: $n;
     }
+
     @else if $v=='tb' {
-        margin-top: $n;
+        margin-top   : $n;
         margin-bottom: $n;
     }
+
     @else {
         margin: $v;
     }
@@ -56,42 +70,55 @@
     .p#{$v} {
         @include p($n)
     }
+
     .pt#{$v} {
         @include p('t', $n)
     }
+
     .pr#{$v} {
         @include p('r', $n)
     }
+
     .pb#{$v} {
         @include p('b', $n)
     }
+
     .pl#{$v} {
         @include p('l', $n)
     }
+
     .plr#{$v} {
         @include p('lr', $n)
     }
+
     .ptb#{$v} {
         @include p('tb', $n)
     }
+
     .m#{$v} {
         @include m($n)
     }
+
     .mt#{$v} {
         @include m('t', $n)
     }
+
     .mr#{$v} {
         @include m('r', $n)
     }
+
     .mb#{$v} {
         @include m('b', $n)
     }
+
     .ml#{$v} {
         @include m('l', $n)
     }
+
     .mlr#{$v} {
         @include m('lr', $n)
     }
+
     .mtb#{$v} {
         @include m('tb', $n)
     }
@@ -101,9 +128,11 @@
     .bold {
         font-weight: bold;
     }
+
     .fnormal {
         font-weight: normal;
     }
+
     /*字体处理*/
     @for $i from 10 through 30 {
         .f#{$i} {
@@ -116,42 +145,54 @@
     .flex-wrap {
         flex-wrap: wrap;
     }
+
     .flex-v-dir {
         flex-direction: column
     }
+
     .flex-h-dir {
         flex-direction: row
     }
+
     .flexbox {
         display: flex
     }
+
     .flexbox-v {
-        display: flex;
+        display       : flex;
         flex-direction: column
     }
+
     .flex-vhcenter,
     .flex-hvcenter {
-        align-items: center;
+        align-items    : center;
         justify-content: center;
     }
+
     .flex-vstart {
         align-items: flex-start;
     }
+
     .flex-vcenter {
         align-items: center;
     }
+
     .flex-hcenter {
         justify-content: center;
     }
+
     .flex-hbetween {
         justify-content: space-between;
     }
+
     .flex-haround {
         justify-content: space-around;
     }
+
     .flex-hend {
         justify-content: flex-end;
     }
+
     .align-self-end {
         align-self: flex-end;
     }
@@ -161,6 +202,7 @@
     .flex {
         flex: 1
     }
+
     @for $i from 1 through 18 {
         .flex#{$i} {
             flex: $i
@@ -172,12 +214,15 @@
     .text-r {
         text-align: right
     }
+
     .text-l {
         text-align: left
     }
+
     .text-c {
         text-align: center
     }
+
     .text-m {
         vertical-align: middle
     }
@@ -185,12 +230,12 @@
 
 @mixin ico-size($n, $v) {
     .ico#{$n} {
-        display: inline-block;
-        width: $v;
-        height: $v;
-        background-repeat: no-repeat;
-        position: relative;
-        background-size: contain;
+        display                : inline-block;
+        width                  : $v;
+        height                 : $v;
+        background-repeat      : no-repeat;
+        position               : relative;
+        background-size        : contain;
         -webkit-background-size: contain;
     }
 }
@@ -199,16 +244,21 @@
     .bor-ra#{$v} {
         border-radius: $v + 0px
     }
+
     $t:$v+0px;
+
     .bor-ra#{$v}-l {
         border-radius: 0 0 0 $t
     }
+
     .bor-ra#{$v}-r {
         border-radius: 0 $t 0 0
     }
+
     .bor-ra#{$v}-b {
         border-radius: 0 0 $t 0
     }
+
     .bor-ra#{$v}-t {
         border-radius: $t 0 0 0
     }
@@ -222,9 +272,9 @@
 
 // 多行文本溢出
 @mixin text-overflow($val) {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    display: -webkit-box;
+    overflow          : hidden;
+    text-overflow     : ellipsis;
+    display           : -webkit-box;
     -webkit-line-clamp: $val;
     -webkit-box-orient: vertical;
 }
