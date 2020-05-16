@@ -8,9 +8,6 @@ import registerFactory from './register-factory';
 
 class G6 {
   constructor(config = {}) {
-    // 注册插件等
-    config.beforeInit && config.beforeInit(config, G6ES);
-
     // 内部注册组件, 行为, 事件等
     registerFactory(G6ES);
 
@@ -41,7 +38,7 @@ class G6 {
       modes: {
         // 允许拖拽画布、缩放画布、拖拽节点
         default: [
-          'drag-canvas',
+          'drag-canvas', // 官方内置的行为
           // 'zoom-canvas',
           /* {
               type:    'click-select',
@@ -52,7 +49,7 @@ class G6 {
               enableDelegate: true,
           }, */
           // 'activate-relations',
-          'canvas-event',
+          'canvas-event', // 自定义行为
           'delete-item',
           'select-node',
           'hover-node',

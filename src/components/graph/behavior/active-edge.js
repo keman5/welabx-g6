@@ -1,6 +1,6 @@
 /**
  * @author claude
- * @date 2018/3/15
+ * @date 2019/3/15
  * @description 边激活事件
  */
 
@@ -8,7 +8,7 @@ export default G6 => {
   G6.registerBehavior('active-edge', {
     getDefaultCfg() {
       return {
-        editMode: false,
+        editMode: false, // 当前的编辑状态
       };
     },
     getEvents() {

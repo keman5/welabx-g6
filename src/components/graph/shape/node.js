@@ -47,7 +47,7 @@ export default G6 => {
   G6.registerNode('rect-node', {
     shapeType: 'rect',
     // 当前节点的样式集合
-    getShapeStyle(cfg) {
+    getShapeStyle (cfg) {
       const width = cfg.style.width || 80;
       const height = cfg.style.height || 40;
 

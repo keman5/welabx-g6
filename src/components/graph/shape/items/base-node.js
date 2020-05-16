@@ -1,6 +1,6 @@
 /**
  * @author claude
- * @date 2018/3/15
+ * @date 2019/3/15
  * @description 注册基础节点, 其他节点都在此基础上继承和扩展
  */
 
@@ -63,6 +63,7 @@ export default G6 => {
          * 中间层: 锚点
          * 最顶层: 锚点group, 用于事件触发
          */
+        // 视觉锚点
         const anchor = group.addShape('circle', {
           attrs: {
             x,
@@ -77,6 +78,7 @@ export default G6 => {
           index:     i,
         });
 
+        // 锚点事件触发的元素
         const anchorGroup = group.addShape('circle', {
           attrs: {
             x,
@@ -120,26 +122,24 @@ export default G6 => {
     addLabel (cfg, group) {
       const { label, labelCfg } = group.getFirst().attr();
 
-      if (label) {
-        // 字体小于12时 svg会报错
-        /* if (labelCfg && labelCfg.fontSize < 12) {
-          labelCfg.fontSize = 12;
-        } */
+      // 字体小于12时 svg会报错
+      /* if (labelCfg && labelCfg.fontSize < 12) {
+        labelCfg.fontSize = 12;
+      } */
 
-        group.addShape('text', {
-          attrs: {
-            x:    0,
-            y:    0,
-            text: label,
-            ...labelCfg,
-          },
-          className: 'node-text',
-          draggable: true,
-        });
-      }
+      group.addShape('text', {
+        attrs: {
+          x:    0,
+          y:    0,
+          text: label || '',
+          ...labelCfg,
+        },
+        className: 'node-text',
+        draggable: true,
+      });
     },
     /* 绘制节点，包含文本 */
-    draw (cfg, group) {
+    draw (cfg, group) { // 元素分组
       // 合并外部样式和默认样式
       const attrs = this.getShapeStyle(cfg, group);
       // 添加节点

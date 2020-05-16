@@ -62,6 +62,7 @@ const events = {
 
       this.getAnchorPoints({ anchorPoints }).forEach((p, i) => {
         const bbox = group.get('children')[0].getBBox();
+        // 激活元素
         const hotspot = group.addShape('circle', {
           zIndex: 0,
           attrs:  {
@@ -84,7 +85,7 @@ const events = {
           duration: 200,
         });
 
-        group.sort();
+        group.sort(); // 将group中的元素按照 zIndex 从大到小排序
         group.anchorShapes.push(hotspot);
       });
 

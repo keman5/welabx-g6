@@ -1,6 +1,6 @@
 /**
  * @author claude
- * @date 2018/3/15
+ * @date 2019/3/15
  * @description 注册基础edge, 其他edge都在此基础上继承和扩展
  */
 
