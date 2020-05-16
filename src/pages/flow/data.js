@@ -1,13 +1,13 @@
 export default {
   nodes: [
     {
-      id:   '1', // 非必选
+      id:   '1',
       data: {
         action: '初始化',
       },
-      x:     500, // 该元素在画布中的位置
+      x:     500,
       y:     100,
-      style: { // 节点样式
+      style: {
         fill:          '#39495b',
         lineDash:      [1, 2],
         shadowOffsetX: 0,
@@ -17,7 +17,7 @@ export default {
         width:         160,
         height:        70,
       },
-      label:    'new Vue()', // 节点上的文本
+      label:    'new Vue()',
       // node 文本默认样式
       labelCfg: {
         fill:         '#fff',
@@ -26,7 +26,6 @@ export default {
         fontWeight:   'bold',
         fontSize:     24,
       },
-      // 当前节点的多状态样式
       nodeStateStyles: {
         'nodeState:default': {
           fill: '#39495b',
@@ -340,4 +339,107 @@ export default {
       },
     },
   ],
+  /* nodes: [
+    {
+      id:    'Start',
+      label: '开始',
+      data:  {
+        type:       'start',
+        ruleName:   'Start',
+        ruleRemark: '',
+        ruleType:   '',
+        fieldType:  '',
+      },
+    },
+    {
+      id:    'id_check',
+      label: '身份证校验',
+      data:  {
+        type:       'rule',
+        ruleName:   'id_check',
+        ruleRemark: '身份证校验',
+        ruleType:   'RuleField',
+        fieldType:  'Integer',
+      },
+    },
+    {
+      id:    'BairongAmountCompoundField',
+      label: '百融评分提额',
+      data:  {
+        type:       'calculate',
+        ruleName:   'BairongAmountCompoundField',
+        ruleRemark: '百融评分提额',
+        ruleType:   'CompoundField',
+        fieldType:  'String',
+      },
+    },
+    {
+      id:    'AmountDecision',
+      label: '额度决策树',
+      data:  {
+        type:       'calculate',
+        ruleName:   'AmountDecision',
+        ruleRemark: '额度决策树',
+        ruleType:   'DecisionTree',
+        fieldType:  'Double',
+      },
+    },
+    {
+      id:    'End',
+      label: '结束',
+      data:  {
+        type:       'end',
+        ruleName:   'End',
+        ruleRemark: '',
+        ruleType:   '',
+        fieldType:  '',
+      },
+    },
+  ],
+  edges: [
+    {
+      source: 'Start',
+      target: 'id_check',
+      label:  '',
+      data:   { ruleTitle: '', nextStep: 'id_check' },
+    },
+    {
+      source: 'id_check',
+      label:  '身份证校验通过',
+      target: 'BairongAmountCompoundField',
+      data:   {
+        operator:   'equals',
+        fieldValue: '1',
+        ruleTitle:  '身份证校验通过',
+        nextStep:   'BairongAmountCompoundField',
+      },
+    },
+    {
+      source: 'id_check',
+      label:  '身份证校验未通过',
+      target: 'AmountDecision',
+      data:   {
+        operator:   'notEquals',
+        fieldValue: '1',
+        ruleTitle:  '身份证校验未通过',
+        nextStep:   'AmountDecision',
+      },
+    },
+    {
+      source: 'BairongAmountCompoundField',
+      label:  '计算提额额度',
+      target: 'AmountDecision',
+      data:   {
+        operator:  'calculate',
+        ruleTitle: '计算提额额度',
+        nextStep:  'AmountDecision',
+      },
+    },
+    {
+      source: 'AmountDecision',
+      label:  '计算额度',
+      target: 'End',
+      data:   { operator: 'calculate', ruleTitle: '计算额度', nextStep: 'End' },
+    },
+  ], */
 };

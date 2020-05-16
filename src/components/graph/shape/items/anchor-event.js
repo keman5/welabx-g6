@@ -45,7 +45,7 @@ export default (anchor, group, p) => {
 
       // 置于顶层
       group.toFront();
-      line.toFront();
+      line.toFront(); // 最后把这条线层级提升至最高
       anchorNodeId = id;
     }
   });

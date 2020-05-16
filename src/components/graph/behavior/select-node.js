@@ -24,8 +24,7 @@ export default G6 => {
       // 先将所有当前是 click 状态的节点/edge 置为非 selected 状态
       this._clearSelected();
       e.item.toFront();
-      // 获取被点击的节点元素对象, 设置当前节点的 click 状态为 true
-      // this.graph.setItemState(e.item, 'nodeState', 'selected');
+      // 获取被点击的节点元素对象, 设置当前节点的 click 状态为 selected
       e.item.setState('nodeState', 'selected');
       // 将点击事件发送给 graph 实例
       this.graph.emit('after-node-selected', e);
@@ -55,6 +54,7 @@ export default G6 => {
     },
     // 移出 node
     onNodeMouseLeave (e) {
+      // hasState 判断当前元素是否存在某种状态
       if (!e.item.hasState('nodeState:selected')) {
         e.item.clearStates('nodeState:hover');
       }

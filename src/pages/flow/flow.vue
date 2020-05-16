@@ -4,7 +4,7 @@
       id="headPanel"
       :class="{ hidden: headVisible }"
     >
-      <span class="logo">Vue 生命周期图示</span>
+      <span class="logo">请假审批工作流</span>
       <i
         class="gb-toggle-btn"
         @click="headVisible = !headVisible"
@@ -15,57 +15,6 @@
       :graph="graph"
       @canvas-add-node="addNode"
     />
-    <!-- 浮动工具条 -->
-    <!-- <div id="toolbar">
-      <i
-        class="iconfont icon-undo"
-        @click="addNode"
-      />
-      <i
-        class="iconfont icon-redo"
-        @click="addNode"
-      />
-      <i class="split" />
-      <i
-        class="iconfont icon-copy"
-        @click="copyNode"
-      />
-      <i
-        class="iconfont icon-paste"
-        @click="addNode"
-      />
-      <i class="split" />
-      <i
-        class="iconfont icon-line-style"
-        @click="addNode"
-      />
-      <i
-        class="iconfont icon-line-strong"
-        @click="addNode"
-      />
-      <i class="split" />
-      <i
-        class="iconfont icon-toup"
-        @click="addNode"
-      />
-      <i
-        class="iconfont icon-todown"
-        @click="addNode"
-      />
-      <i class="split" />
-      <i
-        class="iconfont icon-font-size"
-        @click="addNode"
-      />
-      <i
-        class="iconfont icon-actual-size"
-        @click="addNode"
-      />
-      <i
-        class="iconfont icon-full-screen"
-        @click="addNode"
-      />
-    </div> -->
     <!-- 挂载节点 -->
     <div
       id="canvasPanel"
@@ -98,31 +47,31 @@
           </select>
         </div>
         <div class="config-item">
-          背景色: <input :value="node.fill">
+          背景色: <input v-model="node.fill">
         </div>
         <div class="config-item">
-          边框虚线: <input :value="node.lineDash">
+          边框虚线: <input v-model="node.lineDash">
         </div>
         <div class="config-item">
-          边框颜色: <input :value="node.borderColor">
+          边框颜色: <input v-model="node.borderColor">
         </div>
         <div class="config-item">
-          宽: <input :value="node.width">px
+          宽: <input v-model="node.width">px
         </div>
         <div class="config-item">
-          高: <input :value="node.height">px
+          高: <input v-model="node.height">px
         </div>
       </div>
       <h2 class="panel-title">文字样式配置</h2>
       <div class="config-data">
         <div class="config-item">
-          文字: <input :value="label">
+          文字: <input v-model="label">
         </div>
         <div class="config-item">
-          字体大小: <input :value="labelCfg.fontSize">
+          字体大小: <input v-model="labelCfg.fontSize">
         </div>
         <div class="config-item">
-          颜色: <input :value="labelCfg.fill">
+          颜色: <input v-model="labelCfg.fill">
         </div>
       </div>
       <button @click="configVisible = false">取消</button>
@@ -146,7 +95,7 @@
 <script>
 import G6 from '../../components/graph/graph';
 import ItemPanel from './ItemPanel.vue';
-import data from './data.js';
+// import data from './data.js';
 
 export default {
   components: {
@@ -205,9 +154,11 @@ export default {
         x: 0,
         y: 0,
       },
+      selectedItem: null,
     };
   },
   mounted () {
+    document.title = '请假审批系统';
     // 创建画布
     this.$nextTick(() => {
       this.createGraphic();
@@ -222,7 +173,6 @@ export default {
       const graph = new G6({
         width:  window.innerWidth - 40,
         height: window.innerHeight - 40,
-        // renderer: 'svg',
         layout: {
           type: 'xxx', // 位置将固定
         },
@@ -272,16 +222,9 @@ export default {
       });
 
       this.graph = graph.instance;
-      this.graph.read(data); // 读取数据
-      this.graph.paint(); // 渲染到页面
-      // this.graph.fitView();
-      // 销毁实例
-      // graph.destroy();
+      // this.graph.read(data);
+      this.graph.paint();
     },
-    // 复制节点
-    copyNode () { },
-    // 粘贴节点
-    paste () { },
     // 添加节点
     addNode (e) {
       const model = {
@@ -290,8 +233,8 @@ export default {
         // 形状
         type: e.target.dataset.shape,
         // 坐标
-        x:    e.clientX - this.canvasOffset.x - 50,
-        y:    e.clientY - this.canvasOffset.y - 40,
+        x:    e.clientX + this.canvasOffset.x - 80,
+        y:    e.clientY + this.canvasOffset.y - 40,
       };
 
       this.graph.addItem('node', model);
@@ -303,20 +246,13 @@ export default {
         this.canvasOffset.y = e.dy;
       });
 
-      this.graph.on('on-node-mouseenter', e => {
-        if (e && e.item) {
-          // const model = e.item.get('model');
-
-          // model.style.fill = 'rgba(24, 144, 255, .3)';
-        }
-      });
-
       this.graph.on('after-node-selected', e => {
         this.configVisible = !!e;
 
         if (e && e.item) {
           const model = e.item.get('model');
 
+          this.selectedItem = e.item;
           this.config = model;
           this.label = model.label;
           this.labelCfg = {
@@ -387,9 +323,8 @@ export default {
       this.graph.on('before-node-removed', ({ target, callback }) => {
         console.log(target);
         setTimeout(() => {
-          // 确认提示
           callback(true);
-        }, 1000);
+        }, 100);
       });
 
       this.graph.on('after-node-dblclick', e => {
@@ -405,13 +340,15 @@ export default {
             target: target.get('id'),
             sourceAnchor,
             targetAnchor,
-            // label:  'edge label',
           });
         }, 100);
       });
     },
     save() {
-
+      this.graph.updateItem(this.selectedItem, {
+        label: this.label,
+      });
+      this.configVisible = false;
     },
   },
 };

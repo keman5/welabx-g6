@@ -2,10 +2,11 @@ export default G6 => {
   G6.registerBehavior('drag-node', {
     getDefaultCfg () {
       return {
-        // 记录当前拖拽模式
-        dragTarget:    'node',
-        dragStartNode: {},
-        distance:      [], // 鼠标距离节点中心位置的距离
+        sourceAnchorIndex: 0,
+        // 记录当前拖拽模式(拖拽目标可能是节点也可能是锚点)
+        dragTarget:        'node',
+        dragStartNode:     {},
+        distance:          [], // 鼠标距离节点中心位置的距离
       };
     },
     getEvents () {
@@ -51,7 +52,8 @@ export default G6 => {
     // 拖拽开始
     onDragStart (e) {
       if (e.target.cfg.isAnchor) {
-        // 拖拽锚点
+        // 拖拽锚点, 记录当前点击的锚点 index
+        this.sourceAnchorIndex = e.target.get('index');
       } else {
         // 拖拽节点
         e.item.toFront();
@@ -88,10 +90,11 @@ export default G6 => {
       if (this.dragStartNode.id && e.target.cfg.isAnchor && (this.dragStartNode.id !== e.target.cfg.nodeId)) {
 
         const sourceNode = this.dragStartNode.group.get('item');
+        const targetAnchorIndex = e.target.get('index');
         const edges = sourceNode.getOutEdges();
 
         const hasLinked = edges.find(edge => {
-          if (edge.get('target').get('id') === e.target.cfg.nodeId) {
+          if (edge.get('sourceAnchorIndex') === this.sourceAnchorIndex && edge.get('targetAnchorIndex') === targetAnchorIndex) {
             return true;
           }
         });
