@@ -120,23 +120,21 @@ export default G6 => {
     addLabel (cfg, group) {
       const { label, labelCfg } = group.getFirst().attr();
 
-      if (label) {
-        // 字体小于12时 svg会报错
-        /* if (labelCfg && labelCfg.fontSize < 12) {
-          labelCfg.fontSize = 12;
-        } */
+      // 字体小于12时 svg会报错
+      /* if (labelCfg && labelCfg.fontSize < 12) {
+        labelCfg.fontSize = 12;
+      } */
 
-        group.addShape('text', {
-          attrs: {
-            x:    0,
-            y:    0,
-            text: label,
-            ...labelCfg,
-          },
-          className: 'node-text',
-          draggable: true,
-        });
-      }
+      group.addShape('text', {
+        attrs: {
+          x:    0,
+          y:    0,
+          text: label || '',
+          ...labelCfg,
+        },
+        className: 'node-text',
+        draggable: true,
+      });
     },
     /* 绘制节点，包含文本 */
     draw (cfg, group) {
