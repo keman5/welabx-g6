@@ -95,7 +95,7 @@ module.exports = {
         // 有更新
         if (cloudVersion > localVersion) {
             console.log('\n');
-            console.log(boxen(`welabx脚手架项目模版 ${tempDependencies} 有新版可用\n${chalk.white('建议升级脚手架模版后重新创建项目')}\nnpm i ${tempDependencies} -g`,
+            console.log(boxen(`welabx-cli 脚手架项目模版 ${tempDependencies} 有新版可用\n${chalk.white('建议升级脚手架模版后重新创建项目')}\nnpm i ${tempDependencies} -g`,
                 {
                     padding: 1,
                     borderColor: 'red',

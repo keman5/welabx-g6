@@ -30,9 +30,9 @@ Object.keys(actionMap).forEach(action => {
 program.on('--help', () => {
     console.log(`\n例如:
     - 创建新项目:
-        welabx create
-        welabx create [app-project]
-        welabx create [-l|--local, -i|--install] [myproject]
+        welabx-cli create
+        welabx-cli create [vue-app]
+        welabx-cli create [-l|--local, -i|--install] [myproject]
         (-l|--local is optional, to disable check the update when create app)
         (-i|--install is optional, to install dependencies after create app)
     `);
