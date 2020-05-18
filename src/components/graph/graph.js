@@ -8,6 +8,9 @@ import registerFactory from './register-factory';
 
 class G6 {
   constructor(config = {}) {
+    // 注册插件等
+    config.beforeInit && config.beforeInit(config, G6ES);
+
     // 内部注册组件, 行为, 事件等
     registerFactory(G6ES);
 

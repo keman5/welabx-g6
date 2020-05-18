@@ -1,6 +1,6 @@
 /**
  * @author claude
- * @date 2019/3/15
+ * @date 2020/3/15
  * @description 注册基础edge, 其他edge都在此基础上继承和扩展
  */
 
@@ -49,6 +49,7 @@ function runAnimate (group) {
   // 获得当前边的第1个图形，这里是边本身的 path
   const path = group.get('children')[0];
   const endArrowShape = path.get('endArrowShape');
+  // const endArrowPath = endArrowShape.attrs.path;
   const arrowSize = endArrowShape ? Math.max(endArrowShape.get('bbox').width, endArrowShape.get('bbox').height) : 0;
   const startPoint = path.getPoint(0);
   const length = path.getTotalLength();
