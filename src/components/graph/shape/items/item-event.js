@@ -62,14 +62,15 @@ const events = {
 
       this.getAnchorPoints({ anchorPoints }).forEach((p, i) => {
         const bbox = group.get('children')[0].getBBox();
+        // 激活元素
         const hotspot = group.addShape('circle', {
           zIndex: 0,
           attrs:  {
             x:       bbox.minX + bbox.width * p[0],
             y:       bbox.minY + bbox.height * p[1],
             r:       0,
-            fill:    '#1890ff',
             opacity: 0.5,
+            fill:    '#1890ff',
             ...anchorHotsoptStyles,
           },
           nodeId:    group.get('item').get('id'),
@@ -84,7 +85,7 @@ const events = {
           duration: 200,
         });
 
-        group.sort();
+        group.sort(); // 将group中的元素按照 zIndex 从大到小排序
         group.anchorShapes.push(hotspot);
       });
 
@@ -190,7 +191,7 @@ const events = {
       if (activeStyle.animate === true) {
         this.runAnimate(group);
       } else if (typeof activeStyle.animate === 'function') {
-        activeStyle.animate(group);
+        activeStyle.animate.call(this, group);
       } else {
         setStyle(path, activeStyle);
         if (endArrow) {
@@ -205,7 +206,7 @@ const events = {
         // 停止动画
         this.stopAnimate(group);
       } else if (typeof activeStyle.animate === 'function') {
-        activeStyle.animate(group, 'stop');
+        activeStyle.animate.call(this, group, 'stop');
       } else {
         setStyle(path, defaultStyle);
         if (endArrow) {
@@ -233,7 +234,7 @@ const events = {
         this.runAnimate(group);
       } else if (typeof activeStyle.animate === 'function') {
         // 执行外部动画
-        activeStyle.animate(group);
+        activeStyle.animate.call(this, group);
       } else {
         setStyle(path, activeStyle);
         if (endArrow) {
@@ -249,7 +250,7 @@ const events = {
         this.stopAnimate(group);
       } else if (typeof activeStyle.animate === 'function') {
         // 停止外部动画
-        activeStyle.animate(group, 'stop');
+        activeStyle.animate.call(this, group, 'stop');
       } else {
         setStyle(path, defaultStyle);
         if (endArrow) {

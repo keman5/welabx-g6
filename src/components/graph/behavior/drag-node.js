@@ -2,10 +2,11 @@ export default G6 => {
   G6.registerBehavior('drag-node', {
     getDefaultCfg () {
       return {
-        // 记录当前拖拽模式
-        dragTarget:    'node',
-        dragStartNode: {},
-        distance:      [], // 鼠标距离节点中心位置的距离
+        sourceAnchorIndex: 0,
+        // 记录当前拖拽模式(拖拽目标可能是节点也可能是锚点)
+        dragTarget:        'node',
+        dragStartNode:     {},
+        distance:          [], // 鼠标距离节点中心位置的距离
       };
     },
     getEvents () {
@@ -50,8 +51,9 @@ export default G6 => {
     },
     // 拖拽开始
     onDragStart (e) {
-      if (e.target.cfg.isAnchor) {
-        // 拖拽锚点
+      if (e.target.get('isAnchor')) {
+        // 拖拽锚点, 记录当前点击的锚点 index
+        this.sourceAnchorIndex = e.target.get('index');
       } else {
         // 拖拽节点
         e.item.toFront();
@@ -88,10 +90,11 @@ export default G6 => {
       if (this.dragStartNode.id && e.target.cfg.isAnchor && (this.dragStartNode.id !== e.target.cfg.nodeId)) {
 
         const sourceNode = this.dragStartNode.group.get('item');
+        const targetAnchorIndex = e.target.get('index');
         const edges = sourceNode.getOutEdges();
 
         const hasLinked = edges.find(edge => {
-          if (edge.get('target').get('id') === e.target.cfg.nodeId) {
+          if (edge.get('sourceAnchorIndex') === this.sourceAnchorIndex && edge.get('targetAnchorIndex') === targetAnchorIndex) {
             return true;
           }
         });
@@ -120,7 +123,7 @@ export default G6 => {
 
       let attrs = {
         fillOpacity: 0.1,
-        fill:        'rgb(24, 144, 255, 1)',
+        fill:        '#1890FF',
         stroke:      '#1890FF',
         cursor:      'move',
         lineDash:    [4, 4],
@@ -181,23 +184,46 @@ export default G6 => {
     _nodeOnDrag (e, group) {
       // 记录鼠标拖拽时与图形中心点坐标的距离
       const item = group.get('item');
+      const pathAttrs = group.getFirst();
       const { width, height, centerX, centerY } = item.getBBox();
       const currentShape = item.get('currentShape');
       const { shapeType } = item.get('shapeFactory')[currentShape];
       const shadowNode = group.getItem('shadow-node');
 
       if (shapeType === 'path') {
+        const { type, direction } = pathAttrs.get('attrs');
         const dx = e.x - centerX - this.distance[0];
         const dy = e.y - centerY - this.distance[1];
+        const path = [['Z']];
+
+        switch (type) {
+          case 'diamond-node':
+            path.unshift(
+              ['M', dx, dy - height / 2], // 上顶点
+              ['L', dx + width / 2, dy], // 右侧顶点
+              ['L', dx, dy + height / 2], // 下顶点
+              ['L', dx - width / 2, dy], // 左侧顶点
+            );
+            break;
+          case 'triangle-node':
+            path.unshift(
+              ['L', dx + width / 2, dy], // 右侧顶点
+              ['L', dx - width / 2, dy], // 左侧顶点
+            );
+            if (direction === 'up') {
+              path.unshift(
+                ['M', dx, dy - height], // 上顶点
+              );
+            } else {
+              path.unshift(
+                ['M', dx, dy + height], // 下顶点
+              );
+            }
+            break;
+        }
 
         shadowNode.attr({
-          path: [
-            ['M', dx, dy - height / 2], // 上部顶点
-            ['L', dx + width / 2, dy], // 右侧顶点
-            ['L', dx, dy + height / 2], // 下部顶点
-            ['L', dx - width / 2, dy], // 左侧顶点
-            ['Z'], // 封闭
-          ],
+          path,
         });
       } else {
         shadowNode.attr({
@@ -218,6 +244,7 @@ export default G6 => {
       const shadowNode = group.getItem('shadow-node');
       const currentShape = node.get('currentShape');
       const { shapeType } = node.get('shapeFactory')[currentShape];
+      const { type, direction } = group.getFirst().get('attrs');
       const coords = {
         x: 0,
         y: 0,
@@ -236,6 +263,13 @@ export default G6 => {
         case 'path':
           coords.x = e.x - this.distance[0];
           coords.y = e.y - this.distance[1];
+          if (type === 'triangle-node') {
+            if (direction === 'up') {
+              coords.y += height / 2;
+            } else {
+              coords.y -= height / 2;
+            }
+          }
           break;
       }
 

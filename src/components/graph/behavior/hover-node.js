@@ -7,10 +7,12 @@ export default G6 => {
       };
     },
     onNodeEnter (e) {
-      this.graph.setItemState(e.item, 'anchorShow', true);
+      // 显示当前节点的锚点
+      e.item.setState('anchorShow', true); // 二值状态
     },
     onNodeLeave (e) {
-      this.graph.setItemState(e.item, 'anchorShow', false);
+      // 将锚点再次隐藏
+      e.item.setState('anchorShow', false); // 二值状态
     },
   });
 };

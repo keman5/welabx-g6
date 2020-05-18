@@ -1,6 +1,6 @@
 /**
  * @author claude
- * @date 2018/3/15
+ * @date 2020/3/15
  * @description 注册基础节点, 其他节点都在此基础上继承和扩展
  */
 
@@ -49,20 +49,23 @@ export default G6 => {
       };
     },
     drawAnchor (cfg, group) {
-      const { anchorPointStyles } = group.getFirst().attr();
+      const { type, direction, anchorPointStyles } = group.getFirst().attr();
       const item = group.get('children')[0];
       const bBox = item.getBBox();
 
       // 绘制锚点坐标
       this.getAnchorPoints(cfg).forEach((p, i) => {
+        const diff = type === 'triangle-node' ? (direction === 'up' ? 1 : 0) : 0.5;
         const x = bBox.width * (p[0] - 0.5);
-        const y = bBox.height * (p[1] - 0.5);
+        const y = bBox.height * (p[1] - diff);
+
         /**
          * 绘制三层锚点
          * 最底层: 锚点bg
          * 中间层: 锚点
          * 最顶层: 锚点group, 用于事件触发
          */
+        // 视觉锚点
         const anchor = group.addShape('circle', {
           attrs: {
             x,
@@ -77,6 +80,7 @@ export default G6 => {
           index:     i,
         });
 
+        // 锚点事件触发的元素
         const anchorGroup = group.addShape('circle', {
           attrs: {
             x,
@@ -137,7 +141,7 @@ export default G6 => {
       });
     },
     /* 绘制节点，包含文本 */
-    draw (cfg, group) {
+    draw (cfg, group) { // 元素分组
       // 合并外部样式和默认样式
       const attrs = this.getShapeStyle(cfg, group);
       // 添加节点
@@ -153,17 +157,12 @@ export default G6 => {
       };
       // 添加文本节点
       this.addLabel(cfg, group);
-
       // 添加图标
       this.drawIcon(cfg, group);
       // 添加锚点
       this.initAnchor(cfg, group);
 
       return shape;
-    },
-    /* 绘制后的附加操作，默认没有任何操作 */
-    afterDraw (cfg, group) {
-      //
     },
     /* 更新节点，包含文本 */
     update (cfg, node) {

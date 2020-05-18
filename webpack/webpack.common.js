@@ -39,7 +39,12 @@ if (webpackEnv.envParams.log !== undefined) {
 const cssloaders = [
   'css-loader',
   'postcss-loader',
-  'sass-loader',
+  {
+    loader:  'sass-loader',
+    options: {
+      implementation: require('dart-sass'),
+    },
+  },
   {
     loader:  'sass-resources-loader',
     options: {

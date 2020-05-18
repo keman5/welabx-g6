@@ -1,6 +1,6 @@
 {
   "name": "welabx-g6",
-  "version": "0.3.5",
+  "version": "0.3.7-2",
   "description": "welabx - antv G6",
   "main": "src/components/graph/graph.js",
   "scripts": {
@@ -37,6 +37,7 @@
     "compression-webpack-plugin": "^4.0.0",
     "cross-env": "^7.0.2",
     "css-loader": "^3.5.3",
+    "dart-sass": "^1.25.0",
     "eslint": "^7.0.0",
     "eslint-friendly-formatter": "^4.0.1",
     "eslint-loader": "^4.0.2",
@@ -48,7 +49,6 @@
     "html-webpack-tags-plugin": "^2.0.17",
     "mime": "^2.4.5",
     "mini-css-extract-plugin": "^0.9.0",
-    "node-sass": "^4.14.1",
     "optimize-css-assets-webpack-plugin": "^5.0.3",
     "ora": "^4.0.4",
     "postcss-loader": "^3.0.0",
@@ -60,8 +60,8 @@
     "url-loader": "^4.1.0",
     "vue": "^2.6.11",
     "vue-loader": "^15.9.2",
-    "vue-template-compiler": "^2.6.11",
     "vue-router": "^3.1.6",
+    "vue-template-compiler": "^2.6.11",
     "webpack": "^4.43.0",
     "webpack-bundle-analyzer": "^3.7.0",
     "webpack-cli": "^3.3.11",
