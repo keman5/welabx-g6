@@ -51,7 +51,7 @@ export default G6 => {
     },
     // 拖拽开始
     onDragStart (e) {
-      if (e.target.cfg.isAnchor) {
+      if (e.target.get('isAnchor')) {
         // 拖拽锚点, 记录当前点击的锚点 index
         this.sourceAnchorIndex = e.target.get('index');
       } else {
@@ -123,7 +123,7 @@ export default G6 => {
 
       let attrs = {
         fillOpacity: 0.1,
-        fill:        'rgb(24, 144, 255, 1)',
+        fill:        '#1890FF',
         stroke:      '#1890FF',
         cursor:      'move',
         lineDash:    [4, 4],
@@ -184,23 +184,46 @@ export default G6 => {
     _nodeOnDrag (e, group) {
       // 记录鼠标拖拽时与图形中心点坐标的距离
       const item = group.get('item');
+      const pathAttrs = group.getFirst();
       const { width, height, centerX, centerY } = item.getBBox();
       const currentShape = item.get('currentShape');
       const { shapeType } = item.get('shapeFactory')[currentShape];
       const shadowNode = group.getItem('shadow-node');
 
       if (shapeType === 'path') {
+        const { type, direction } = pathAttrs.get('attrs');
         const dx = e.x - centerX - this.distance[0];
         const dy = e.y - centerY - this.distance[1];
+        const path = [['Z']];
+
+        switch (type) {
+          case 'diamond-node':
+            path.unshift(
+              ['M', dx, dy - height / 2], // 上顶点
+              ['L', dx + width / 2, dy], // 右侧顶点
+              ['L', dx, dy + height / 2], // 下顶点
+              ['L', dx - width / 2, dy], // 左侧顶点
+            );
+            break;
+          case 'triangle-node':
+            path.unshift(
+              ['L', dx + width / 2, dy], // 右侧顶点
+              ['L', dx - width / 2, dy], // 左侧顶点
+            );
+            if (direction === 'up') {
+              path.unshift(
+                ['M', dx, dy - height], // 上顶点
+              );
+            } else {
+              path.unshift(
+                ['M', dx, dy + height], // 下顶点
+              );
+            }
+            break;
+        }
 
         shadowNode.attr({
-          path: [
-            ['M', dx, dy - height / 2], // 上部顶点
-            ['L', dx + width / 2, dy], // 右侧顶点
-            ['L', dx, dy + height / 2], // 下部顶点
-            ['L', dx - width / 2, dy], // 左侧顶点
-            ['Z'], // 封闭
-          ],
+          path,
         });
       } else {
         shadowNode.attr({
@@ -221,6 +244,7 @@ export default G6 => {
       const shadowNode = group.getItem('shadow-node');
       const currentShape = node.get('currentShape');
       const { shapeType } = node.get('shapeFactory')[currentShape];
+      const { type, direction } = group.getFirst().get('attrs');
       const coords = {
         x: 0,
         y: 0,
@@ -239,6 +263,13 @@ export default G6 => {
         case 'path':
           coords.x = e.x - this.distance[0];
           coords.y = e.y - this.distance[1];
+          if (type === 'triangle-node') {
+            if (direction === 'up') {
+              coords.y += height / 2;
+            } else {
+              coords.y -= height / 2;
+            }
+          }
           break;
       }
 

@@ -222,7 +222,36 @@ export default {
       });
 
       this.graph = graph.instance;
-      // this.graph.read(data);
+      this.graph.read({
+        nodes: [{
+          data: {
+            action: '初始化',
+          },
+          type:  'triangle-node',
+          // direction: 'down',
+          x:     500,
+          y:     100,
+          style: { // 节点样式
+            fill: '#39495b',
+          },
+          label:    '',
+          labelCfg: {
+            textAlign:    'center',
+            textBaseline: 'middle',
+            fontWeight:   'bold',
+            fontSize:     10,
+          },
+          /* anchorPoints: [
+            [1, 0],
+          ], */
+        }, {
+          data: {
+            action: '初始化',
+          },
+          x: 200,
+          y: 100,
+        }],
+      });
       this.graph.paint();
     },
     // 添加节点

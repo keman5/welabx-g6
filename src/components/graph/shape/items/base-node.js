@@ -49,14 +49,16 @@ export default G6 => {
       };
     },
     drawAnchor (cfg, group) {
-      const { anchorPointStyles } = group.getFirst().attr();
+      const { type, direction, anchorPointStyles } = group.getFirst().attr();
       const item = group.get('children')[0];
       const bBox = item.getBBox();
 
       // 绘制锚点坐标
       this.getAnchorPoints(cfg).forEach((p, i) => {
+        const diff = type === 'triangle-node' ? (direction === 'up' ? 1 : 0) : 0.5;
         const x = bBox.width * (p[0] - 0.5);
-        const y = bBox.height * (p[1] - 0.5);
+        const y = bBox.height * (p[1] - diff);
+
         /**
          * 绘制三层锚点
          * 最底层: 锚点bg
@@ -155,17 +157,12 @@ export default G6 => {
       };
       // 添加文本节点
       this.addLabel(cfg, group);
-
       // 添加图标
       this.drawIcon(cfg, group);
       // 添加锚点
       this.initAnchor(cfg, group);
 
       return shape;
-    },
-    /* 绘制后的附加操作，默认没有任何操作 */
-    afterDraw (cfg, group) {
-      //
     },
     /* 更新节点，包含文本 */
     update (cfg, node) {

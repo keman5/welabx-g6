@@ -20,11 +20,13 @@ export default (anchor, group, p) => {
   // 拖拽事件
   anchor.on('dragstart', e => {
     if (anchorNodeId == null) {
+      const { type, direction } = group.getFirst().attr();
+      const diff = type === 'triangle-node' ? (direction === 'up' ? 1 : 0) : 0.5;
       const bBox = group.get('item').getBBox();
       const id = group.get('item').get('id');
       const point = [
         bBox.width * (p[0] - 0.5), // x
-        bBox.height * (p[1] - 0.5), // y
+        bBox.height * (p[1] - diff), // y
       ];
 
       dragLog = [e.x, e.y];
@@ -52,10 +54,12 @@ export default (anchor, group, p) => {
 
   // 拖拽中
   anchor.on('drag', e => {
+    const { type, direction } = group.getFirst().attr();
     const canvasBox = group.get('children')[0].get('canvasBox');
+    const diff = type === 'triangle-node' ? (direction === 'up' ? canvasBox.height : 0) : canvasBox.height / 2;
     const line = group.getItem('dashed-line');
     const pointStart = line.get('pointStart');
-    const endPoint = [e.x - canvasBox.x - canvasBox.width / 2, e.y - canvasBox.y - canvasBox.height / 2];
+    const endPoint = [e.x - canvasBox.x - canvasBox.width / 2, e.y - canvasBox.y - diff];
 
     line.toFront();
     /**

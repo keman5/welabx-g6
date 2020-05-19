@@ -104,23 +104,26 @@ export default {
       id:    '4',
       x:     500,
       y:     450,
+      type:  'triangle-node',
       label: '初始化\n注入 & 校验',
+      // direction: 'down',
       style: {
-        width:     200,
-        height:    60,
         fill:      '#65b586',
+        size:      [100, 160],
         lineWidth: 0,
       },
       labelCfg: {
-        fontSize:  18,
+        fontSize:  12,
         fill:      '#fff',
+        stroke:    '#65b586',
         textAlign: 'left',
-        x:         -45,
+        x:         -30,
+        y:         -20,
       },
-      /* anchorPointsStyles: [
-        {
-          fill: '#fff',
-        },
+      /* anchorPoints: [
+        [1, 0],
+        [0, 0],
+        [0.5, 1],
       ], */
     },
     {

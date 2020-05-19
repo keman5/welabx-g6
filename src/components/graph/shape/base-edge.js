@@ -75,10 +75,12 @@ function runAnimate (group) {
           const tmpPoint = path.getPoint(ratio);
           const opacity = length - length * ratio >= arrowSize ? 1 : 0;
 
+          // ! 必须设置这个属性为false, 否则当起始位置落在画布外时将无法播放动画
+          circle.set('hasChanged', false);
+
           // 返回需要变化的参数集，这里返回了位置 x 和 y
           return {
-            x: tmpPoint.x,
-            y: tmpPoint.y,
+            ...tmpPoint,
             opacity,
           };
         },
@@ -112,53 +114,22 @@ function stopAnimate (group) {
   this.running = false;
 }
 
+// 继承方法
+function inheritEdge (G6, name) {
+  G6.registerEdge(`${name}-edge`, {
+    running: false,
+    runners: [],
+    drawShape,
+    setState,
+    runAnimate,
+    stopAnimate,
+  }, name);
+}
+
 export default G6 => {
-  // 直线
-  G6.registerEdge('line-edge', {
-    running: false,
-    runners: [],
-    drawShape,
-    setState,
-    runAnimate,
-    stopAnimate,
-  }, 'line');
+  const edgeArray = ['line', 'polyline', 'quadratic', 'cubic', 'arc'];
 
-  // 折线
-  G6.registerEdge('polyline-edge', {
-    running: false,
-    runners: [],
-    drawShape,
-    setState,
-    runAnimate,
-    stopAnimate,
-  }, 'polyline');
-
-  // 二次贝塞尔曲线
-  G6.registerEdge('quadratic-edge', {
-    running: false,
-    runners: [],
-    drawShape,
-    setState,
-    runAnimate,
-    stopAnimate,
-  }, 'quadratic');
-
-  // 三次贝塞尔曲线
-  G6.registerEdge('cubic-edge', {
-    running: false,
-    runners: [],
-    drawShape,
-    setState,
-    runAnimate,
-    stopAnimate,
-  }, 'cubic');
-
-  G6.registerEdge('arc-edge', {
-    running: false,
-    runners: [],
-    drawShape,
-    setState,
-    runAnimate,
-    stopAnimate,
-  }, 'arc');
+  edgeArray.forEach(edge => {
+    inheritEdge(G6, edge);
+  });
 };
