@@ -16,7 +16,6 @@ export default G6 => {
         'node:dragstart': 'onDragStart',
         'node:drag':      'onDrag',
         'node:dragend':   'onDragEnd',
-        'node:dragenter': 'onDragEnter',
         'node:drop':      'onDrop',
       };
     },

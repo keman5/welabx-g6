@@ -267,6 +267,8 @@ export default {
           });
 
           cfg.plugins = [minimap];
+
+          return new G6.Graph(cfg);
         },
         // ... 其他G6原生入参
       });
@@ -274,7 +276,7 @@ export default {
       this.graph = graph.instance;
       this.graph.read(data); // 读取数据
       this.graph.paint(); // 渲染到页面
-      this.graph.get('canvas').set('localRefresh', false); // 关闭局部渲染
+      // this.graph.get('canvas').set('localRefresh', false); // 关闭局部渲染
       // this.graph.fitView();
       // 销毁实例
       // graph.destroy();

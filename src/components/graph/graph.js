@@ -8,13 +8,14 @@ import registerFactory from './register-factory';
 
 class G6 {
   constructor(config = {}) {
-    // 内部注册组件, 行为, 事件等
-    registerFactory(G6ES);
+    if (config.registerFactory) {
+      // 内部注册组件, 行为, 事件等
+      registerFactory(G6ES);
 
-    // 外部自定义行为/事件等
-    config.registerFactory && config.registerFactory(G6ES, config);
-
-    this.init(config);
+      this.init(config);
+    } else {
+      console.warn('registerFactory 方法未定义');
+    }
   }
 
   init (config) {
@@ -27,7 +28,7 @@ class G6 {
       animate:        true,
       animateCfg:     {
         duration: 500,
-        easing:   'linearEasing',
+        easing:   'easeLinear',
       },
       layout: {
         type:    'dagre',
@@ -109,22 +110,27 @@ class G6 {
       },
     }, config);
 
-    if (config.plugins && config.plugins.length) {
-      options.plugins = config.plugins;
+    delete options.registerFactory;
+
+    // 外部自定义行为/事件等
+    const instance = config.registerFactory(G6ES, options);
+
+    if (instance) {
+      this.instance = instance;
+
+      const { el } = this.instance.cfg.canvas.cfg;
+
+      el.id = `${options.container}-canvas`;
+      el.setAttribute('dx', 0);
+      el.setAttribute('dy', 0);
+
+      document.addEventListener('click', e => {
+        // 内部键盘事件是否可被触发
+        el.setAttribute('isFocused', e.target.id === el.id);
+      });
+    } else {
+      console.warn('未返回G6实例');
     }
-
-    this.instance = new G6ES.Graph(options);
-
-    const { el } = this.instance.cfg.canvas.cfg;
-
-    el.id = `${options.container}-canvas`;
-    el.setAttribute('dx', 0);
-    el.setAttribute('dy', 0);
-
-    document.addEventListener('click', e => {
-      // 内部键盘事件是否可被触发
-     el.setAttribute('isFocused', e.target.id === el.id);
-    });
   }
 
   // 销毁实例

@@ -217,6 +217,8 @@ export default {
           });
 
           cfg.plugins = [minimap];
+
+          return new G6.Graph(cfg);
         },
         // ... 其他G6原生入参
       });
