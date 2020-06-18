@@ -385,7 +385,7 @@ npm run dev
 - 也可以通过监听 on-canvas-dragend 事件获取画布相对于渲染时的偏移量
 - !!全局默认样式和多状态样式支持被单个节点或边的配置覆盖了
 
-### [0.4.1] 2020-06-08
+### [0.4.2] 2020-06-19
 
 - [fix] 添加过的边不会重复添加了
 - [fix] 边落在画布外时动画不会停止了
@@ -394,3 +394,75 @@ npm run dev
 - [upgrade] 升级G6 到 3.5.x 版本
 - [upgrade] !! 从 0.4.1 开始, 内部自动注册 G6.Graph实例, 可在 registerFactory 方法中 return new G6.TreeGraph(config) 来自定义不同的实例.
 - [issue] 安装g6依赖时经常因版本不同而出现报错, 如出现 "transform" of undefined 报错, 请手动安装 @antv/g-base@0.4.6 版本, 出现类似报错请自行排查依赖项
+- [add] 新增全局节点配置项 anchorControls 用于控制锚点行为, 暂时只支持 hide 字段, 后续讲进行扩展.
+
+  ```js
+    defaultNode: {
+      anchorControls: {
+        hide: true, // 隐藏所有锚点
+      },
+    }
+  ```
+
+- [add] 新增 modelRect-node 类型节点, 支持添加多行标签及相应样式, 该配置与官方不尽相同, 请留意.
+
+  ```js
+    nodes: [{
+      type:  'modelRect-node',
+      style: {
+        fill: '#fff',
+      },
+      // 左侧方条
+      preRect: {
+        show: true, // 是否显示左侧方条
+        width: 4,
+        fill: '#40a9ff',
+        radius: 2,
+      },
+      // logo图标
+      logoIcon: {
+        show: true, // 是否显示图标
+        x: 0, // 控制图标在横轴上的位置
+        y: 0, // 控制图标在纵轴上的位置
+        // url 用于图标地址, 也支持 iconfont
+        img: 'https://gw.alipayobjects.com/zos/basement_prod/4f81893c-1806-4de4-aff3-9a6b266bc8a2.svg',
+        width: 16,
+        height: 16,
+      },
+      // 状态图标
+      stateIcon: {
+        show: true, // 是否显示图标
+        x: 0,       // 控制图标在横轴上的位置
+        y: 0,       // 控制图标在纵轴上的位置
+        // url 用于图标地址, 也支持 iconfont
+        img: 'https://gw.alipayobjects.com/zos/basement_prod/4f81893c-1806-4de4-aff3-9a6b266bc8a2.svg',
+        width: 16,
+        height: 16,
+      },
+      // 这里是数组! 这里是数组! 这里是数组!
+      labels: [{
+        label: '标题,最长10个字符~~',
+        labelCfg: {
+          textBaseline: 'middle',
+          fontWeight:   'bold',
+          maxlength: 10, // 超出10个字符显示省略号
+          fontSize: 14,
+          fill: '#666',
+        }
+      }, {
+        label: '描述描述',
+        labelCfg: {
+          maxlength: 12,
+          fontSize: 12,
+          fill: '#999',
+        }
+      }, {
+        label: '第三行,最长16个字符,超出显示省略号~~~',
+        labelCfg: {
+          maxlength: 16,
+          fontSize: 10,
+          fill: '#ccc',
+        }
+      }],
+    }]
+  ```

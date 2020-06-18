@@ -184,6 +184,10 @@ export default {
           labelCfg: {
             fontSize: 20,
           },
+          // 锚点控制字段
+          anchorControls: {
+            hide: true,
+          },
         },
         // 覆盖全局样式
         nodeStateStyles: {
@@ -217,11 +221,11 @@ export default {
           });
 
           cfg.plugins = [minimap];
-
-          return new G6.Graph(cfg);
         },
         // ... 其他G6原生入参
       });
+
+      // - [mod] * 为保证与官方api的一致性, 特地将 labelCfg 中的样式移动到了 labelCfg.style 中, 请自行修改数据结构
 
       this.graph = graph.instance;
       this.graph.read({
@@ -229,29 +233,47 @@ export default {
           data: {
             action: '初始化',
           },
-          type:  'triangle-node',
-          // direction: 'down',
-          x:     500,
-          y:     100,
+          type:  'modelRect-node',
+          x:     400,
+          y:     200,
           style: { // 节点样式
-            fill: '#39495b',
+            // fill: '#39495b',
           },
-          label:    '',
-          labelCfg: {
-            textAlign:    'center',
-            textBaseline: 'middle',
-            fontWeight:   'bold',
-            fontSize:     10,
+          // 左侧方条
+          preRect: {
+            show:   true, // 是否显示左侧方条
+            width:  4,
+            fill:   '#40a9ff',
+            radius: 2,
           },
-          /* anchorPoints: [
-            [1, 0],
-          ], */
-        }, {
-          data: {
-            action: '初始化',
-          },
-          x: 200,
-          y: 100,
+          labels: [{
+            x:        -70,
+            y:        -10,
+            label:    '标题,最长10个字符~~',
+            labelCfg: {
+              fill:      '#666',
+              fontSize:  14,
+              maxlength: 10,
+            },
+          }, {
+            x:        -70,
+            y:        7,
+            label:    '描述,最长12个字符~~~',
+            labelCfg: {
+              fontSize:  12,
+              fill:      '#999',
+              maxlength: 12,
+            },
+          }, {
+            x:        -70,
+            y:        24,
+            label:    '第三行,最长16个字符,超出显示省略号~~~',
+            labelCfg: {
+              fontSize:  10,
+              fill:      '#ccc',
+              maxlength: 16,
+            },
+          }],
         }],
       });
       this.graph.paint();

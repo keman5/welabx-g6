@@ -4,7 +4,7 @@
  * @description 注册基础edge, 其他edge都在此基础上继承和扩展
  */
 
-import itemEvents from './items/item-event';
+import itemEvents from '../items/item-event';
 
 /*
  * flow:

@@ -52,9 +52,10 @@ export default G6 => {
       const { type, direction, anchorPointStyles } = group.getFirst().attr();
       const item = group.get('children')[0];
       const bBox = item.getBBox();
+      const anchors = this.getAnchorPoints(cfg);
 
       // 绘制锚点坐标
-      this.getAnchorPoints(cfg).forEach((p, i) => {
+      anchors && anchors.forEach((p, i) => {
         const diff = type === 'triangle-node' ? (direction === 'up' ? 1 : 0) : 0.5;
         const x = bBox.width * (p[0] - 0.5);
         const y = bBox.height * (p[1] - diff);
@@ -140,6 +141,40 @@ export default G6 => {
         draggable: true,
       });
     },
+    drawModelRect (cfg, group, attrs) {
+      const { labels, preRect, width, height } = attrs;
+
+      if (preRect) {
+        group.addShape('rect', {
+          attrs: {
+            x: -width / 2,
+            y: -height / 2,
+            height,
+            ...preRect,
+          },
+          draggable: true,
+        });
+      }
+      labels.forEach(item => {
+        const { label, labelCfg: { maxlength } } = item;
+
+        let text = maxlength ? label.substr(0, maxlength) : text || '';
+
+        if (label.length > maxlength) {
+          text = `${text}...`;
+        }
+
+        group.addShape('text', {
+          attrs: {
+            text,
+            ...item,
+            ...item.labelCfg,
+          },
+          className: 'node-text',
+          draggable: true,
+        });
+      });
+    },
     /* 绘制节点，包含文本 */
     draw (cfg, group) { // 元素分组
       // 合并外部样式和默认样式
@@ -155,10 +190,15 @@ export default G6 => {
       group.getItem = className => {
         return group.get('children').find(item => item.get('className') === className);
       };
-      // 添加文本节点
-      this.addLabel(cfg, group);
-      // 添加图标
-      this.drawIcon(cfg, group);
+
+      if (cfg.type === 'modelRect-node') {
+        this.drawModelRect(cfg, group, attrs);
+      } else {
+        // 添加文本节点
+        this.addLabel(cfg, group);
+        // 添加图标
+        this.drawIcon(cfg, group);
+      }
       // 添加锚点
       this.initAnchor(cfg, group);
 
