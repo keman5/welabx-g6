@@ -5,6 +5,12 @@
       :class="{ hidden: headVisible }"
     >
       <span class="logo">Vue 生命周期图示</span>
+      <router-link
+        :to="{ path: '/tree' }"
+        style="float:right; text-decoration:underline; color:#1890FF; font-size: 16px;"
+      >
+        脑图
+      </router-link>
       <i
         class="gb-toggle-btn"
         @click="headVisible = !headVisible"
@@ -220,10 +226,11 @@ export default {
   methods: {
     createGraphic () {
       const graph = new G6({
-        width:  window.innerWidth - 40,
-        height: window.innerHeight - 40,
+        width:     window.innerWidth - 40,
+        height:    window.innerHeight - 40,
+        fitCenter: true,
         // renderer: 'svg',
-        layout: {
+        layout:    {
           type: 'xxx', // 位置将固定
         },
         defaultNode: {
@@ -273,7 +280,7 @@ export default {
 
       this.graph = graph.instance;
       this.graph.read(data); // 读取数据
-      this.graph.paint(); // 渲染到页面
+      // this.graph.paint(); // 渲染到页面
       // this.graph.get('canvas').set('localRefresh', false); // 关闭局部渲染
       // this.graph.fitView();
       // 销毁实例

@@ -54,8 +54,8 @@ export default {
   iconStyles: {
     width:  20,
     height: 20,
-    left:   0,
-    top:    0,
+    x:      0,
+    y:      0,
   },
   // edge默认样式
   edgeStyles: {

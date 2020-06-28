@@ -5,6 +5,8 @@
  */
 
 import itemEvents from '../items/item-event';
+import hvh from './hvh.js';
+import hvh_h from './hvh-h.js';
 
 /*
  * flow:
@@ -115,7 +117,7 @@ function stopAnimate (group) {
 }
 
 // 继承方法
-function inheritEdge (G6, name) {
+function inheritEdge (G6, graph, name) {
   G6.registerEdge(`${name}-edge`, {
     running: false,
     runners: [],
@@ -126,10 +128,27 @@ function inheritEdge (G6, name) {
   }, name);
 }
 
-export default G6 => {
+export default (G6, graph) => {
   const edgeArray = ['line', 'polyline', 'quadratic', 'cubic', 'arc'];
 
   edgeArray.forEach(edge => {
-    inheritEdge(G6, edge);
+    inheritEdge(G6, graph, edge);
+  });
+
+  hvh(G6, graph, {
+    running: false,
+    runners: [],
+    drawShape,
+    setState,
+    runAnimate,
+    stopAnimate,
+  });
+  hvh_h(G6, graph, {
+    running: false,
+    runners: [],
+    drawShape,
+    setState,
+    runAnimate,
+    stopAnimate,
   });
 };

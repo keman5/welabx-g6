@@ -4,16 +4,12 @@
  * 注册边
  */
 
-export default G6 => {
-  G6.registerEdge('hvh', {
-    itemType: 'edge',
+export default (G6, graph, cfg) => {
+  G6.registerEdge('hvh-edge', {
     draw(cfg, group) {
-      const startPoint = cfg.startPoint;
-      const endPoint = cfg.endPoint;
-      const startY = startPoint.y;
-      const endY = endPoint.y;
-      const Ydiff = endY - startY;
-      const yOffset = 20;
+      const { startPoint, endPoint } = cfg;
+      const Ydiff = endPoint.y - startPoint.y;
+      const yOffset = 1;
       const xOffset = 20;
 
       const line1EndPoint = {
@@ -31,63 +27,53 @@ export default G6 => {
         y: endPoint.y,
       };
 
-      let path = [
+      const path = Ydiff === 0 ? [
+          ['M', startPoint.x, startPoint.y],
+          ['L', endPoint.x, endPoint.y],
+        ] : [
         ['M', startPoint.x, startPoint.y],
         ['L', startPoint.x + 50, startPoint.y],
         ['L', line1EndPoint.x + 50, line1EndPoint.y],
-        [
-          'Q',
-          controlPoint.x + 50,
-          controlPoint.y,
-          line2StartPoint.x + 50,
-          line2StartPoint.y,
-        ],
+        ['Q', controlPoint.x + 50, controlPoint.y, line2StartPoint.x + 50, line2StartPoint.y],
         ['L', endPoint.x, endPoint.y],
       ];
 
-      if (Ydiff === 0) {
-        path = [
-          ['M', startPoint.x, startPoint.y],
-          ['L', endPoint.x, endPoint.y],
-        ];
-      }
+      // 获取边的样式
+      const { edgeStyle } = cfg.sourceNode.getModel();
       const shape = group.addShape('path', {
         attrs: {
           path,
-          ...cfg.style,
-          stroke:   '#368FF8',
+          stroke:   '#1890FF',
           endArrow: false,
+          ...cfg.style,
+          ...edgeStyle,
         },
-        name:      'hvh-line',
+        name:      'hvh-edge',
         draggable: true,
       });
 
-      const model = cfg.target.getModel();
+      const { note } = cfg.targetMode.getModel();
 
-      let not = model.not || '';
-
-      const textStr = model.text || not;
-      const fills = model.fills || '';
-
-      if (not) {
-        not = textStr !== 'default' ? textStr : '';
-        group.addShape('text', {
+      if (note) {
+        const label = group.addShape('text', {
           attrs: {
-            x:            line2StartPoint.x + 40, // 居中
-            y:            endPoint.y - 20,
-            autoRotate:   true,
-            width:        100,
-            height:       50,
-            textAlign:    'left',
-            textBaseline: 'middle',
-            text:         not,
-            fontSize:     16,
-            fill:         fills ? fills : '#333',
-            stroke:       '#fff',
+            x:          line2StartPoint.x + 40, // 居中
+            y:          endPoint.y - 20,
+            autoRotate: true,
+            text:       note || '',
+            fill:       '#333',
+            stroke:     '#fff',
+            fontSize:   16,
           },
+          zIndex: 10,
         });
+
+        group.sort();
+        label.toFront();
       }
+
       return shape;
     },
+    ...cfg,
   });
 };

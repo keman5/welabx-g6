@@ -7,9 +7,9 @@
 import shape from './shape/exports';
 import behavior from './behavior/exports';
 
-export default G6 => {
+export default (G6, graph) => {
   // 注册图形
-  shape(G6);
+  shape(G6, graph);
   // 注册行为
-  behavior(G6);
+  behavior(G6, graph);
 };
