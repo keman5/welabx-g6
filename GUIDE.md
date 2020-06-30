@@ -1,0 +1,511 @@
+# 使用教程
+
+## 安装
+
+```js
+npm install welabx-g6
+```
+
+## 引入/使用
+
+```js
+import WelabxG6 from 'welabx-g6';
+
+const g6 = new WelabxG6({
+  // config
+});
+const graph = g6.instance; // G6实例
+graph.read(data);
+graph.paint();
+// 销毁实例
+g6.destroy();
+```
+
+### 自定义节点和边(边支持设置箭头)
+
+| 非内置节点和边 | type | 宽高/半径属性 |
+| ---- | ---- | ---- |
+| rect-node | 方形节点 | width, height, radius(圆角) |
+| circle-node | 圆形节点 | r (半径) |
+| ellipse-node | 椭圆节点 | rx, ry 椭圆焦距 |
+| diamond-node | 菱形节点 | size, 默认 [80, 80] |
+| triangle-node | 三角形节点 | size, 默认 [60, 100] direction, 默认 'up', 可设为 'down' |
+| line-edge | 自定义边 | 默认属性 |
+| polyline-edge | 自定义边 | 默认属性 |
+| quadratic-edge | 自定义边 | 默认属性 |
+| cubic-edge | 自定义边 | 默认属性 |
+| hvh-edge | 自定义边 | 单向开口 |
+| hvh-h-edge | 自定义边 | 双向开口 |
+
+### 事件监听与通知
+
+> 已支持事件列表
+
+| 事件名称 | 回调参数 | 说明 |
+| ---- | ---- | ---- |
+| after-node-selected | event 对象 | 节点选中事件 |
+| after-edge-selected | event 对象 | 边选中事件 |
+| on-canvas-click | event 对象 | 鼠标点击画布事件 |
+| on-canvas-dragend | event 对象(内置了画布偏移量dx, dy) | 画布拖拽结束事件 |
+| on-node-mouseenter | event 对象 | 鼠标移入节点事件 |
+| on-node-mousemove | event 对象 | 鼠标在节点上移动事件(持续触发) |
+| on-node-mouseleave | event 对象 | 鼠标从节点上移开事件 |
+| on-node-mousedown | event 对象 | 鼠标左键按下节点事件 |
+| on-node-mouseup | event 对象 | 鼠标左键抬起节点事件 |
+| on-node-dragstart | event 对象 | 节点拖拽开始事件(也是锚点拖拽事件) |
+| on-node-drag | event 对象 | 节点拖拽中事件(也是锚点拖拽事件) |
+| on-node-dragend | event 对象 | 节点拖拽结束事件(也是锚点拖拽事件) |
+| on-node-drop | event 对象 | 在节点上释放事件(e.item 当前拖拽节点, e.target 当前释放节点) |
+| on-edge-mouseenter | event 对象 | 同节点事件 |
+| on-edge-mousemove | event 对象 | 同节点事件 |
+| on-edge-mouseleave | event 对象 | 同节点事件 |
+| before-node-removed | event 对象 | 节点移除前的事件 |
+| after-node-removed | event 对象 | 节点移除后的事件 |
+| after-node-dblclick | event 对象 | 双击节点事件 |
+| after-edge-dblclick | event 对象 | 双击边事件 |
+| before-edge-add | event 对象 | 添加边之前的事件 |
+
+(回调中有些情况下是空, 有些回调会触发多次, 因为内部也在使用, 如果影响较大, 后期考虑减少空回调和重复回调)
+
+```js
+graph.on('after-node-selected', e => {
+  if(e && e.item) {
+    console.log(e.item.get('id'));
+  }
+});
+
+graph.on('after-edge-selected', e => {
+  if(e && e.item) {
+    console.log(e.item.get('id'));
+  }
+});
+
+graph.on('before-node-removed', ({target, callback}) => {
+  console.log(target);
+  setTimeout(() => {
+    callback(true);
+  }, 1000);
+});
+
+graph.on('before-edge-add', ({ source, target, sourceAnchor, targetAnchor }) => {
+  setTimeout(() => {
+    this.graph.addItem('edge', {
+      source: source.get('id'),
+      target: target.get('id'),
+      sourceAnchor,
+      targetAnchor,
+      label:  'edge label',
+      // ... item 其他属性
+    });
+  }, 1000);
+});
+// 自定义事件监听需在 registerFactory 中定义
+```
+
+### 添加节点
+
+```js
+const model = {
+  label: 'node',
+  id:  '1', // 非必传
+  // 形状
+  type:  'rect-node', // e.target.dataset.shape
+  // 坐标
+  x:   e.clientX - 50,
+  y:   e.clientY + 200,
+};
+
+graph.addItem('node', model);
+```
+
+> 自定义的 modes
+
+- canvas-event
+- delete-item
+- select-node
+- hover-node
+- drag-node
+- active-edge
+
+## 自定义G6实例
+
+```js
+import WelabxG6 from 'welabx-g6';
+
+const g6 = new WelabxG6({
+  registerFactory(G6, config) {
+    return new G6.TreeGraph(config); // 使用树图
+  }
+});
+const graph = g6.instance; // G6实例
+graph.read({
+  id:       'root',
+  label:    'Root',
+  children: [{
+    id:   '1',
+    data: {
+      action: '初始化',
+    },
+    type:  'modelRect-node',
+    style: { // 节点样式
+      // fill: '#39495b',
+    },
+    // 左侧方条
+    preRect: {
+      show:   true, // 是否显示左侧方条
+      width:  4,
+      fill:   '#40a9ff',
+      radius: 2,
+    },
+    labels: [{
+      x:        -70,
+      y:        -10,
+      label:    '标题,最长10个字符~~',
+      labelCfg: {
+        fill:      '#666',
+        fontSize:  14,
+        maxlength: 10,
+      },
+    }, {
+      x:        -70,
+      y:        7,
+      label:    '描述,最长12个字符~~~',
+      labelCfg: {
+        fontSize:  12,
+        fill:      '#999',
+        maxlength: 12,
+      },
+    }, {
+      x:        -70,
+      y:        24,
+      label:    '第三行,最长16个字符,超出显示省略号~~~',
+      labelCfg: {
+        fontSize:  10,
+        fill:      '#ccc',
+        maxlength: 16,
+      },
+    }],
+  }, {
+    id:    '2',
+    type:  'modelRect-node',
+    style: {
+      width:     230,
+      height:    60,
+      fill:      '#65b586',
+      lineWidth: 0,
+    },
+    label:    '初始化事件和生命周期和其他',
+    labelCfg: {
+      stroke:    '#ccc',
+      fill:      '#fff',
+      maxlength: 10,
+    },
+  }],
+});
+```
+
+## 注册自定义节点/边/事件
+
+```js
+import WelabxG6 from 'welabx-g6';
+
+const g6 = new WelabxG6({
+  registerFactory(G6, config) {
+    // 注册自定义节点
+    G6.registerNode('your-node', {
+      // your code here
+    });
+    // 注册自定义边
+    G6.registerEdge('your-edge', {
+      // your code here
+    });
+    // 注册自定义边
+    G6.registerBehavior('your-behavior', {
+      // your code here
+    });
+
+    return new G6.TreeGraph(config);
+  }
+});
+const graph = g6.instance; // G6实例
+graph.read(data);
+graph.paint();
+// 销毁实例
+g6.destroy();
+```
+
+## 完整案例
+
+```js
+import WelabxG6 from 'welabx-g6';
+
+const data = {
+  node: [
+    {
+      id:   '1',
+      data: {
+        // 业务数据
+      },
+      type:  'rect-node', // 对应注册的节点name, 还可以是 ellipse-node / rect-node / diamond-node 等
+      style: {
+        // ... 当前节点的样式
+        r:   40, // 圆形节点半径
+        fill:          'orange',
+        lineDash:      [1, 2],
+        shadowOffsetX: 0,
+        shadowOffsetY: 2,
+        shadowColor:   '#666',
+        shadowBlur:    10,
+        hover: {
+          fill: '#ccc',
+        },
+        selected: {
+          stroke: '#ccc',
+        },
+      },
+      label:    'new Vue()', // 节点上显示的文字
+      // node 文本默认样式
+      labelCfg: {
+        fill:         '#fff',
+        textAlign:    'center',
+        textBaseline: 'middle',
+        fontWeight:   'bold',
+        fontSize:     24,
+      },
+      // 当前节点多状态样式, 覆盖全局样式, 仅对当前节点生效
+      nodeStateStyles: {
+        'nodeState:default': {
+          fill: 'orange',
+        },
+        'nodeState:hover': {
+          fill: '#ffbd17',
+        },
+        'nodeState:selected': {
+          fill: '#f1ac00',
+        },
+      },
+    },
+    {
+      id:    'node-2',
+      label: 'beforeCreate',
+      type:  'rect-node',
+      style: {
+        radius: 2,
+      },
+      // 自定义锚点数量和位置(二维数组, 含义参见官网)
+      anchorPoints: [
+        [0, 0],
+        [0.5, 0],
+        [0, 1],
+        [0.5, 1],
+        [1, 0],
+        [1, 1],
+      ],
+    },
+  ],
+  edges: [
+    {
+      source: '1', // 来源节点 id
+      target: '2', // 目标节点 id
+      label: '条件', // 边上的文字 / 当前只支持1个文案
+      data:   {   // 当前边的自定义属性
+        type:   'xxx',
+        amount: '100,000 元',
+        date:   '2019-08-03',
+      },
+      style: {
+        stroke:          '#ccc',
+        lineDash:        [5,5],
+        lineWidth:       2,
+        lineAppendWidth: 10,
+      },
+      labelCfg: {
+        position:   'center', // 其实默认就是 center，这里写出来便于理解
+        autoRotate: true,   // 使文本随边旋转
+        style:      {
+          stroke:    'white',  // 给文本添加白边和白色背景
+          fill:      '#722ed1',  // 文本颜色
+          lineWidth: 5,     // 文本白边粗细
+        },
+      },
+      // 边的多状态样式, 会覆盖全局样式, 仅对这条边生效
+      edgeStateStyles: {
+        'edgeState:default': {
+          strokeOpacity: 1,
+          stroke:        '#ccc',
+        },
+        'edgeState:hover': {
+          strokeOpacity: 0.6,
+          stroke:        '#ccc',
+        },
+        'edgeState:selected': {
+          strokeOpacity: 1,
+          stroke:        '#ccc',
+        },
+      },
+    },
+  ],
+}
+
+const g6 = new WelabxG6({
+  container: 'id',
+  width: 1000,
+  height: 300,
+  renderer: 'canvas', // 默认 canvas, 也可选用 svg, 但有些事件没有兼容, 也不打算兼容了, 只维护canvas版本
+  // 自定义注册行为, 事件, 交互
+  registerFactory: (G6, cfg) => {
+    const minimap = new G6.Minimap({
+      size: [200, 100],
+    });
+
+    cfg.plugins = [minimap];
+    // ! 拖拽画布会引起偏移量变化, 自定义事件需自行计算, 并写入到canvas dx, dy 属性, 便于内部计算
+    // 也可以通过监听 on-canvas-dragend 事件获取画布相对于渲染时的偏移量
+    // 另外 minimap 插件拖拽需写入 canvas dx和dy属性, 请自行实现, 插件那么多谁知道你要用哪个, 也许有空了我会内置进去?
+  },
+  defaultEdge: {
+    type:  'polyline-edge', // 扩展了内置边, 有边的事件
+    style: {
+      radius:          5,
+      offset:          15,
+      stroke:          '#aab7c3',
+      lineAppendWidth: 10, // 防止线太细没法点中
+      /* startArrow:      {
+          path: 'M 0,0 L 8,4 L 7,0 L 8,-4 Z',
+          fill: '#aab7c3',
+      }, */
+      endArrow:        {
+        path: 'M 0,0 L 8,4 L 7,0 L 8,-4 Z',
+        fill: '#aab7c3',
+      },
+    },
+  },
+  // 默认节点不同状态下的样式集合
+  nodeStateStyles: {
+    'nodeState:default': {
+      fill:   '#E7F7FE',
+      stroke: '#1890FF',
+    },
+    'nodeState:hover': {
+      fill: '#d5f1fd',
+    },
+    'nodeState:selected': {
+      fill:   '#caebf9',
+      stroke: '#1890FF',
+    },
+  },
+  // 默认边不同状态下的样式集合
+  edgeStateStyles: {
+    'edgeState:default': {
+      stroke: '#aab7c3',
+    },
+    'edgeState:selected': {
+      stroke: '#1890FF',
+    },
+    'edgeState:hover': {
+      stroke: '#1890FF',
+    },
+  },
+  // ... 其他G6参数
+});
+
+const graph = g6.instance; // G6实例
+graph.read(data);
+```
+
+## modelRect-node 与树图配置
+
+```js
+// 树形结构
+data = {
+  id: 'root',
+  label: 'Root',
+  type:  'modelRect-node',
+  style: {
+    // 节点样式
+  },
+  edgeStyle: { // 边的样式
+    stroke: '#39495b',
+  },
+  children: [{
+    type:  'modelRect-node',
+    style: {
+      fill: '#fff',
+    },
+    // 左侧方条
+    preRect: {
+      show: true, // 是否显示左侧方条
+      width: 4,
+      fill: '#40a9ff',
+      radius: 2,
+    },
+    // logo图标, 注意: 坐标 (0, 0) 代表图形几何中心
+    logoIcon: {
+      show: true, // 是否显示图标
+      x: 0, // 控制图标在横轴上的位置
+      y: 0, // 控制图标在纵轴上的位置
+      // url 用于图标地址
+      imag: 'https://gw.alipayobjects.com/zos/basement_prod/4f81893c-1806-4de4-aff3-9a6b266bc8a2.svg',
+      text: '\ue610;', // 用于支持 iconfont, text 是 iconfont.css 中的content, 注意加 u
+      width: 16,
+      height: 16,
+      // 图标样式
+      style:      {
+        stroke: '#333',
+        fill:   '#fc0',
+      },
+    },
+    // 状态图标, 注意: 坐标 (0, 0) 代表图形几何中心
+    stateIcon: {
+      show:       true,       // 是否显示图标
+      x:          70,         // 控制图标在横轴上的位置
+      y:          10,         // 控制图标在纵轴上的位置
+      text:       '\ue610',   // css中对应的content, 注意加 u
+      fontFamily: 'iconfont', // 这里是css中定义的字体名称
+      fontSize:   20,
+      style:      {
+        stroke: '#333',
+        fill:   '#fc0',
+      },
+    },
+    // 这里是数组! 这里是数组! 这里是数组!
+    labels: [{
+      label: '标题,最长10个字符~~',
+      labelCfg: {
+        textBaseline: 'middle',
+        fontWeight:   'bold',
+        maxlength: 10, // 超出10个字符显示省略号
+        fontSize: 14,
+        fill: '#666',
+      },
+      className: 'node-text-0', // 可用于绑定自定义事件
+    }, {
+      label: '描述描述',
+      labelCfg: {
+        maxlength: 12,
+        fontSize: 12,
+        fill: '#999',
+      },
+      className: 'node-text-1',
+    }, {
+      label: '第三行,最长16个字符,超出显示省略号~~~',
+      labelCfg: {
+        maxlength: 16,
+        fontSize: 10,
+        fill: '#ccc',
+      },
+      className: 'node-text-2',
+    }],
+  }]
+};
+```
+
+## 隐藏所有节点锚点
+
+```js
+  defaultNode: {
+    anchorControls: {
+      hide: true, // 隐藏所有锚点
+    },
+  }
+```

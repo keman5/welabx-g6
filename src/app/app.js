@@ -12,8 +12,8 @@ const router = new VueRouter({
   mode:   'history',
   routes: [
     {
-      path:      '/flow',
-      component: () => import('../pages/flow/flow.vue'),
+      path:      '/tree',
+      component: () => import('../pages/tree/tree.vue'),
     },
     {
       path:      '*',

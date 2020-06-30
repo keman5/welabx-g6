@@ -37,9 +37,14 @@ function getItemStyle(type, group, state = 'hover') {
 const events = {
   /**
    * @description 锚点事件
+   * 显示/隐藏锚点
    */
-  anchorShow(value, group) {
-    // 显示/隐藏锚点
+  anchorShow (value, group) {
+    // 锚点全局开关
+    const { anchorControls } = group.get('children')[0].cfg.attrs;
+
+    if(anchorControls && anchorControls.hide) return false;
+
     if (value) {
       group.showAnchor(group);
     } else {
@@ -50,7 +55,12 @@ const events = {
   /**
    * @description 锚点激活事件
    */
-  anchorActived(value, group) {
+  anchorActived (value, group) {
+    // 锚点全局开关
+    const { anchorControls } = group.get('children')[0].cfg.attrs;
+
+    if(anchorControls && anchorControls.hide) return false;
+
     if (value) {
       const model = group.get('item').getModel();
       const {

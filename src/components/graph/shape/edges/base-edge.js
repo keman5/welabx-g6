@@ -4,7 +4,9 @@
  * @description 注册基础edge, 其他edge都在此基础上继承和扩展
  */
 
-import itemEvents from './items/item-event';
+import itemEvents from '../items/item-event';
+import hvh from './hvh.js';
+import hvh_h from './hvh-h.js';
 
 /*
  * flow:
@@ -131,5 +133,22 @@ export default G6 => {
 
   edgeArray.forEach(edge => {
     inheritEdge(G6, edge);
+  });
+
+  hvh(G6, {
+    running: false,
+    runners: [],
+    drawShape,
+    setState,
+    runAnimate,
+    stopAnimate,
+  });
+  hvh_h(G6, {
+    running: false,
+    runners: [],
+    drawShape,
+    setState,
+    runAnimate,
+    stopAnimate,
   });
 };

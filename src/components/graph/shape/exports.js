@@ -1,5 +1,5 @@
 import registerBaseNode from './items/base-node';
-import registerEdge from './base-edge';
+import registerEdge from './edges/base-edge';
 import registerNode from './node';
 
 export default G6 => {

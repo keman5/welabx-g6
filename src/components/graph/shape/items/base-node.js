@@ -13,28 +13,33 @@ import anchorEvent from './anchor-event';
 export default G6 => {
   G6.registerNode('base-node', {
     // 绘制图标
-    drawIcon (cfg, group) {
-      const attrs = group.getFirst().attr();
+    drawIcon (cfg, group, attrs) {
+      const { logoIcon, stateIcon } = attrs;
 
-      if (attrs.icon) {
-        const iconStyles = {
-          ...cfg.iconStyles,
-        };
-
-        group.icon = group.addShape('image', {
+      if (logoIcon && logoIcon.show) {
+        const icon = group.addShape(logoIcon.img ? 'image' : 'text', {
           attrs: {
-            img:    attrs.icon,
-            x:      iconStyles.left,
-            y:      iconStyles.top,
-            width:  iconStyles.width,
-            height: iconStyles.height,
+            ...logoIcon,
+            ...logoIcon.style,
           },
           className: `${attrs.type}-icon`,
+          draggable: true,
         });
 
-        if (attrs.hideIcon) {
-          group.icon.hide();
-        }
+        icon.toFront();
+      }
+
+      if (stateIcon && stateIcon.show) {
+        const icon = group.addShape(stateIcon.img ? 'image' : 'text', {
+          attrs: {
+            ...stateIcon,
+            ...stateIcon.style,
+          },
+          className: `${attrs.type}-icon`,
+          draggable: true,
+        });
+
+        icon.toFront();
       }
     },
     // 绘制锚点
@@ -52,9 +57,10 @@ export default G6 => {
       const { type, direction, anchorPointStyles } = group.getFirst().attr();
       const item = group.get('children')[0];
       const bBox = item.getBBox();
+      const anchors = this.getAnchorPoints(cfg);
 
       // 绘制锚点坐标
-      this.getAnchorPoints(cfg).forEach((p, i) => {
+      anchors && anchors.forEach((p, i) => {
         const diff = type === 'triangle-node' ? (direction === 'up' ? 1 : 0) : 0.5;
         const x = bBox.width * (p[0] - 0.5);
         const y = bBox.height * (p[1] - diff);
@@ -121,24 +127,78 @@ export default G6 => {
     },
     /* 添加文本节点 */
     /* https://g6.antv.vision/zh/docs/manual/advanced/keyconcept/shape-and-properties/#%E6%96%87%E6%9C%AC-text */
-    addLabel (cfg, group) {
-      const { label, labelCfg } = group.getFirst().attr();
+    addLabel (cfg, group, attrs) {
+      const { label, labelCfg, labels } = attrs;
 
       // 字体小于12时 svg会报错
       /* if (labelCfg && labelCfg.fontSize < 12) {
         labelCfg.fontSize = 12;
       } */
 
-      group.addShape('text', {
-        attrs: {
-          x:    0,
-          y:    0,
-          text: label || '',
-          ...labelCfg,
-        },
-        className: 'node-text',
-        draggable: true,
-      });
+      // 多行文本
+      if (labels) {
+        labels.forEach(item => {
+          const { label, labelCfg: { maxlength }, className } = item;
+
+          let text = maxlength ? label.substr(0, maxlength) : label || '';
+
+          if (label.length > maxlength) {
+            text = `${text}...`;
+          }
+
+          group.addShape('text', {
+            attrs: {
+              text,
+              ...item,
+              ...item.labelCfg,
+            },
+            className: `node-text ${className}`,
+            draggable: true,
+          });
+        });
+      } else if (label) {
+        const { maxlength } = labelCfg;
+
+        let text = maxlength ? label.substr(0, maxlength) : label || '';
+
+          if (label.length > maxlength) {
+            text = `${text}...`;
+          }
+
+          group.addShape('text', {
+            attrs: {
+              text,
+              x: 0,
+              y: 0,
+              ...label,
+              ...labelCfg,
+            },
+            className: 'node-text',
+            draggable: true,
+          });
+      }
+    },
+    drawModelRect (group, attrs) {
+      const { preRect, width, height } = attrs;
+      const $preRect = {
+        show:   true, // 是否显示左侧方条
+        width:  4,
+        fill:   '#40a9ff',
+        radius: 2,
+      };
+
+      if (!preRect || preRect.show !== false) {
+        group.addShape('rect', {
+          attrs: {
+            x: -width / 2,
+            y: -height / 2,
+            height,
+            ...$preRect,
+            ...preRect,
+          },
+          draggable: true,
+        });
+      }
     },
     /* 绘制节点，包含文本 */
     draw (cfg, group) { // 元素分组
@@ -155,10 +215,14 @@ export default G6 => {
       group.getItem = className => {
         return group.get('children').find(item => item.get('className') === className);
       };
+
+      if (this.shapeType === 'modelRect-node') {
+        this.drawModelRect(group, attrs);
+      }
       // 添加文本节点
-      this.addLabel(cfg, group);
+      this.addLabel(cfg, group, attrs);
       // 添加图标
-      this.drawIcon(cfg, group);
+      this.drawIcon(cfg, group, attrs);
       // 添加锚点
       this.initAnchor(cfg, group);
 

@@ -4,7 +4,7 @@
       id="headPanel"
       :class="{ hidden: headVisible }"
     >
-      <span class="logo">请假审批工作流</span>
+      <span class="logo">脑图</span>
       <i
         class="gb-toggle-btn"
         @click="headVisible = !headVisible"
@@ -95,7 +95,6 @@
 <script>
 import G6 from '../../components/graph/graph';
 import ItemPanel from './ItemPanel.vue';
-// import data from './data.js';
 
 export default {
   components: {
@@ -158,7 +157,7 @@ export default {
     };
   },
   mounted () {
-    document.title = '请假审批系统';
+    document.title = '脑图';
     // 创建画布
     this.$nextTick(() => {
       this.createGraphic();
@@ -170,19 +169,173 @@ export default {
   },
   methods: {
     createGraphic () {
-      const graph = new G6({
-        width:  window.innerWidth - 40,
-        height: window.innerHeight - 40,
-        layout: {
-          type: 'xxx', // 位置将固定
+      const data = {
+        id:        'root',
+        label:     'Root',
+        // 边的样式
+        edgeStyle: {
+          stroke: '#999',
         },
-        defaultNode: {
-          type:  'rect-node',
-          style: {
-            radius: 10,
+        children: [{
+          data: {
+            action: '初始化',
           },
+          // note:      'root-note',
+          type:      'modelRect-node',
+          edgeStyle: { // 节点样式
+            stroke: '#39495b',
+          },
+          // 左侧方条
+          preRect: {
+            show:   true, // 是否显示左侧方条
+            width:  4,
+            fill:   '#40a9ff',
+            radius: 2,
+          },
+          logoIcon: {
+            show:   true, // 是否显示图标
+            x:      -92,  // 控制图标在横轴上的位置
+            y:      -8,   // 控制图标在纵轴上的位置
+            img:    'https://gw.alipayobjects.com/zos/basement_prod/4f81893c-1806-4de4-aff3-9a6b266bc8a2.svg',
+            width:  16,
+            height: 16,
+          },
+          // 状态图标, 注意: 坐标 (0, 0) 代表图形几何中心
+          stateIcon: {
+            show:       true,     // 是否显示图标
+            x:          70,       // 控制图标在横轴上的位置
+            y:          10,       // 控制图标在纵轴上的位置
+            text:       '\ue610',
+            fontFamily: 'iconfont',
+            fontSize:   20,
+            style:      {
+              stroke: '#333',
+              fill:   '#fc0',
+            },
+          },
+          labels: [{
+            x:        -70,
+            y:        -10,
+            label:    '标题,最长10个字符~~',
+            labelCfg: {
+              fill:      '#666',
+              fontSize:  14,
+              maxlength: 10,
+            },
+          }, {
+            x:        -70,
+            y:        7,
+            label:    '描述,最长12个字符~~~',
+            labelCfg: {
+              fontSize:  12,
+              fill:      '#999',
+              maxlength: 12,
+            },
+          }, {
+            x:        -70,
+            y:        24,
+            label:    '第三行,最长16个字符,超出显示省略号~~~',
+            labelCfg: {
+              fontSize:  10,
+              fill:      '#ccc',
+              maxlength: 16,
+            },
+          }],
+          children: [{
+            label:    '初始化事件和生命周期和其他',
+            labelCfg: {
+              stroke:    '#ccc',
+              fill:      '#666',
+              maxlength: 10,
+            },
+          }],
+        }, {
+          label:    '初始化事件和生命周期和其他',
+          labelCfg: {
+            stroke:    '#ccc',
+            fill:      '#666',
+            maxlength: 10,
+          },
+          // 状态图标, 注意: 坐标 (0, 0) 代表图形几何中心
+          stateIcon: {
+            show:       true,     // 是否显示图标
+            x:          -96,      // 控制图标在横轴上的位置
+            y:          14,       // 控制图标在纵轴上的位置
+            text:       '\ue601',
+            fontFamily: 'iconfont',
+            fontSize:   30,
+            style:      {
+              stroke: '#999',
+              fill:   '#fc0',
+            },
+          },
+          children: [{
+            label:    '初始化事件和生命周期和其他',
+            labelCfg: {
+              stroke:    '#ccc',
+              fill:      '#666',
+              maxlength: 10,
+            },
+          }],
+        }],
+      };
+
+      for(let i = 0; i < 11; i++) {
+        data.children.push({
+          label:    '初始化事件和生命周期和其他',
+          labelCfg: {
+            stroke:    '#ccc',
+            fill:      '#666',
+            maxlength: 10,
+          },
+          children: [{
+            label:    '初始化事件和生命周期和其他',
+            labelCfg: {
+              stroke:    '#ccc',
+              fill:      '#666',
+              maxlength: 10,
+            },
+          }],
+        });
+      }
+      const graph = new G6({
+        width:     window.innerWidth - 40,
+        height:    window.innerHeight - 40,
+        fitCenter: true,
+        layout:    {
+          type:      'mindmap',
+          direction: 'H', // H / V / LR / RL / TB / BT
+          getWidth:  () => {
+            return 200;
+          },
+          getVGap: () => {
+            return 50;
+          },
+          getHGap: () => {
+            return 50;
+          },
+        },
+        modes: {
+          default: ['zoom-canvas', 'drag-canvas', 'canvas-event'],
+        },
+        // renderer:    'svg',
+        defaultNode: {
+          type:     'modelRect-node',
           labelCfg: {
             fontSize: 20,
+          },
+          // 锚点控制字段
+          anchorControls: {
+            hide: true,
+          },
+        },
+        defaultEdge: {
+          type:  'hvh-h-edge', // 扩展了内置边, 有边的事件
+          style: {
+            radius:          5,
+            offset:          15,
+            lineWidth:       3,
+            lineAppendWidth: 10, // 防止线太细没法点中
           },
         },
         // 覆盖全局样式
@@ -199,15 +352,8 @@ export default {
         },
         // 默认边不同状态下的样式集合
         edgeStateStyles: {
-          'edgeState:default': {
-            stroke: '#aab7c3',
-          },
-          'edgeState:selected': {
-            stroke: '#1890FF',
-          },
           'edgeState:hover': {
-            stroke:  '#1890FF',
-            animate: true,
+            animate: false,
           },
         },
         // 自定义注册行为, 事件, 交互
@@ -218,43 +364,17 @@ export default {
 
           cfg.plugins = [minimap];
 
-          return new G6.Graph(cfg);
+          return new G6.TreeGraph(cfg);
         },
         // ... 其他G6原生入参
       });
 
       this.graph = graph.instance;
-      this.graph.read({
-        nodes: [{
-          data: {
-            action: '初始化',
-          },
-          type:  'triangle-node',
-          // direction: 'down',
-          x:     500,
-          y:     100,
-          style: { // 节点样式
-            fill: '#39495b',
-          },
-          label:    '',
-          labelCfg: {
-            textAlign:    'center',
-            textBaseline: 'middle',
-            fontWeight:   'bold',
-            fontSize:     10,
-          },
-          /* anchorPoints: [
-            [1, 0],
-          ], */
-        }, {
-          data: {
-            action: '初始化',
-          },
-          x: 200,
-          y: 100,
-        }],
+      this.graph.read(data);
+      setTimeout(() => {
+        this.graph.paint();
+        this.graph.fitView();
       });
-      this.graph.paint();
     },
     // 添加节点
     addNode (e) {
@@ -328,26 +448,6 @@ export default {
           this.tooltip = e.item.get('model').label;
           this.left = e.clientX + 40;
           this.top = e.clientY - 20;
-        }
-      });
-
-      this.graph.on('on-node-mousemove', e => {
-        if (e && e.item) {
-          this.tooltip = e.item.get('model').id;
-          this.left = e.clientX + 40;
-          this.top = e.clientY - 20;
-        }
-      });
-
-      this.graph.on('on-node-mouseleave', e => {
-        if (e && e.item) {
-          this.tooltip = '';
-        }
-      });
-
-      this.graph.on('on-edge-mouseleave', e => {
-        if (e && e.item) {
-          this.tooltip = '';
         }
       });
 
