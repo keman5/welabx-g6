@@ -1,0 +1,16 @@
+@import './_mixins.scss';
+
+@mixin layout() {
+    @include gap('40', 40px);
+    @include gap('30', 30px);
+    @include gap('20', 20px);
+    @include gap('10', 10px);
+    @include gap('5', 5px);
+    @include gap('0', 0);
+    @include font-size();
+    @include _flex();
+    @include txt();
+    @include word-wrap(1);
+}
+
+@include layout();

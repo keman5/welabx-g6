@@ -1,0 +1,45 @@
+// 所有 scss 文件都不用手动引入变量, webpack 中已自动处理
+@import "./_variable.scss";
+@import "./_element-ui.scss";
+@import "./_reset.scss";
+@import "./_main.scss";
+
+#app {
+    width: 100vw;
+    min-height: 100vh;
+}
+
+/* 全局 loading */
+.fade-enter-active,
+.fade-leave-active {
+    transition: opacity 0.2s ease-in;
+}
+
+.fade-enter,
+.fade-leave-to {
+    opacity: 0;
+}
+
+.plr{position: relative;}
+.pla{position: absolute;}
+.float-left{float: left;}
+.float-right{float: right;}
+
+/* 内容区样式 */
+.el-container{flex-basis:0;}
+.base-container {
+    overflow-x: hidden;
+    position: relative;
+    padding-top: 50px;
+}
+
+.base-wrapper{
+    padding: 20px;
+    min-height: 500px;
+    &>.fade-enter-active,
+    &>.fade-leave-active {
+        position: absolute;
+        left: 41px;
+        right: 41px;
+    }
+}

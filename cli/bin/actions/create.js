@@ -16,7 +16,7 @@ const prompts = require('prompts');                 // 命令行提示框交互
 const spinner = ora(chalk.yellow('正在处理... hold on...'));
 const resolve = p => path.resolve(__dirname, "../", p);
 const { spawnSync } = require('child_process');
-const { emptyDir } = require("fs-extra");
+// const { emptyDir } = require("fs-extra");
 const warning = chalk.cyanBright;
 
 module.exports = {
@@ -111,6 +111,7 @@ module.exports = {
 
         try {
             await mkdirs(resolve(appName));
+
             // 复制项目模版
             await copy(resolve(dependencyPath), projectPath);
 

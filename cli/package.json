@@ -1,6 +1,6 @@
 {
   "name": "welabx-cli",
-  "version": "0.6.15",
+  "version": "0.7.2",
   "description": "welabx code pack tool",
   "bin": {
     "welabx-cli": "bin/cli-cmd.js",
@@ -39,8 +39,10 @@
     "optimize-css-assets-webpack-plugin": "^5.0.3",
     "ora": "^4.0.4",
     "postcss-loader": "^3.0.0",
+    "prompts": "^2.3.2",
     "sass-loader": "^8.0.2",
     "sass-resources-loader": "^2.0.3",
+    "shelljs": "^0.8.4",
     "style-loader": "^1.2.1",
     "terser-webpack-plugin": "^3.0.6",
     "url-loader": "^4.1.0",
@@ -55,6 +57,5 @@
     "webpack-dev-server": "^3.11.0",
     "webpack-manifest-plugin": "^2.2.0",
     "webpack-merge": "^4.2.2"
-  },
-  "tempDependencies": "welabx-template"
+  }
 }

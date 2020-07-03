@@ -1,0 +1,63 @@
+/* base color
+-------------------------- */
+
+$color-primary                     : #1b223c;
+$color-light                       : #6c757d;
+$color-primary-darken              : #978755;
+
+$color-success                     : #5BBA69;
+$color-warning                     : #FFB403;
+$color-danger                      : #FF5757;
+$color-error                       : #FF001F;
+
+/* layout navigate
+-------------------------- */
+$nav-background                    : #212a39;
+$nav-background-active             : #5088fc;
+$nav-text-color                    : rgba(255, 255, 255, 0.7);
+$nav-active-color                  : #fff;
+$header-background                 : #fff;
+$layout-main-background            : #f5f6fa;
+$sub-menu-list_bg                  : #1d2531;
+
+/* link
+-------------------------- */
+$color-link-base                   : #4c84ff;
+$color-link-base-hover             : #0050ff;
+
+/* text color
+-------------------------- */
+$color-text-base                   : #495057;
+$color-text-light                  : #666;
+$color-text-placeholder            : #999;
+$color-text-disabled               : #D8D8D8;
+$color-text-selected               : #FF8A00;
+
+/* background-color
+-------------------------- */
+$background-color-base             : #fff;
+$background-color-selected         : #F2F2F2;
+$background-color-hover            : #F7F7F7;
+$background-color-light            : #FBFBFB;
+
+/* border
+-------------------------- */
+$border-radius                     : 4px;
+$border-color-base                 : #e5e9f2;
+$border-color-light                : #D8D8D8;
+$border-base-style                 : 1px solid $border-color-base;
+
+/* Font
+-------------------------- */
+$font-size-small                   : 12px;
+$font-size-large                   : 14px;
+$font-size-larger                  : 16px;
+$font-size-largest                 : 18px;
+$font-weight-medium                : 500;
+$font-family                       : Avenir,Helvetica,Arial,Helvetica,PingFang SC,Microsoft YaHei,SimSun,sans-serif;
+$font-line-height                  : 1;
+
+/* Animation
+-------------------------- */
+$animation-transition-time          : 300ms;
+$animation-transition-timing        : ease-in-out;

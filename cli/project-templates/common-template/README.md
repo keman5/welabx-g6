@@ -1,6 +1,35 @@
-# welabx-template welabx 脚手架项目模板
 
-## Project setup
+# 前台地址
+
+[测试环境](http://xxx.com/xxx-website/)
+
+## 环境准备
+
+> 安装 nodejs, 版本 10.x
+
+```shell
+# mac:
+brew install node@10
+# Windows: https://nodejs.org/en/download/ 下载并安装
+
+# 安装完成命令行执行:
+node -v
+```
+
+## 编译命令
+
+```shell
+# cd 到项目下
+npm install # 仅首次安装时
+npm run dev # 开发命令
+npm run build # 打包命令
+npm run build -- dev # 打包不同的环境
+# npm install太慢 可以试试用 yarn 安装
+```
+
+## 脚手架项目模板
+
+### Project setup
 
 ```shell
 npm install
@@ -91,5 +120,62 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
     terserOptions: {},
     // 是否启用多线程进行生产编译, 默认为true
     parallel: true,
+}
+```
+
+## 其他
+
+[前端框架](https://element.eleme.cn/#/zh-CN)
+
+[皮肤样式](https://sleek.tafcoder.com/form-advance.html)
+
+## vscode 编辑器(格式化)配置项
+
+编辑器插件: prettier, eslint, vetur, JavaScript (ES6) code snippets, tabnine
+
+```json
+{
+    "editor.formatOnSave": false, // 必选
+    "editor.codeActionsOnSave": {
+        "source.fixAll.eslint": true
+    },
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "eslint.validate": [
+        "javascript",
+        "javascriptreact",
+        "react",
+        "html",
+        "vue",
+    ],
+    "emmet.syntaxProfiles": {
+        "postcss": "css",
+        "vue-html": "html",
+        "vue": "html",
+    },
+    "vetur.format.defaultFormatter.html": "js-beautify-html",
+    "vetur.format.defaultFormatter.ts": "vscode-typescript",
+    "vetur.format.defaultFormatter.js": "vscode-typescript",
+    "vetur.format.options.tabSize": 4,
+    "vetur.format.options.useTabs": false,
+    "vetur.format.scriptInitialIndent": true,
+    "vetur.format.styleInitialIndent": true,
+    "[javascript]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[json]": {
+        "editor.defaultFormatter": "vscode.json-language-features"
+    },
+    "[html]": {
+        "editor.defaultFormatter": "vscode.html-language-features"
+    },
+    "[css]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[less]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[scss]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
 }
 ```

@@ -76,9 +76,9 @@ coreConfig.resolve
     .alias
     .set('@', projectPath)
     .set('@src', `${projectPath}/src`)
-    .set('@assets', `${projectPath}/assets`)
-    .set('@comp', `${projectPath}/components`)
-    .set('@views', `${projectPath}/views`);
+    .set('@assets', `${projectPath}/src/assets`)
+    .set('@comp', `${projectPath}/src/components`)
+    .set('@views', `${projectPath}/src/views`);
 
 coreConfig.context(projectPath)
 

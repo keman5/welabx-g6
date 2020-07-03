@@ -1,0 +1,61 @@
+@import './_normalize.scss';
+
+/**
+ * 定义标准盒模型
+ */
+html, body, article, hgroup, figure, main, section, header, footer, aside, nav, video, audio, canvas, details, h1, h2, h3, h4, h5, h6, div, p, dl, dd, ul, li, ol, label, form, input, img, textarea, th, tr, td, button, select, a, span, em, i, sub, sup, pre, code, table {
+    box-sizing:border-box;
+}
+
+/**
+ * 设置字体、行高、颜色等属性
+ */
+body {
+    font-family: $font-family;
+    font-size: $font-size-larger;
+    background-color: $background-color-base;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    color: $color-text-base;
+}
+
+h1, h2, h3, h4, h5, h6,
+ul, li, ol, dl, dt, dd,
+figure, p {
+    padding: 0;
+    margin: 0;
+    font-weight: normal;
+    word-wrap: break-word;
+}
+
+/**
+ * 超链接颜色
+ */
+
+a {display: inline-block;
+    color: $color-link-base;
+    text-decoration: none;
+    font-size: inherit;
+    outline: none;
+    cursor: pointer; /* 解决IOS10.3点不动问题 */
+    &:hover{
+        color: $color-link-base-hover;
+        text-decoration: underline;
+    }
+}
+
+img{
+    max-width: 100%;
+    vertical-align: middle;
+    height: auto;
+}
+
+ul{list-style: none;
+    padding-inline-start:0;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button{
+   -webkit-appearance: none !important;
+}
+input[type="number"]{-moz-appearance:textfield;}
