@@ -9,8 +9,8 @@ const chalk = require('chalk');
 const shell = require('shelljs');
 const prompts = require('prompts');
 const { existsSync } = require('fs');
-const package = require('../../package.json');
-const resolve = p => path.resolve(__dirname, "../", p);
+// const package = require('../../package.json');
+const resolve = p => path.resolve(__dirname, '../', p);
 const create = require('./create.js');
 const warning = chalk.cyanBright;
 

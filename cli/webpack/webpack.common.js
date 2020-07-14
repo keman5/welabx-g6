@@ -14,7 +14,6 @@ const pathResolver = dir => `${projectPath}${dir.substr(1)}`;
 const WebpackChain = require('webpack-chain');
 // 获取 welabx-config.js 配置文件
 const userConfig = require('./resolve.userconf');
-const isDev = process.env.NODE_ENV !== 'production';
 // 获取当前项目路径
 const projectPath = process.env.INIT_CWD;
 // 核心配置项实例
@@ -47,11 +46,11 @@ function resolveEntry () {
 }
 
 coreConfig
-    .mode(isDev ? 'development' : 'production')
+    .mode('development')
     .output
         .path(`${projectPath}/${userConfig.outputDir || 'dist'}`)
-        .filename(`${userConfig.assetsDir || 'static'}/js/[name].[${isDev ? 'hash' : 'chunkhash'}].js`)
-        .chunkFilename(`${userConfig.assetsDir || 'static'}/js/[name].[${isDev ? 'hash' : 'chunkhash'}].js`)
+        .filename(`${userConfig.assetsDir || 'static'}/js/[name].[hash].js`)
+        .chunkFilename(`${userConfig.assetsDir || 'static'}/js/[name].[hash].js`)
         .publicPath(userConfig.publicPath || '/')
         .end()
 
@@ -82,15 +81,12 @@ coreConfig.resolve
 
 coreConfig.context(projectPath)
 
-/* coreConfig.module
+coreConfig.module
     .rule('js')
         .include
             .add(`${projectPath}/src`)
             .end()
         .test(/\.js$/i)
-            .use('thread')
-                .loader('thread-loader')
-            .end()
             .use('cache')
                 .loader('cache-loader')
             .end()
@@ -135,17 +131,10 @@ coreConfig.context(projectPath)
                 .loader('vue-loader')
             .end()
         .end()
-    .rule('scss')
-        .include
-            .add(`${projectPath}/src`)
-            .end()
+    /* .rule('scss')
         .test(/\.(sc|c)ss$/)
             .use('scss')
                 .loader('style-loader')
-                    .options({
-                        loader: MiniCssExtractPlugin.loader,
-                        hmr: isDev,
-                    })
                 .loader('css-loader')
                 .loader('postcss-loader')
                     .options({
@@ -157,12 +146,9 @@ coreConfig.context(projectPath)
                         options: {
                             implementation: require('dart-sass'),
                         },
-                    }) */
-    /*  .rule('element-ui-js')
+                    })
+    .rule('element-ui-js')
         .test(/element-ui\/.*?js$/i)
-            .use('thread')
-                .loader('thread-loader')
-            .end()
             .use('cache')
                 .loader('cache-loader')
             .end()
@@ -193,8 +179,6 @@ coreConfig.watchOptions({
     //不监听的 node_modules 目录下的文件
     ignored: userConfig.transpileDependencies || [/node_modules/],
 });
-
-coreConfig.devtool(userConfig.sourceMap !== undefined ? userConfig.sourceMap : 'cheap-module-eval-source-map');
 
 coreConfig
     .plugin('vue-loader')

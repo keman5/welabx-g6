@@ -6,9 +6,11 @@
 
 const webpack = require('webpack');
 const portfinder = require('portfinder');
-const WebpackMerge = require('webpack-merge');
 const WebpackDevServer = require('webpack-dev-server');
 const { coreConfig, userConfig } = require('../../webpack/webpack.dev');
+let merge = require('webpack-merge');
+
+if (merge.merge) merge = merge.merge;
 
 // 获取当前项目路径
 const projectPath = process.env.INIT_CWD;
@@ -45,7 +47,7 @@ async function dev () {
             const webpackDevConfig = coreConfig.toConfig();
 
             // 临时解决element-ui 样式问题
-            const finalConfig = WebpackMerge(webpackDevConfig, {
+            const finalConfig = merge(webpackDevConfig, {
                 module: {
                     rules: [{
                         test: /\.(sc|c)ss$/,
@@ -62,44 +64,16 @@ async function dev () {
                         ],
                         exclude: [/node_modules/],
                     }, {
-                        test: /\.js$/,
-                        use: ['babel-loader'],
-                        exclude: [/node_modules/],
-                    }, {
-                        test: /\.(png|jpe?g|svg|gif)$/i,
-                        use: [{
-                            loader: 'url-loader',
-                            options: {
-                                limit: 8192,    // 8k
-                                name: 'images/[name].[hash:7].[ext]',
-                                esModule: false,
-                            },
-                        }],
-                        exclude: [],
-                    }, {
-                        test: /\.(eot|woff|woff2|ttf)$/i,
-                        use: [{
-                            loader: 'url-loader',
-                            options: {
-                                limit: 8192,    // 8k
-                                name: 'fonts/[name].[hash:7].[ext]',
-                            },
-                        }],
-                        exclude: [],
-                    }, {
                         test: /element-ui\/.*?js$/,
                         loader: ['babel-loader'],
                         exclude: [/node_modules/],
                     }, {
                         test: /node_modules\/.*?css$/,
                         use: [
+                            'style-loader',
                             'css-loader',
                             'postcss-loader',
                         ],
-                    }, {
-                        test: /\.vue$/,
-                        loader: 'vue-loader',
-                        exclude: [],
                     }]
                 },
             });

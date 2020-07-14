@@ -12,7 +12,10 @@ const HardSourceWebpackPlugin = require('hard-source-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const TerserJSPlugin = require('terser-webpack-plugin');
-const WebpackMerge = require('webpack-merge');
+let merge = require('webpack-merge');
+
+if (merge.merge) merge = merge.merge;
+
 // 默认编译 prod
 const STAGE = (JSON.parse(process.env.npm_config_argv).cooked[2] || 'prod').replace(/(-|--)/,'');
 const { coreConfig, userConfig } = require('./webpack.common');
@@ -28,6 +31,7 @@ console.log(boxen(`当前运行环境为 ${STAGE}`,
 ));
 
 coreConfig
+    .mode('production')
     // 注入环境变量
     .plugin('definePlugin')
         .use(webpack.DefinePlugin, [{
@@ -46,7 +50,7 @@ coreConfig
         .end()
     .plugin('clean')
         .use(CleanWebpackPlugin, [{
-            cleanOnceBeforeBuildPatterns: ['**/*', '!**/lib/**'],
+            cleanOnceBeforeBuildPatterns: ['**/*', '!**/lib/**', '!**/*vendor*.js'],
         }])
         .end()
     .plugin('hashedModule')
@@ -65,7 +69,7 @@ coreConfig.optimization
             },
         }])
         .end()
-    /* .minimizer('terser')
+    .minimizer('terser')
         .use(TerserJSPlugin, [{
             terserOptions: {
                 warnings: false,
@@ -82,27 +86,27 @@ coreConfig.optimization
             sourceMap: Boolean(userConfig.sourceMap !== undefined ? userConfig.sourceMap : false),
             parallel: userConfig.parallel || true,
         }])
-        .end() */
+        .end()
     .splitChunks({
-        name: true,
-        chunks: 'all', // 从哪些chunks里面抽取代码
-        minChunks: 2, // 最少引用次数
-        minSize: 30000, // 表示抽取出来的文件在压缩前的最小体积，默认为 30000
-        maxAsyncRequests: 5, // 最大的按需加载次数
-        maxInitialRequests: 3, // 最大的初始化加载次数
+        name:                   true,
+        chunks:                 'all', // 从哪些chunks里面抽取代码
+        minChunks:              2, // 最少引用次数
+        minSize:                30000, // 表示抽取出来的文件在压缩前的最小体积，默认为 30000
+        maxAsyncRequests:       5, // 最大的按需加载次数
+        maxInitialRequests:     3, // 最大的初始化加载次数
         automaticNameDelimiter: '~',
-        cacheGroups: {
+        cacheGroups:            {
             vendors: {
                 // 第三方依赖
-                test: /[\\/]node_modules[\\/]/,
-                priority: -10,
-                chunks: 'initial',
-                minSize: 100,
-                minChunks: 1 //重复引入了几次
+                test:      /[\\/]node_modules[\\/]/,
+                priority:  -10,
+                chunks:    'initial',
+                minSize:   100,
+                minChunks: 1,
             },
             default: {
-                minChunks: 2,
-                priority: -20,
+                minChunks:          2,
+                priority:           -20,
                 reuseExistingChunk: true,
             },
         },
@@ -118,7 +122,7 @@ if (userConfig.webpackChain) {
 const finalConfig = coreConfig.toConfig();
 
 // 临时解决element-ui 样式问题
-module.exports = WebpackMerge(finalConfig, {
+module.exports = merge(finalConfig, {
     module: {
         rules: [{
             test: /\.(sc|c)ss$/,
@@ -136,32 +140,6 @@ module.exports = WebpackMerge(finalConfig, {
             ],
             exclude: [/node_modules/],
         }, {
-            test:    /\.js$/,
-            use:     ['cache-loader', 'babel-loader'],
-            exclude: [/node_modules/],
-        }, {
-            test: /\.(png|jpe?g|svg|gif)$/i,
-            use:  [{
-                loader:  'url-loader',
-                options: {
-                    limit: 8192,    // 8k
-                    name: 'images/[name].[hash:7].[ext]',
-                    esModule: false,
-                },
-            }],
-            exclude: [],
-        }, {
-            test: /\.(eot|woff|woff2|ttf)$/i,
-            use:  [{
-                loader:  'url-loader',
-                options: {
-                    limit: 8192,    // 8k
-                    name:  'fonts/[name].[hash:7].[ext]',
-                    esModule: false,
-                },
-            }],
-            exclude: [],
-        }, {
             test:    /element-ui\/.*?js$/,
             loader:  ['cache-loader', 'babel-loader'],
             exclude: [/node_modules/],
@@ -176,26 +154,6 @@ module.exports = WebpackMerge(finalConfig, {
                 'css-loader',
                 'postcss-loader',
             ],
-        }, {
-            test:    /\.vue$/,
-            loader:  'vue-loader',
-            exclude: [],
         }]
     },
-    plugins: [
-        new TerserJSPlugin({
-            terserOptions: {
-                warnings: false,
-                output:   {
-                    comments: false,
-                },
-                compress: {
-                    drop_console:  true,
-                    drop_debugger: true,
-                },
-            },
-            sourceMap: false,
-            parallel:  true,
-        }),
-    ]
 });
