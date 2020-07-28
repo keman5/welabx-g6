@@ -5,8 +5,9 @@
  */
 
 export default (G6, graph, cfg) => {
+  // console.log(graph);
   G6.registerEdge('hvh-h-edge', {
-    draw(cfg, group) {
+    draw (cfg, group) {
       const { startPoint, endPoint } = cfg;
       const startX = startPoint.x;
       const endX = endPoint.x;

@@ -1,13 +1,14 @@
 <template>
   <div class="root">
     <div id="headPanel">
-      <span class="logo">脑图</span>
+      <span class="logo">脑图 (Tab新建节点, 回车输入和确定)</span>
     </div>
     <!-- 挂载节点 -->
     <div
       id="canvasPanel"
       @dragover.prevent
     />
+    <input id="canvas-input" type="text">
   </div>
 </template>
 
@@ -17,38 +18,13 @@ import G6 from '../../components/graph/graph';
 export default {
   data () {
     return {
-      graph:    null,
-      label:    '',
-      labelCfg: {
-        fontSize: 12,
-        fill:     '#fff',
+      graph:        null,
+      node:         null,
+      inputEl:      null,
+      canvasOffset: {
+        x: 0,
+        y: 0,
       },
-      node: {
-        fill:        '',
-        lineDash:    'none',
-        borderColor: '',
-        width:       160,
-        height:      60,
-        shape:       'rect-node',
-      },
-      nodeShapes: [
-        {
-          name:  '矩形',
-          shape: 'rect-node',
-        },
-        {
-          name:  '圆形',
-          shape: 'circle-node',
-        },
-        {
-          name:  '椭圆',
-          shape: 'ellipise-node',
-        },
-        {
-          name:  '菱形',
-          shape: 'diamond-node',
-        },
-      ],
     };
   },
   mounted () {
@@ -57,6 +33,12 @@ export default {
     this.$nextTick(() => {
       this.createGraphic();
       this.initGraphEvent();
+      this.inputEl = document.getElementById('canvas-input');
+
+      this.inputEl.addEventListener('blur', () => {
+        this.inputEl.style.left = '-100em';
+        this.inputEl.style.top = '-100em';
+      });
     });
   },
   beforeDestroy () {
@@ -251,11 +233,11 @@ export default {
         },
         // 自定义注册行为, 事件, 交互
         registerFactory: (G6, cfg) => {
-          const minimap = new G6.Minimap({
+          /* const minimap = new G6.Minimap({
             size: [200, 100],
           });
 
-          cfg.plugins = [minimap];
+          cfg.plugins = [minimap]; */
 
           return new G6.TreeGraph(cfg);
         },
@@ -271,40 +253,40 @@ export default {
     },
     // 初始化图事件
     initGraphEvent () {
-      this.graph.on('after-node-selected', e => {
-        if (e && e.item) {
-          const model = e.item.get('model');
+      this.graph.on('on-canvas-dragend', e => {
+        this.canvasOffset.x = e.dx;
+        this.canvasOffset.y = e.dy;
+      });
 
-          this.label = model.label;
-          this.labelCfg = {
-            fill:     model.labelCfg.fill,
-            fontSize: model.labelCfg.fontSize,
-          };
-          this.node = {
-            fill:        model.style.fill,
-            borderColor: model.style.stroke,
-            lineDash:    model.style.lineDash || 'none',
-            width:       model.style.width,
-            height:      model.style.height,
-            shape:       model.type,
-          };
+      // 监听键盘事件
+      this.graph.on('keydown', e => {
+        switch (e.keyCode) {
+          // tab
+          case 9:
+            this.tabEvent(e);
+            break;
+          // enter
+          case 13:
+            this.enterEvent(e);
+            break;
         }
       });
 
-      this.graph.on('after-edge-selected', e => {
+      this.graph.on('after-node-selected', e => {
         if (e && e.item) {
-          this.graph.updateItem(e.item, {
-            style: {
-              radius:    10,
-              lineWidth: 2,
-            },
-          });
+          this.node = e.item;
+        }
+      });
+      this.graph.on('canvas:mousedown', e => {
+        if (e && e.item) {
+          this.node = null;
         }
       });
 
       this.graph.on('after-node-dblclick', e => {
         if (e && e.item) {
-          console.log(e.item);
+          this.node = e.item;
+          this.enterEvent(e);
         }
       });
 
@@ -319,15 +301,34 @@ export default {
         }, 100);
       });
     },
+    tabEvent(e) {
+      console.log(e);
+    },
+    enterEvent(e) {
+      if(this.node) {
+        if(this.node._cfg.keyShape.cfg) {
+          const { keyShape: { cfg: { cacheCanvasBBox: { x, y, width, height } } }, model: { label } } = this.node._cfg;
+
+          this.inputEl.style.width = `${width}px`;
+          this.inputEl.style.height = `${height}px`;
+          this.inputEl.style.left = `${x}px`;
+          this.inputEl.style.top = `${y+40}px`;
+          this.inputEl.value = label;
+          this.inputEl.focus();
+        }
+      }
+    },
   },
 };
 </script>
 
 <style lang="scss">
   #canvasPanel{left:0;}
-  .g6-minimap{
+  #canvas-input{
     position: absolute;
-    right: 0;
-    bottom: 0;
+    top: 100em;
+    left: 100em;
+    z-index: 100;
+    border:1px solid #ccc;
   }
 </style>

@@ -5,11 +5,13 @@
 
 import G6ES from '@antv/g6/es/index';
 import registerFactory from './register-factory';
-
-let i = -1;
+import registerEdges from './register-edges';
 
 class G6 {
   constructor(config = {}) {
+
+    // 内部注册组件, 行为, 事件等
+    registerFactory(G6ES);
 
     // 初始化配置等
     this.init(config);
@@ -118,13 +120,8 @@ class G6 {
 
     this.instance = instance || new G6ES.Graph(options);
 
-    i += 1;
-
-    // 挂载到全局对象
-    window[`$graph_${i}`] = this.instance;
-
-    // 内部注册组件, 行为, 事件等
-    registerFactory(G6ES, window[`$graph_${i}`]);
+    // 实例化以后再注册边(否则边无法获取graph实例)
+    registerEdges(G6ES, this.instance);
 
     const { el } = this.instance.cfg.canvas.cfg;
 
@@ -142,7 +139,6 @@ class G6 {
   destroy () {
     this.instance.destroy();
     this.instance = null;
-    window[`$graph_${i}`] = null;
   }
 }
 

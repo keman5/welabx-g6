@@ -34,9 +34,7 @@ export default G6 => {
       this.originOffset = [dx, dy];
       this.offset = [e.clientX, e.clientY];
     },
-    /* onCanvasDrag (e) {
-
-    }, */
+    /* onCanvasDrag (e) {}, */
     onCanvasDragEnd (e) {
       e.target.get('el').style.cursor = 'grab';
       const { el } = e.target.cfg;
