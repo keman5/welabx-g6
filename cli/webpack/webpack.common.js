@@ -7,7 +7,7 @@
 const { VueLoaderPlugin } = require('vue-loader');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ManifestPlugin = require('webpack-manifest-plugin');
-// const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const HardSourceWebpackPlugin = require('hard-source-webpack-plugin');
 const FriendlyErrorsPlugin = require('friendly-errors-webpack-plugin');
 const WebpackBundleAnalyzer = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 const pathResolver = dir => `${projectPath}${dir.substr(1)}`;
@@ -183,6 +183,9 @@ coreConfig.watchOptions({
 coreConfig
     .plugin('vue-loader')
         .use(VueLoaderPlugin)
+        .end()
+    .plugin('hardSource')
+        .use(HardSourceWebpackPlugin)
         .end()
     .plugin('friendly-errors')
         .use(FriendlyErrorsPlugin)

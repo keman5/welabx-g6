@@ -8,7 +8,6 @@
 const boxen = require('boxen');
 const webpack = require('webpack');
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
-const HardSourceWebpackPlugin = require('hard-source-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const TerserJSPlugin = require('terser-webpack-plugin');
@@ -55,9 +54,6 @@ coreConfig
         .end()
     .plugin('hashedModule')
         .use(webpack.HashedModuleIdsPlugin)
-        .end()
-    .plugin('hardSource')
-        .use(HardSourceWebpackPlugin)
         .end()
 
 coreConfig.optimization
