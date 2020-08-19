@@ -8,10 +8,9 @@ const boxen = require('boxen');
 const webpack = require('webpack');
 const { VueLoaderPlugin } = require('vue-loader');
 const ManifestPlugin = require('webpack-manifest-plugin');
+// const HardSourceWebpackPlugin = require('hard-source-webpack-plugin');
 const FriendlyErrorsPlugin = require('friendly-errors-webpack-plugin');
-// 默认编译 test
-const STAGE = (JSON.parse(process.env.npm_config_argv).cooked[2] || 'test').replace(/(-|--)/, '');
-const { coreConfig, userConfig } = require('./webpack.common');
+const { coreConfig, userConfig, STAGE } = require('./webpack.common');
 
 console.log(boxen(`当前运行环境为 ${STAGE}`,
     {
@@ -29,6 +28,9 @@ coreConfig.devServer
     .color(true)
 
 coreConfig
+    /* .plugin('hardSource')
+        .use(HardSourceWebpackPlugin)
+        .end() */
     .plugin('vue-loader')
         .use(VueLoaderPlugin)
         .end()

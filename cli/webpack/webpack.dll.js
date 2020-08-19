@@ -1,9 +1,11 @@
 const path = require('path');
 const webpack = require('webpack');
+const projectPath = process.env.INIT_CWD;
+const packageJson = require(`${projectPath}/package.json`);
+const { original } = JSON.parse(process.env.npm_config_argv);
+const cliParam = original.find(item => item.includes('--project-name='));
+let context = cliParam ? cliParam.split('=')[1] : packageJson.context || '/';
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
-const packageJson = require('../package.json');
-const devMode = process.env.NODE_ENV !== 'production';
-const context = (devMode ? '/' : `${packageJson.context}`) || '/';
 const resolve = p => path.resolve(__dirname, '../', p);
 
 module.exports = {

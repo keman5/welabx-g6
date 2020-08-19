@@ -7,17 +7,39 @@
 
 const boxen = require('boxen');
 const webpack = require('webpack');
+let merge = require('webpack-merge');
+const TerserJSPlugin = require('terser-webpack-plugin');
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
-const TerserJSPlugin = require('terser-webpack-plugin');
-let merge = require('webpack-merge');
+const { coreConfig, userConfig, STAGE } = require('./webpack.common');
+
+// TODO:
+/* const dllLib = `../dist${context}lib/vendor-manifest.json`;
+const dllExists = existsSync(resolve(dllLib));
+
+// 如果 dll 库不存在, 就自动生成
+if (!dllExists) {
+    const command = `webpack -p --progress --config ${resolve('./webpack.dll.js')}`;
+
+    shelljs.exec(command);
+}
+
+const dllManifest = require(dllLib);
+const plugins = [];
+
+plugins.push(
+    new HtmlWebpackTagsPlugin({
+        publicPath: `${context}lib/`,
+        tags:       [`${dllManifest.name}.js`],
+        append:     false,
+    }),
+    new webpack.DllReferencePlugin({
+        manifest: dllManifest,
+    }),
+); */
 
 if (merge.merge) merge = merge.merge;
-
-// 默认编译 prod
-const STAGE = (JSON.parse(process.env.npm_config_argv).cooked[2] || 'prod').replace(/(-|--)/,'');
-const { coreConfig, userConfig } = require('./webpack.common');
 
 console.log(boxen(`当前运行环境为 ${STAGE}`,
     {
