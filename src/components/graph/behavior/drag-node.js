@@ -93,7 +93,8 @@ export default G6 => {
         const edges = sourceNode.getOutEdges();
 
         const hasLinked = edges.find(edge => {
-          if (edge.get('sourceAnchorIndex') === this.sourceAnchorIndex && edge.get('targetAnchorIndex') === targetAnchorIndex) {
+          // sourceAnchorIndex === targetAnchorIndex, edge.source.id === source.id, edget.target.id === target.id
+          if (edge.get('source').get('id') === sourceNode.get('id') && edge.get('target').get('id') === e.target.cfg.nodeId && edge.get('sourceAnchorIndex') === this.sourceAnchorIndex && edge.get('targetAnchorIndex') === targetAnchorIndex) {
             return true;
           }
         });
