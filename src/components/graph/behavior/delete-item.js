@@ -15,7 +15,7 @@ export default G6 => {
        * TODO:
        * 删除节点时, 将与该节点连接的后代节点也删除
        */
-      if (e.keyCode === 8) {
+      if (e.keyCode === 8 || e.keyCode === 46) {
         const nodes = graph.findAllByState('node', 'nodeState:selected');
 
         if (nodes && nodes.length) {

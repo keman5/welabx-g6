@@ -4,7 +4,7 @@
  * 注册边
  */
 
-export default (G6, cfg) => {
+export default (G6, graph, cfg) => {
   G6.registerEdge('hvh-edge', {
     draw(cfg, group) {
       const { startPoint, endPoint } = cfg;

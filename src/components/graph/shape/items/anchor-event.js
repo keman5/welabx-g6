@@ -55,7 +55,7 @@ export default (anchor, group, p) => {
   // 拖拽中
   anchor.on('drag', e => {
     const { type, direction } = group.getFirst().attr();
-    const canvasBox = group.get('children')[0].get('canvasBox');
+    const canvasBox = group.get('children')[0].get('canvasBBox');
     const diff = type === 'triangle-node' ? (direction === 'up' ? canvasBox.height : 0) : canvasBox.height / 2;
     const line = group.getItem('dashed-line');
     const pointStart = line.get('pointStart');

@@ -3,6 +3,7 @@
 ## 安装
 
 ```js
+npm install @antv/g6
 npm install welabx-g6
 ```
 

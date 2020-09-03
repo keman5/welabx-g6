@@ -94,8 +94,8 @@ npm run dev
 - 支持自定义边的类型,可通过事件设置
 - 可自定义创建 tooltip
 - 新增多状态样式管理
-- 单个节点和边支持多状态样式管理 (边为 cubic-edge 时暂时无效, 如需复杂样式在自定义事件中处理)
 - 画布拖拽时在画布元素上新增移动 x,y 属性, 方便外部计算
+- 单个节点和边支持多状态样式管理 (边为 cubic-edge 时暂时无效, 如需复杂样式在自定义事件中处理)
 - **拖拽画布会引起偏移量变化, canvas-event modes 已内置了计算规则, 如未使用需自行计算, 并写入到canvas dx, dy 属性, 便于内部计算**
 - 也可以通过监听 on-canvas-dragend 事件获取画布相对于渲染时的偏移量
 - !!全局默认样式和多状态样式支持被单个节点或边的配置覆盖了
@@ -106,9 +106,8 @@ npm run dev
 
 ### [0.4.2] 2020-06-28
 
-- [upgrade] 升级G6 到 3.5.x 版本
 - [upgrade] !! 从 0.4.1 开始, 内部自动注册 G6.Graph实例, 可在 registerFactory 方法中 return new G6.TreeGraph(config) 来自定义不同的实例.
-- [issue] 安装g6依赖时经常因版本不同而出现报错, 如出现 cannot read property 'transform' of undefined 报错, 请手动安装 @antv/g-base@0.4.6 版本, 出现类似报错请自行排查依赖项
+- [issue] 安装g6依赖时经常因版本不同而出现报错, 如出现 cannot read property 'transform' of undefined 报错, 请手动安装 @antv/g-base@0.4.6 版本, 出现类似报错请自行排查依赖项 !!! 或者删掉 package.lock 重新安装 g6
 - [add] 新增全局节点配置项 anchorControls 用于控制锚点行为, 暂时只支持 hide 字段, 后续讲进行扩展.
 
   ```js
@@ -123,3 +122,11 @@ npm run dev
 - [add] 所有自定义节点均可支持多行文本配置, 若同时设置 labels 和 label, 将显示 labels 配置, labels 中支持 className字段, 便于绑定自定义事件.
 - [add] 新增 modelRect-node 类型节点, 支持添加多行标签及相应样式, 该配置与官方不尽相同, 请留意.
 - [add] 所有自定义节点均支持 logoIcon 和 stateIcon 添加图标
+
+### [0.4.3] 2020-09-03
+
+时隔几个月又更新了...
+
+- [update] 更新使用说明
+- [upgrade] 升级G6 到 3.7.x 版本
+- [fix] 修复重复拖拽锚点判断逻辑, 防止生成多条重复的线

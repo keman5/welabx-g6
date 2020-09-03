@@ -6,7 +6,7 @@
 
 const path = require('path');
 const webpack = require('webpack');
-const merge = require('webpack-merge');
+const { merge } = require('webpack-merge');
 const { webpackConfig } = require('./webpack.common.js');
 const plugins = [
   new webpack.DefinePlugin({
@@ -22,7 +22,7 @@ const devServer = {
     compress:           true,
     historyApiFallback: true,
     contentBase:        path.join(__dirname, '../dist'),
-    host:               '0.0.0.0',
+    host:               '127.0.0.1',
     port:               4300,
     hot:                true,
     open:               false,
