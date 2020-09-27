@@ -89,12 +89,13 @@ export default G6 => {
       if (this.dragStartNode.id && e.target.cfg.isAnchor && (this.dragStartNode.id !== e.target.cfg.nodeId)) {
 
         const sourceNode = this.dragStartNode.group.get('item');
+        const { singleEdge } = sourceNode.getModel(); // 同个source和同个target只能有1条线
         const targetAnchorIndex = e.target.get('index');
         const edges = sourceNode.getOutEdges();
 
         const hasLinked = edges.find(edge => {
           // sourceAnchorIndex === targetAnchorIndex, edge.source.id === source.id, edget.target.id === target.id
-          if (edge.get('source').get('id') === sourceNode.get('id') && edge.get('target').get('id') === e.target.cfg.nodeId && edge.get('sourceAnchorIndex') === this.sourceAnchorIndex && edge.get('targetAnchorIndex') === targetAnchorIndex) {
+          if ((edge.get('source').get('id') === sourceNode.get('id') && edge.get('target').get('id') === e.target.cfg.nodeId && edge.get('sourceAnchorIndex') === this.sourceAnchorIndex && edge.get('targetAnchorIndex') === targetAnchorIndex) || (singleEdge && edge.get('target').get('id') === e.target.cfg.nodeId)) {
             return true;
           }
         });
@@ -119,7 +120,8 @@ export default G6 => {
       const { radius } = item.get('originStyle');
       const currentShape = item.get('currentShape');
       const { width, height, centerX, centerY } = item.getBBox();
-      const { shapeType } = item.get('shapeFactory')[currentShape];
+
+      let { shapeType } = item.get('shapeFactory')[currentShape];
 
       let attrs = {
         fillOpacity: 0.1,
@@ -168,6 +170,16 @@ export default G6 => {
           attrs.x = 0;
           attrs.y = 0;
           break;
+        case 'modelRect':
+          this.distance = [e.x - centerX + width / 2, e.y - centerY + height / 2];
+          attrs = {
+            ...attrs,
+            x: -width / 2,
+            y: -height / 2,
+            r: width / 2,
+          };
+          shapeType = 'rect';
+          break;
       }
 
       const shadowNode = group.addShape(shapeType, {
@@ -188,8 +200,11 @@ export default G6 => {
       const { width, height, centerX, centerY } = item.getBBox();
       const currentShape = item.get('currentShape');
       const { shapeType } = item.get('shapeFactory')[currentShape];
-      const shadowNode = group.getItem('shadow-node');
+      const shadowNode = group.getItem ? group.getItem('shadow-node') : null;
 
+      if (!shadowNode) {
+        return console.warn('暂未支持拖拽内置节点');
+      }
       if (shapeType === 'path') {
         const { type, direction } = pathAttrs.get('attrs');
         const dx = e.x - centerX - this.distance[0];
@@ -241,7 +256,7 @@ export default G6 => {
     _nodeOnDragEnd (e, group) {
       const node = group.get('item');
       const { width, height } = node.getBBox();
-      const shadowNode = group.getItem('shadow-node');
+      const shadowNode = group.getItem ? group.getItem('shadow-node') : null;
       const currentShape = node.get('currentShape');
       const { shapeType } = node.get('shapeFactory')[currentShape];
       const { type, direction } = group.getFirst().get('attrs');
@@ -273,7 +288,7 @@ export default G6 => {
           break;
       }
 
-      shadowNode.remove();
+      shadowNode && shadowNode.remove();
 
       /* 添加移动动画? */
       // 更新坐标

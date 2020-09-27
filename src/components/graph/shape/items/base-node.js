@@ -216,7 +216,7 @@ export default G6 => {
         return group.get('children').find(item => item.get('className') === className);
       };
 
-      if (this.shapeType === 'modelRect-node') {
+      if (this.type === 'modelRect-node') {
         this.drawModelRect(group, attrs);
       }
       // 添加文本节点

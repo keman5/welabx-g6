@@ -106,6 +106,7 @@ graph.on('before-edge-add', ({ source, target, sourceAnchor, targetAnchor }) => 
 ### 添加节点
 
 ```js
+// 节点 model 中添加 singleEdge 属性时, 拖拽锚点只能生成 1 条边
 const model = {
   label: 'node',
   id:  '1', // 非必传
@@ -114,6 +115,7 @@ const model = {
   // 坐标
   x:   e.clientX - 50,
   y:   e.clientY + 200,
+  singleEdge: true, // 拖拽锚点只能生成 1 条边
 };
 
 graph.addItem('node', model);

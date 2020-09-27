@@ -7,34 +7,22 @@
 export default (G6, graph, cfg) => {
   G6.registerEdge('hvh-edge', {
     draw(cfg, group) {
+      const xOffset = 40;
       const { startPoint, endPoint } = cfg;
       const Ydiff = endPoint.y - startPoint.y;
-      const yOffset = 1;
-      const xOffset = 20;
-
-      const line1EndPoint = {
+      // 水平结束点坐标
+      const horizontalEndPoint = {
         x: startPoint.x,
-        y: startPoint.y > 0 ? startPoint.y + yOffset : startPoint.y - yOffset,
-      };
-      const line2StartPoint = {
-        x: line1EndPoint.x + xOffset,
         y: endPoint.y,
       };
-
-      // 控制点坐标
-      const controlPoint = {
-        x: ((line1EndPoint.x - startPoint.x) * (endPoint.y - startPoint.y)) / (line1EndPoint.y - startPoint.y) + startPoint.x,
-        y: endPoint.y,
-      };
-
       const path = Ydiff === 0 ? [
-          ['M', startPoint.x, startPoint.y],
-          ['L', endPoint.x, endPoint.y],
-        ] : [
         ['M', startPoint.x, startPoint.y],
-        ['L', startPoint.x + 50, startPoint.y],
-        ['L', line1EndPoint.x + 50, line1EndPoint.y],
-        ['Q', controlPoint.x + 50, controlPoint.y, line2StartPoint.x + 50, line2StartPoint.y],
+        ['L', endPoint.x, endPoint.y],
+      ] : [
+        ['M', startPoint.x, startPoint.y],
+        ['L', startPoint.x + xOffset, startPoint.y],
+        ['L', horizontalEndPoint.x + xOffset, endPoint.y > startPoint.y ? horizontalEndPoint.y - 10 : horizontalEndPoint.y + 10],
+        ['Q', horizontalEndPoint.x + xOffset, horizontalEndPoint.y, horizontalEndPoint.x + xOffset + 10, horizontalEndPoint.y],
         ['L', endPoint.x, endPoint.y],
       ];
 
@@ -57,8 +45,8 @@ export default (G6, graph, cfg) => {
       if (note) {
         const label = group.addShape('text', {
           attrs: {
-            x:          line2StartPoint.x + 40, // 居中
-            y:          endPoint.y - 20,
+            x:          horizontalEndPoint.x + xOffset + 10, // 居中
+            y:          endPoint.y - 30,
             autoRotate: true,
             text:       note || '',
             fill:       '#333',

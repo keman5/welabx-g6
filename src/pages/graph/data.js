@@ -79,7 +79,7 @@ export default {
         width:     180,
         height:    60,
       },
-      x:        200,
+      x:        250,
       y:        170,
       label:    'beforeCreate',
       labelCfg: {
@@ -128,8 +128,8 @@ export default {
     },
     {
       id:    '5',
-      x:     200,
-      y:     360,
+      x:     250,
+      y:     320,
       label: 'created',
       type:  'rect-node',
       style: {
@@ -158,36 +158,77 @@ export default {
       labelCfg: {
         fill:     '#fff',
         stroke:   '#f1b953',
-        fontSize: 20,
+        fontSize: 14,
       },
     },
     {
-      id:    '7',
-      x:     800,
-      y:     700,
-      label: '当调用 vm.$mount(el) 函数时',
+      id:       '7',
+      x:        750,
+      y:        600,
+      label:    '当调用\n vm.$mount(el)\n 函数时',
+      labelCfg: {
+        fontSize: 14,
+      },
       style: {
-        size: [130, 100],
+        rx: 70,
+        ry: 30,
       },
       type: 'ellipse-node',
     },
     {
-      x:     500,
-      y:     800,
-      id:    '8',
-      label: '是否指定 "template" 选项',
+      x:        500,
+      y:        800,
+      id:       '8',
+      label:    '是否指定 "template" 选项',
+      labelCfg: {
+        fontSize: 12,
+      },
+      style: {
+        width:  200,
+        height: 60,
+      },
     },
     {
-      id:    '9',
-      x:     250,
-      y:     900,
-      label: '将 template 编译\n到 render 函数中',
+      id:       '9',
+      x:        250,
+      y:        800,
+      label:    '将 template 编译\n到 render 函数中',
+      labelCfg: {
+        fontSize: 12,
+      },
+      style: {
+        width:  160,
+        height: 60,
+      },
     },
     {
-      id:    '10',
-      x:     800,
-      y:     900,
-      label: '将 el 外部的 HTML\n作为 template 编译',
+      id:       '10',
+      x:        750,
+      y:        800,
+      label:    '将 el 外部的 HTML\n作为 template 编译',
+      labelCfg: {
+        fontSize: 12,
+      },
+      style: {
+        width:  160,
+        height: 60,
+      },
+    },
+    {
+      id:       '11',
+      x:        500,
+      y:        1000,
+      label:    '结束',
+      labelCfg: {
+        fontSize: 16,
+        fill:     '#fff',
+      },
+      style: {
+        width:     160,
+        height:    60,
+        fill:      '#fdbc33',
+        lineWidth: 0,
+      },
     },
   ],
   edges: [
@@ -336,6 +377,24 @@ export default {
     {
       source: '8',
       target: '10',
+      data:   {
+        type:   'C',
+        amount: '100,000 元',
+        date:   '2019-08-03',
+      },
+    },
+    {
+      source: '9',
+      target: '11',
+      data:   {
+        type:   'C',
+        amount: '100,000 元',
+        date:   '2019-08-03',
+      },
+    },
+    {
+      source: '10',
+      target: '11',
       data:   {
         type:   'C',
         amount: '100,000 元',
