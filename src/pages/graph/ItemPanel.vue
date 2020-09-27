@@ -33,7 +33,7 @@
       <i
         draggable="true"
         data-type="node"
-        data-shape="modelRect"
+        data-shape="modelRect-node"
         class="iconfont icon-model-rect"
       />
       <i class="split" />

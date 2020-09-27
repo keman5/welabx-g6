@@ -226,11 +226,10 @@ export default {
   methods: {
     createGraphic () {
       const graph = new G6({
-        width:     window.innerWidth - 40,
-        height:    window.innerHeight - 40,
-        fitCenter: true,
+        width:  window.innerWidth - 40,
+        height: window.innerHeight - 40,
         // renderer: 'svg',
-        layout:    {
+        layout: {
           type: 'xxx', // 位置将固定
         },
         defaultNode: {
