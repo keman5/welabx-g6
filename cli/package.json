@@ -1,6 +1,6 @@
 {
   "name": "welabx-cli",
-  "version": "0.7.13",
+  "version": "0.7.15",
   "description": "welabx code pack tool",
   "bin": {
     "welabx-cli": "bin/cli-cmd.js",

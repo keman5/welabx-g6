@@ -3,7 +3,7 @@
  * @date 2020/03/05
  * webpack 默认配置文件
  */
-
+const { normalize } = require('path');
 const WebpackChain = require('webpack-chain');
 const { VueLoaderPlugin } = require('vue-loader');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
@@ -18,7 +18,8 @@ const {
     isDev,
     STAGE,
 } = require('./resolve.userconf');
-const pathResolver = dir => `${projectPath}${dir.substr(1)}`;
+
+const pathResolver = dir => normalize(`${projectPath}${dir.substr(1)}`);
 // 核心配置项实例
 const coreConfig = new WebpackChain();
 
@@ -30,20 +31,20 @@ function resolveEntry () {
             const page = userConfig.pages[key];
             coreConfig
                 .entry(key)
-                    .add(pathResolver(page.entry))
-                    .end()
+                .add(pathResolver(page.entry))
+                .end()
                 .plugin(`${key}-html`)
-                    .use(HtmlWebpackPlugin, [{
-                        filename: page.filename || `${key}.html`,
-                        template: page.template ? `${projectPath}${page.template.substr(1)}` : `${projectPath}/public/index.html`,
-                        favicon: (page.favicon ? `${projectPath}${page.favicon.substr(1)}` : `${projectPath}/public/favicon.ico`) || '',
-                        title: page.title || 'title',
-                        minify: {
-                            removeComments: true,
-                            collapseWhitespace: true,
-                            removeAttributeQuotes: true,
-                        },
-                    }])
+                .use(HtmlWebpackPlugin, [{
+                    filename: page.filename || `${key}.html`,
+                    template: normalize(page.template ? `${projectPath}${page.template.substr(1)}` : `${projectPath}/public/index.html`),
+                    favicon: normalize(page.favicon ? `${projectPath}${page.favicon.substr(1)}` : `${projectPath}/public/favicon.ico`) || '',
+                    title: page.title || 'title',
+                    minify: {
+                        removeComments: true,
+                        collapseWhitespace: true,
+                        removeAttributeQuotes: true,
+                    },
+                }])
         }
     }
 }
@@ -51,9 +52,9 @@ function resolveEntry () {
 coreConfig
     .mode('development')
     .output
-        .path(`${projectPath}/${userConfig.outputDir || 'dist'}${context}`)
-        .filename(`${userConfig.assetsDir || 'static'}/js/[name]${isDev ? '' : '.[hash]'}.js`)
-        .chunkFilename(`${userConfig.assetsDir || 'static'}/js/[name]${isDev ? '' : '.[hash]'}.js`)
+        .path(normalize(`${projectPath}/${userConfig.outputDir || 'dist'}${context}`))
+        .filename(normalize(`${userConfig.assetsDir || 'static'}/js/[name]${isDev ? '' : '.[hash]'}.js`))
+        .chunkFilename(normalize(`${userConfig.assetsDir || 'static'}/js/[name]${isDev ? '' : '.[hash]'}.js`))
         .publicPath(`${isDev ? (userConfig.publicPath || '/') : context}`)
         .end()
 
@@ -71,27 +72,27 @@ coreConfig.resolve
         .add('.json')
         .end()
     .modules
-        .add(`${projectPath}/node_modules`)
+        .add(normalize(`${projectPath}/node_modules`))
         .end()
 
 coreConfig.resolve
     .alias
-    .set('@', projectPath)
-    .set('@src', `${projectPath}/src`)
-    .set('@assets', `${projectPath}/src/assets`)
-    .set('@comp', `${projectPath}/src/components`)
-    .set('@views', `${projectPath}/src/views`);
+        .set('@', normalize(projectPath))
+        .set('@src', normalize(`${projectPath}/src`))
+        .set('@assets', normalize(`${projectPath}/src/assets`))
+        .set('@comp', normalize(`${projectPath}/src/components`))
+        .set('@views', normalize(`${projectPath}/src/views`));
 
-coreConfig.context(projectPath)
+coreConfig.context(normalize(projectPath))
 
 coreConfig.module
     .rule('js')
         .include
-            .add(`${projectPath}/src`)
+            .add(normalize(`${projectPath}/src`))
             .end()
         .test(/\.js$/i)
             .use('cache')
-                .loader('cache-loader')
+                   .loader('cache-loader')
             .end()
             .use('babel')
                 .loader('babel-loader')
@@ -103,80 +104,80 @@ coreConfig.module
         .end()
     .rule('png')
         .include
-            .add(`${projectPath}/src`)
+            .add(normalize(`${projectPath}/src`))
             .end()
         .test(/\.(png|jpe?g|gif|svg)$/i)
             .use('img')
                 .loader('url-loader')
-                .options({
-                    limit: 8192,    // 8k
-                    name: `${userConfig.assetsDir || 'static'}/images/[name]${isDev ? '' : '.[hash:7]'}.[ext]`,
-                    esModule: false,
-                })
+                    .options({
+                        limit: 8192,    // 8k
+                        name: normalize(`${userConfig.assetsDir || 'static'}/images/[name]${isDev ? '' : '.[hash:7]'}.[ext]`),
+                        esModule: false,
+                    })
+                .end()
             .end()
-        .end()
     .rule('font')
         .test(/.(eot|woff|woff2|ttf)$/i)
             .use('url')
                 .loader('url-loader')
                 .options({
                     limit: 8192,    // 8k
-                    name: `${userConfig.assetsDir || 'static'}/fonts/[name]${isDev ? '' : '.[hash:7]'}.[ext]`,
+                    name: normalize(`${userConfig.assetsDir || 'static'}/fonts/[name]${isDev ? '' : '.[hash:7]'}.[ext]`),
                 })
             .end()
         .end()
     .rule('vue')
         .include
-            .add(`${projectPath}/src`)
+            .add(normalize(`${projectPath}/src`))
             .end()
         .test(/\.vue$/i)
             .use('vue')
                 .loader('vue-loader')
             .end()
         .end()
-    /* .rule('scss')
-        .test(/\.(sc|c)ss$/)
-            .use('scss')
-                .loader('style-loader')
-                .loader('css-loader')
-                .loader('postcss-loader')
-                    .options({
-                        ident: 'postcss',
-                        plugins: [
-                            require('autoprefixer')(),
-                        ],
-                        loader: 'sass-loader',
-                        options: {
-                            implementation: require('dart-sass'),
-                        },
-                    })
-    .rule('element-ui-js')
-        .test(/element-ui\/.*?js$/i)
-            .use('cache')
-                .loader('cache-loader')
-            .end()
-            .use('babel')
-                .loader('babel-loader')
+/* .rule('scss')
+    .test(/\.(sc|c)ss$/)
+        .use('scss')
+            .loader('style-loader')
+            .loader('css-loader')
+            .loader('postcss-loader')
                 .options({
-                    presets: ['@vue/app'],
-                    plugins: ['@babel/plugin-transform-runtime'],
+                    ident: 'postcss',
+                    plugins: [
+                        require('autoprefixer')(),
+                    ],
+                    loader: 'sass-loader',
+                    options: {
+                        implementation: require('dart-sass'),
+                    },
                 })
-            .end()
+.rule('element-ui-js')
+    .test(/element-ui\/.*?js$/i)
+        .use('cache')
+            .loader('cache-loader')
         .end()
-    .rule('node_modules_css')
-        .test(/node_modules\/.*?css$/)
-            .use('node_modules-css')
-                .loader(MiniCssExtractPlugin.loader)
-                .loader('css-loader')
-                .loader('postcss-loader')
-                    .options({
-                        ident: 'postcss',
-                        plugins: [
-                            require('autoprefixer')(),
-                        ],
-                    })
-            .end()
-        .end() */
+        .use('babel')
+            .loader('babel-loader')
+            .options({
+                presets: ['@vue/app'],
+                plugins: ['@babel/plugin-transform-runtime'],
+            })
+        .end()
+    .end()
+.rule('node_modules_css')
+    .test(/node_modules\/.*?css$/)
+        .use('node_modules-css')
+            .loader(MiniCssExtractPlugin.loader)
+            .loader('css-loader')
+            .loader('postcss-loader')
+                .options({
+                    ident: 'postcss',
+                    plugins: [
+                        require('autoprefixer')(),
+                    ],
+                })
+        .end()
+    .end() */
 
 coreConfig.watchOptions({
     //不监听的 node_modules 目录下的文件

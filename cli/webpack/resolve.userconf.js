@@ -3,6 +3,7 @@
  * @date 2020/03/05
  */
 const { existsSync } = require('fs');
+const { normalize } = require('path');
 const projectPath = process.env.INIT_CWD;
 const packageJson = require(`${projectPath}/package.json`);
 const { original } = JSON.parse(process.env.npm_config_argv);
@@ -17,7 +18,7 @@ if (original[2] && original[2][0] === '-' && original[2][1] !== '-') {
     STAGE = original[2].substr(1);
 }
 
-const rcfile = `${process.env.INIT_CWD}/welabx-cli.conf.js`;
+const rcfile = normalize(`${process.env.INIT_CWD}/welabx-cli.conf.js`);
 
 if (context.length > 1) {
     context = `/${context}/`;
