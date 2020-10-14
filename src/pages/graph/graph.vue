@@ -263,8 +263,9 @@ export default {
             stroke: '#1890FF',
           },
           'edgeState:hover': {
-            stroke:  '#1890FF',
-            animate: true,
+            animate:       true,
+            animationType: 'dash',
+            stroke:        '#1890FF',
           },
         },
         // 自定义注册行为, 事件, 交互

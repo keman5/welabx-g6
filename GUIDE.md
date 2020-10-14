@@ -340,6 +340,8 @@ const data = {
         'edgeState:hover': {
           strokeOpacity: 0.6,
           stroke:        '#ccc',
+          animate:       true,
+          animationType: 'ball',
         },
         'edgeState:selected': {
           strokeOpacity: 1,

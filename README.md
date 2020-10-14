@@ -35,13 +35,13 @@
 
 ## TODO
 
-- [] 给节点设置图标
 - [] 节点多选(shift), 拖动框选节点
 - [] 拖拽节点到画布边缘时自动滚动画布可见范围
 - [] 高亮显示与该节点连接的节点
 - [] 锚点禁用状态及相关交互
 - [] 节点锁定及加锁状态
 
+- [x] 给节点设置图标
 - [x] 边偶尔会被选中
 - [x] 边动态动画
 - [x] 拖拽边高亮及时消失
@@ -123,11 +123,12 @@ npm run dev
 - [add] 新增 modelRect-node 类型节点, 支持添加多行标签及相应样式, 该配置与官方不尽相同, 请留意.
 - [add] 所有自定义节点均支持 logoIcon 和 stateIcon 添加图标
 
-### [0.4.4] 2020-09-27
+### [0.4.6] 2020-10-16
 
-时隔几个月又更新了...
-
-- [upgrade] 升级G6 到 3.7.x 版本
-- [add] 节点 model 中添加 singleEdge 属性时, 拖拽锚点只能生成 1 条边
-- [fix] 修复重复拖拽锚点判断逻辑, 防止生成多条重复的线
+- [upgrade] 升级 G6 到 3.8.x 版本
 - [fix] 优化脑图边样式, 解决某些报错
+- [fix] 修复直接更新数据时锚点状态内部报错
+- [fix] 修复重复拖拽锚点判断逻辑, 防止生成多条重复的线
+- [add] 节点 model 中添加 singleEdge 属性时, 拖拽锚点只能生成 1 条边
+- [add] 新增变动画配置 animationType, 内置了 ball/dash 两种动画, 默认使用 dash
+- [tips] nodeStateStyles 和 edgeStateStyles 支持配置节点和边动画, 参考[案例](https://github.com/claudewowo/welabx-g6/blob/develop/GUIDE.md)

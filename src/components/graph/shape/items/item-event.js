@@ -41,9 +41,12 @@ const events = {
    */
   anchorShow (value, group) {
     // 锚点全局开关
-    const { anchorControls } = group.get('children')[0].cfg.attrs;
+    // changeData 时由于实例没销毁, 这里需要处理异常
+    if (group.get('children')) {
+      const { anchorControls } = group.get('children')[0].cfg.attrs;
 
-    if(anchorControls && anchorControls.hide) return false;
+      if (anchorControls && anchorControls.hide) return false;
+    }
 
     if (value) {
       group.showAnchor(group);
@@ -177,13 +180,13 @@ const events = {
    */
   'edgeState:default'(value, group) {
     if (value) {
-      const { defaultStyle } = getItemStyle.call(this, 'edge', group);
+      const { activeStyle, defaultStyle } = getItemStyle.call(this, 'edge', group);
       const edge = group.getChildByIndex(0);
 
       if (defaultStyle) {
         // 停止内部动画
-        this.stopAnimate(group);
-        setStyle(edge, defaultStyle);
+        this.stopAnimate(group, activeStyle && activeStyle.animationType ? activeStyle.animationType : 'dash');
+        setStyle(edge, { ...defaultStyle, animationType: activeStyle.animationType || 'dash' });
       }
     }
   },
@@ -199,7 +202,7 @@ const events = {
     if (!activeStyle) return;
     if (value) {
       if (activeStyle.animate === true) {
-        this.runAnimate(group);
+        this.runAnimate(group, activeStyle.animationType || 'dash');
       } else if (typeof activeStyle.animate === 'function') {
         activeStyle.animate.call(this, group);
       } else {
@@ -214,7 +217,7 @@ const events = {
     } else {
       if (activeStyle.animate === true) {
         // 停止动画
-        this.stopAnimate(group);
+        this.stopAnimate(group, activeStyle.animationType || 'dash');
       } else if (typeof activeStyle.animate === 'function') {
         activeStyle.animate.call(this, group, 'stop');
       } else {
@@ -241,7 +244,7 @@ const events = {
     if (value) {
       if (activeStyle.animate === true) {
         // 执行内部动画
-        this.runAnimate(group);
+        this.runAnimate(group, activeStyle.animationType || 'dash');
       } else if (typeof activeStyle.animate === 'function') {
         // 执行外部动画
         activeStyle.animate.call(this, group);
@@ -257,7 +260,7 @@ const events = {
     } else {
       if (activeStyle.animate === true) {
         // 停止内部动画
-        this.stopAnimate(group);
+        this.stopAnimate(group, activeStyle.animationType || 'dash');
       } else if (typeof activeStyle.animate === 'function') {
         // 停止外部动画
         activeStyle.animate.call(this, group, 'stop');

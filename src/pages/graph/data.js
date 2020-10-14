@@ -104,7 +104,7 @@ export default {
       id:    '4',
       x:     500,
       y:     450,
-      type:  'triangle-node',
+      type:  'rect-node',
       label: '初始化\n注入 & 校验',
       // direction: 'down',
       style: {
@@ -118,7 +118,7 @@ export default {
         stroke:    '#65b586',
         textAlign: 'left',
         x:         -30,
-        y:         -20,
+        y:         0,
       },
       /* anchorPoints: [
         [1, 0],
@@ -162,18 +162,24 @@ export default {
       },
     },
     {
-      id:       '7',
-      x:        750,
-      y:        600,
-      label:    '当调用\n vm.$mount(el)\n 函数时',
-      labelCfg: {
-        fontSize: 14,
-      },
+      id:    '7',
+      x:     750,
+      y:     600,
+      label: '当调用\n vm.$mount(el)\n 函数时',
       style: {
-        rx: 70,
-        ry: 30,
+        fill:      '#65b586',
+        size:      [160, 200],
+        lineWidth: 0,
       },
-      type: 'ellipse-node',
+      labelCfg: {
+        fontSize:  12,
+        fill:      '#fff',
+        stroke:    '#65b586',
+        textAlign: 'left',
+        x:         -40,
+        y:         -30,
+      },
+      type: 'triangle-node',
     },
     {
       x:        500,
@@ -184,9 +190,10 @@ export default {
         fontSize: 12,
       },
       style: {
-        width:  200,
-        height: 60,
+        rx: 100,
+        ry: 30,
       },
+      type: 'ellipse-node',
     },
     {
       id:       '9',
@@ -261,8 +268,11 @@ export default {
       },
       edgeStateStyles: {
         'edgeState:default': {
-          strokeOpacity: 1,
-          cursor:        'default',
+          strokeOpacity:   1,
+          cursor:          'default',
+          lineDash:        [5, 2],
+          lineWidth:       2,
+          lineAppendWidth: 10,
         },
         'edgeState:hover': {
           strokeOpacity: 0.6,
@@ -317,7 +327,8 @@ export default {
         'edgeState:hover': {
           strokeOpacity: 0.6,
           stroke:        '#ccc',
-          animate:       false,
+          animate:       true,
+          animationType: 'ball',
         },
         'edgeState:selected': {
           strokeOpacity: 1,
