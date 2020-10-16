@@ -451,7 +451,9 @@ data = {
       x: 0, // 控制图标在横轴上的位置
       y: 0, // 控制图标在纵轴上的位置
       // url 用于图标地址
-      imag: 'https://gw.alipayobjects.com/zos/basement_prod/4f81893c-1806-4de4-aff3-9a6b266bc8a2.svg',
+      img: 'https://gw.alipayobjects.com/zos/basement_prod/4f81893c-1806-4de4-aff3-9a6b266bc8a2.svg',
+      // 相对路径
+      // img: require('../../image.png'),
       text: '\ue610;', // 用于支持 iconfont, text 是 iconfont.css 中的content, 注意加 u
       width: 16,
       height: 16,

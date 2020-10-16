@@ -161,11 +161,11 @@ export default G6 => {
 
         let text = maxlength ? label.substr(0, maxlength) : label || '';
 
-          if (label.length > maxlength) {
-            text = `${text}...`;
-          }
+        if (label.length > maxlength) {
+          text = `${text}...`;
+        }
 
-          group.addShape('text', {
+        group.addShape('text', {
             attrs: {
               text,
               x: 0,
@@ -260,6 +260,7 @@ export default G6 => {
       ];
       const group = item.getContainer();
 
+      if (group.get('destroyed')) return;
       if (buildInEvents.includes(name)) {
         // 内部this绑定到了当前item实例
         itemEvents[name].call(this, value, group);

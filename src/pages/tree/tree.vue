@@ -58,7 +58,7 @@ export default {
         },
         children: [{
           text:      'root-note', // 边对应的文案
-          type:      'modelRect-node',
+          // type:      'modelRect-node',
           edgeStyle: { // 节点样式
             stroke: '#39495b',
           },
