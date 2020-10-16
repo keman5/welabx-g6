@@ -8,7 +8,10 @@
       id="canvasPanel"
       @dragover.prevent
     />
-    <input id="canvas-input" type="text">
+    <input
+      id="canvas-input"
+      type="text"
+    >
   </div>
 </template>
 

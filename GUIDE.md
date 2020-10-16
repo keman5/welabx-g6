@@ -336,10 +336,13 @@ const data = {
         'edgeState:default': {
           strokeOpacity: 1,
           stroke:        '#ccc',
+          animate:       false,
         },
         'edgeState:hover': {
           strokeOpacity: 0.6,
           stroke:        '#ccc',
+          animate:       true,
+          animationType: 'ball', // 内置 ball/dash 两种动画, 默认使用 dash
         },
         'edgeState:selected': {
           strokeOpacity: 1,

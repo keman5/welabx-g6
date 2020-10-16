@@ -225,6 +225,7 @@ export default {
   },
   methods: {
     createGraphic () {
+      const vm = this;
       const graph = new G6({
         width:  window.innerWidth - 40,
         height: window.innerHeight - 40,
@@ -262,17 +263,38 @@ export default {
             stroke: '#1890FF',
           },
           'edgeState:hover': {
-            stroke:  '#1890FF',
-            animate: true,
+            animate:       true,
+            animationType: 'dash',
+            stroke:        '#1890FF',
           },
         },
         // 自定义注册行为, 事件, 交互
         registerFactory: (G6, cfg) => {
+          const menu = new G6.Menu({
+            offsetX:   -20,
+            offsetY:   -50,
+            itemTypes: ['node'],
+            getContent(e) {
+              const outDiv = document.createElement('div');
+
+              outDiv.style.width = '80px';
+              outDiv.style.cursor = 'pointer';
+              outDiv.innerHTML = '<p id="deleteNode">删除节点</p>';
+              return outDiv;
+            },
+            handleMenuClick(target, item) {
+              const { id } = target;
+
+              if(id) {
+                vm[id](item);
+              }
+            },
+          });
           const minimap = new G6.Minimap({
             size: [200, 100],
           });
 
-          cfg.plugins = [minimap];
+          cfg.plugins = [menu, minimap];
         },
         // ... 其他G6原生入参
       });
@@ -289,6 +311,9 @@ export default {
     copyNode () { },
     // 粘贴节点
     paste () { },
+    deleteNode(item) {
+      this.graph.removeItem(item);
+    },
     // 添加节点
     addNode (e) {
       const model = {
