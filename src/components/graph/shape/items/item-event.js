@@ -60,9 +60,11 @@ const events = {
    */
   anchorActived (value, group) {
     // 锚点全局开关
-    const { anchorControls } = group.get('children')[0].cfg.attrs;
+    if (group.get('children')) {
+      const { anchorControls } = group.get('children')[0].cfg.attrs;
 
-    if(anchorControls && anchorControls.hide) return false;
+      if (anchorControls && anchorControls.hide) return false;
+    }
 
     if (value) {
       const model = group.get('item').getModel();

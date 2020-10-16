@@ -108,7 +108,7 @@ npm run dev
 
 - [upgrade] !! 从 0.4.1 开始, 内部自动注册 G6.Graph实例, 可在 registerFactory 方法中 return new G6.TreeGraph(config) 来自定义不同的实例.
 - [issue] 安装g6依赖时经常因版本不同而出现报错, 如出现 cannot read property 'transform' of undefined 报错, 请手动安装 @antv/g-base@0.4.6 版本, 出现类似报错请自行排查依赖项 !!! 或者删掉 package.lock 重新安装 g6
-- [add] 新增全局节点配置项 anchorControls 用于控制锚点行为, 暂时只支持 hide 字段, 后续讲进行扩展.
+- [add] 新增全局节点配置项 anchorControls 用于控制锚点行为, 暂时只支持 hide 字段, 后续将进行扩展.
 
   ```js
     defaultNode: {

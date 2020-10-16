@@ -207,7 +207,7 @@ graph.read({
 });
 ```
 
-## 注册自定义节点/边/事件
+## 注册自定义节点/边/行为
 
 ```js
 import WelabxG6 from 'welabx-g6';
@@ -222,7 +222,7 @@ const g6 = new WelabxG6({
     G6.registerEdge('your-edge', {
       // your code here
     });
-    // 注册自定义边
+    // 注册自定义行为
     G6.registerBehavior('your-behavior', {
       // your code here
     });
@@ -336,12 +336,13 @@ const data = {
         'edgeState:default': {
           strokeOpacity: 1,
           stroke:        '#ccc',
+          animate:       false,
         },
         'edgeState:hover': {
           strokeOpacity: 0.6,
           stroke:        '#ccc',
           animate:       true,
-          animationType: 'ball',
+          animationType: 'ball', // 内置 ball/dash 两种动画, 默认使用 dash
         },
         'edgeState:selected': {
           strokeOpacity: 1,

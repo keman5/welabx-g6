@@ -7,7 +7,6 @@ const ball = {
     // 获得当前边的第1个图形，这里是边本身的 path
     const path = group.get('children')[0];
     const endArrowShape = path.get('endArrowShape');
-    // const endArrowPath = endArrowShape.attrs.path;
     const arrowSize = endArrowShape ? Math.max(endArrowShape.get('bbox').width, endArrowShape.get('bbox').height) : 0;
     const startPoint = path.getPoint(0);
     const length = path.getTotalLength();
@@ -76,15 +75,25 @@ const dash = {
     let index = 0;
     // 获得当前边的第1个图形，这里是边本身的 path
     const path = group.get('children')[0];
+    const dashLine = group.addShape('path', {
+      attrs: {
+        offset:     path.attrs.offset,
+        path:       path.attrs.path,
+        stroke:     '#fff',
+        startArrow: false,
+        endArrow:   false,
+      },
+      name: 'edge-dash',
+    });
 
-    path.animate(
-      () => {
+    dashLine.animate(
+      radio => {
         index++;
         if (index > 9) {
           index = 0;
         }
         return {
-          lineDash:       [4, 2, 1, 2],
+          lineDash:       [2, 1, 2, 4],
           lineDashOffset: -index,
         };
       },
@@ -96,11 +105,12 @@ const dash = {
   },
   stop (group) {
     // 获得当前边的第1个图形，这里是边本身的 path
-    const path = group.get('children')[0];
+    const path = group.get('children').find(item => item.cfg.name === 'edge-dash');
 
-    path.stopAnimate();
-    path.attr('lineDash', null);
-    this.running = false;
+    if (path) {
+      path.remove();
+      this.running = false;
+    }
   },
 };
 
