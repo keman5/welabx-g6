@@ -242,6 +242,19 @@ export default {
             fontSize: 20,
           },
         },
+        defaultEdge: {
+          type:  'polyline-edge', // 扩展了内置边, 有边的事件
+          style: {
+            radius:          5,
+            offset:          15,
+            stroke:          '#aab7c3',
+            lineAppendWidth: 10, // 防止线太细没法点中
+            endArrow:        {
+              path: 'M 0,0 L 8,4 L 7,0 L 8,-4 Z',
+              fill: '#aab7c3',
+            },
+          },
+        },
         // 覆盖全局样式
         nodeStateStyles: {
           'nodeState:default': {
@@ -468,5 +481,6 @@ export default {
     position: absolute;
     right: 0;
     bottom: 0;
+    background:#fff;
   }
 </style>

@@ -49,6 +49,7 @@ function setState (name, value, item) {
 function runAnimate (group, animationType) {
   if (this.running) return;
   this.running = true;
+  group.toFront();
   animation[animationType].run.call(this, group);
 }
 
