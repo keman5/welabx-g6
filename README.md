@@ -20,9 +20,14 @@
 
 [流程案例](https://claudewowo.github.io/welabx-g6/build/?_blank)
 
+## 视频教程
+
+> 欢迎关注我的 B 站教程, 不定时更新, 讲解各种图形绘制以及问题解决思路, 带你领略可视化的魅力:
+[b站教程](http://www.bilibili.com/video/BV1YX4y1u7bB?share_medium=android&share_source=copy_link&bbid=XYECCEEEA651E106BC16F360C66C12F72B7CB&ts=1608714329434)
+
 ## G6 五十问
 
-[五十个问题及解答](https://github.com/claudewowo/welabx-g6/blob/develop/FAQ.md)
+[五十个问题及解答](https://github.com/claudewowo/welabx-g6/blob/master/FAQ.md)
 
 ## 已完成功能
 
@@ -64,7 +69,7 @@
 
 ## 使用教程
 
-[使用教程](https://github.com/claudewowo/welabx-g6/blob/develop/GUIDE.md)
+[使用教程](https://github.com/claudewowo/welabx-g6/blob/master/GUIDE.md)
 
 ## 运行案例
 
@@ -131,4 +136,10 @@ npm run dev
 - [fix] 修复重复拖拽锚点判断逻辑, 防止生成多条重复的线
 - [add] 节点 model 中添加 singleEdge 属性时, 拖拽锚点只能生成 1 条边
 - [add] 新增变动画配置 animationType, 内置了 ball/dash 两种动画, 默认使用 dash
-- [tips] nodeStateStyles 和 edgeStateStyles 支持配置节点和边动画, 参考[案例](https://github.com/claudewowo/welabx-g6/blob/develop/GUIDE.md)
+- [tips] nodeStateStyles 和 edgeStateStyles 支持配置节点和边动画, 参考[案例](https://github.com/claudewowo/welabx-g6/blob/master/GUIDE.md)
+
+### [0.5] 2020-11-27 !重大更新
+
+- [upgrade] 升级 G6 到 4.x 版本
+- [upgrade] 重大更新! 实例化方法已经独立成注册方法, 只需极少的改动, 具体写法请参照[使用教程](https://github.com/claudewowo/welabx-g6/blob/master/GUIDE.md)!
+- [add] 支持引用 G6 内置箭头了!

@@ -60,7 +60,7 @@ function stopAnimate (group, animationType) {
 }
 
 // 继承方法
-function inheritEdge (G6, graph, name) {
+function inheritEdge (G6, name) {
   G6.registerEdge(`${name}-edge`, {
     running: false,
     runners: [],
@@ -71,14 +71,14 @@ function inheritEdge (G6, graph, name) {
   }, name);
 }
 
-export default (G6, graph) => {
+export default (G6) => {
   const edgeArray = ['line', 'polyline', 'quadratic', 'cubic', 'arc'];
 
   edgeArray.forEach(edge => {
-    inheritEdge(G6, graph, edge);
+    inheritEdge(G6, edge);
   });
 
-  hvh(G6, graph, {
+  hvh(G6, {
     running: false,
     runners: [],
     drawShape,
@@ -86,7 +86,7 @@ export default (G6, graph) => {
     runAnimate,
     stopAnimate,
   });
-  hvh_h(G6, graph, {
+  hvh_h(G6, {
     running: false,
     runners: [],
     drawShape,

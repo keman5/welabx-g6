@@ -150,7 +150,8 @@
 </template>
 
 <script>
-import G6 from '../../components/graph/graph';
+import G6 from '@antv/g6';
+import registerFactory from '../../components/graph/graph';
 import ItemPanel from './ItemPanel.vue';
 import data from './data.js';
 
@@ -226,7 +227,30 @@ export default {
   methods: {
     createGraphic () {
       const vm = this;
-      const graph = new G6({
+      const menu = new G6.Menu({
+          offsetX:   -20,
+          offsetY:   -50,
+          itemTypes: ['node'],
+          getContent(e) {
+              const outDiv = document.createElement('div');
+
+              outDiv.style.width = '80px';
+              outDiv.style.cursor = 'pointer';
+              outDiv.innerHTML = '<p id="deleteNode">删除节点</p>';
+              return outDiv;
+          },
+          handleMenuClick(target, item) {
+              const { id } = target;
+
+              if(id) {
+                  vm[id](item);
+              }
+          },
+      });
+      const minimap = new G6.Minimap({
+          size: [200, 100],
+      });
+      const cfg = registerFactory(G6, {
         width:  window.innerWidth - 40,
         height: window.innerHeight - 40,
         // renderer: 'svg',
@@ -249,10 +273,7 @@ export default {
             offset:          15,
             stroke:          '#aab7c3',
             lineAppendWidth: 10, // 防止线太细没法点中
-            endArrow:        {
-              path: 'M 0,0 L 8,4 L 7,0 L 8,-4 Z',
-              fill: '#aab7c3',
-            },
+            endArrow:        true,
           },
         },
         // 覆盖全局样式
@@ -281,44 +302,15 @@ export default {
             stroke:        '#1890FF',
           },
         },
-        // 自定义注册行为, 事件, 交互
-        registerFactory: (G6, cfg) => {
-          const menu = new G6.Menu({
-            offsetX:   -20,
-            offsetY:   -50,
-            itemTypes: ['node'],
-            getContent(e) {
-              const outDiv = document.createElement('div');
-
-              outDiv.style.width = '80px';
-              outDiv.style.cursor = 'pointer';
-              outDiv.innerHTML = '<p id="deleteNode">删除节点</p>';
-              return outDiv;
-            },
-            handleMenuClick(target, item) {
-              const { id } = target;
-
-              if(id) {
-                vm[id](item);
-              }
-            },
-          });
-          const minimap = new G6.Minimap({
-            size: [200, 100],
-          });
-
-          cfg.plugins = [menu, minimap];
-        },
+        plugins: [menu, minimap],
         // ... 其他G6原生入参
       });
 
-      this.graph = graph.instance;
+      this.graph = new G6.Graph(cfg);
       this.graph.read(data); // 读取数据
       // this.graph.paint(); // 渲染到页面
       // this.graph.get('canvas').set('localRefresh', false); // 关闭局部渲染
       // this.graph.fitView();
-      // 销毁实例
-      // graph.destroy();
     },
     // 复制节点
     copyNode () { },
@@ -335,7 +327,7 @@ export default {
         // 形状
         type: e.target.dataset.shape,
         // 坐标
-        x:    e.clientX - this.canvasOffset.x - 50,
+        x:    e.clientX - this.canvasOffset.x - 40,
         y:    e.clientY - this.canvasOffset.y - 40,
       };
 
