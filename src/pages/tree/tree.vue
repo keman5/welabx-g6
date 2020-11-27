@@ -16,7 +16,8 @@
 </template>
 
 <script>
-import G6 from '../../components/graph/graph';
+import G6 from '@antv/g6';
+import registerFactory from '../../components/graph/graph';
 
 export default {
   data () {
@@ -58,7 +59,7 @@ export default {
         },
         children: [{
           text:      'root-note', // 边对应的文案
-          type:      'modelRect-node',
+          // type:      'modelRect-node',
           edgeStyle: { // 节点样式
             stroke: '#39495b',
           },
@@ -176,7 +177,7 @@ export default {
         });
       }
 
-      const graph = new G6({
+      const cfg = registerFactory(G6, {
         width:     window.innerWidth,
         height:    window.innerHeight - 40,
         fitCenter: true,
@@ -234,20 +235,10 @@ export default {
             animate: false,
           },
         },
-        // 自定义注册行为, 事件, 交互
-        registerFactory: (G6, cfg) => {
-          /* const minimap = new G6.Minimap({
-            size: [200, 100],
-          });
-
-          cfg.plugins = [minimap]; */
-
-          return new G6.TreeGraph(cfg);
-        },
         // ... 其他G6原生入参
       });
 
-      this.graph = graph.instance;
+      this.graph = new G6.TreeGraph(cfg);
       this.graph.read(data);
       setTimeout(() => {
         this.graph.paint();

@@ -9,6 +9,8 @@ npm install welabx-g6
 
 ## 引入/使用
 
+v0.4.x (不推荐)
+
 ```js
 import WelabxG6 from 'welabx-g6';
 
@@ -20,6 +22,22 @@ graph.read(data);
 graph.paint();
 // 销毁实例
 g6.destroy();
+```
+
+## v0.5+ (推荐)
+
+```js
+import G6 from '@antv/g6';
+import registerFactory from 'welabx-g6';
+
+const config = registerFactory(G6, {
+  // g6 config
+});
+
+const graph = new G6.Graph(config);
+
+graph.read(data);
+graph.destory();
 ```
 
 ### 自定义节点和边(边支持设置箭头)
@@ -133,114 +151,115 @@ graph.addItem('node', model);
 ## 自定义G6实例
 
 ```js
-import WelabxG6 from 'welabx-g6';
+import G6 from '@antv/g6';
+import registerFactory from 'welabx-g6';
 
-const g6 = new WelabxG6({
-  registerFactory(G6, config) {
-    return new G6.TreeGraph(config); // 使用树图
-  }
+const config = registerFactory(G6, {
+  // ...
 });
-const graph = g6.instance; // G6实例
+const graph = new G6.TreeGraph(config);
+
 graph.read({
-  id:       'root',
-  label:    'Root',
-  children: [{
-    id:   '1',
-    data: {
-      action: '初始化',
-    },
-    type:  'modelRect-node',
-    style: { // 节点样式
-      // fill: '#39495b',
-    },
-    // 左侧方条
-    preRect: {
-      show:   true, // 是否显示左侧方条
-      width:  4,
-      fill:   '#40a9ff',
-      radius: 2,
-    },
-    labels: [{
-      x:        -70,
-      y:        -10,
-      label:    '标题,最长10个字符~~',
+  nodes: [{
+    id:       'root',
+    label:    'Root',
+    children: [{
+      id:   '1',
+      data: {
+        action: '初始化',
+      },
+      type:  'modelRect-node',
+      style: { // 节点样式
+        // fill: '#39495b',
+      },
+      // 左侧方条
+      preRect: {
+        show:   true, // 是否显示左侧方条
+        width:  4,
+        fill:   '#40a9ff',
+        radius: 2,
+      },
+      labels: [{
+        x:        -70,
+        y:        -10,
+        label:    '标题,最长10个字符~~',
+        labelCfg: {
+          fill:      '#666',
+          fontSize:  14,
+          maxlength: 10,
+        },
+      }, {
+        x:        -70,
+        y:        7,
+        label:    '描述,最长12个字符~~~',
+        labelCfg: {
+          fontSize:  12,
+          fill:      '#999',
+          maxlength: 12,
+        },
+      }, {
+        x:        -70,
+        y:        24,
+        label:    '第三行,最长16个字符,超出显示省略号~~~',
+        labelCfg: {
+          fontSize:  10,
+          fill:      '#ccc',
+          maxlength: 16,
+        },
+      }],
+    }, {
+      id:    '2',
+      type:  'modelRect-node',
+      style: {
+        width:     230,
+        height:    60,
+        fill:      '#65b586',
+        lineWidth: 0,
+      },
+      label:    '初始化事件和生命周期和其他',
       labelCfg: {
-        fill:      '#666',
-        fontSize:  14,
+        stroke:    '#ccc',
+        fill:      '#fff',
         maxlength: 10,
       },
-    }, {
-      x:        -70,
-      y:        7,
-      label:    '描述,最长12个字符~~~',
-      labelCfg: {
-        fontSize:  12,
-        fill:      '#999',
-        maxlength: 12,
-      },
-    }, {
-      x:        -70,
-      y:        24,
-      label:    '第三行,最长16个字符,超出显示省略号~~~',
-      labelCfg: {
-        fontSize:  10,
-        fill:      '#ccc',
-        maxlength: 16,
-      },
     }],
-  }, {
-    id:    '2',
-    type:  'modelRect-node',
-    style: {
-      width:     230,
-      height:    60,
-      fill:      '#65b586',
-      lineWidth: 0,
-    },
-    label:    '初始化事件和生命周期和其他',
-    labelCfg: {
-      stroke:    '#ccc',
-      fill:      '#fff',
-      maxlength: 10,
-    },
-  }],
+  }]
 });
 ```
 
 ## 注册自定义节点/边/行为
 
 ```js
-import WelabxG6 from 'welabx-g6';
+import G6 from '@antv/g6';
+import registerFactory from 'welabx-g6';
 
-const g6 = new WelabxG6({
-  registerFactory(G6, config) {
-    // 注册自定义节点
-    G6.registerNode('your-node', {
-      // your code here
-    });
-    // 注册自定义边
-    G6.registerEdge('your-edge', {
-      // your code here
-    });
-    // 注册自定义行为
-    G6.registerBehavior('your-behavior', {
-      // your code here
-    });
-
-    return new G6.TreeGraph(config);
-  }
+G6.registerNode('your-node', {
+  // your code here
 });
-const graph = g6.instance; // G6实例
+// 注册自定义边
+G6.registerEdge('your-edge', {
+  // your code here
+});
+// 注册自定义行为
+G6.registerBehavior('your-behavior', {
+  // your code here
+});
+
+const config = registerFactory(G6, {
+  // ...
+});
+const graph = new G6.TreeGraph(config);
 graph.read(data);
 graph.paint();
 // 销毁实例
-g6.destroy();
+graph.destroy();
 ```
 
 ## 完整案例
 
 ```js
-import WelabxG6 from 'welabx-g6';
+import G6 from '@antv/g6';
+import registerFactory from 'welabx-g6';
 
 const data = {
   node: [
@@ -321,6 +340,12 @@ const data = {
         lineDash:        [5,5],
         lineWidth:       2,
         lineAppendWidth: 10,
+        // 支持引用 G6内置箭头了!
+        endArrow: {
+          path:   G6.Arrow.rect(10, 10, 3),
+          fill:   '#aab7c1',
+          stroke: '#aab7c1',
+        },
       },
       labelCfg: {
         position:   'center', // 其实默认就是 center，这里写出来便于理解
@@ -353,22 +378,16 @@ const data = {
   ],
 }
 
-const g6 = new WelabxG6({
+const minimap = new G6.Minimap({
+  size: [200, 100],
+});
+const confg = registerFactory(G6, {
   container: 'id',
   width: 1000,
   height: 300,
   renderer: 'canvas', // 默认 canvas, 也可选用 svg, 但有些事件没有兼容, 也不打算兼容了, 只维护canvas版本
   // 自定义注册行为, 事件, 交互
-  registerFactory: (G6, cfg) => {
-    const minimap = new G6.Minimap({
-      size: [200, 100],
-    });
-
-    cfg.plugins = [minimap];
-    // ! 拖拽画布会引起偏移量变化, 自定义事件需自行计算, 并写入到canvas dx, dy 属性, 便于内部计算
-    // 也可以通过监听 on-canvas-dragend 事件获取画布相对于渲染时的偏移量
-    // 另外 minimap 插件拖拽需写入 canvas dx和dy属性, 请自行实现, 插件那么多谁知道你要用哪个, 也许有空了我会内置进去?
-  },
+  plugins: [minimap],
   defaultEdge: {
     type:  'polyline-edge', // 扩展了内置边, 有边的事件
     style: {
@@ -382,7 +401,8 @@ const g6 = new WelabxG6({
       }, */
       endArrow:        {
         path: 'M 0,0 L 8,4 L 7,0 L 8,-4 Z',
-        fill: '#aab7c3',
+        fill: '#aab7c1',
+        stroke: '#aab7c1',
       },
     },
   },
@@ -415,7 +435,7 @@ const g6 = new WelabxG6({
   // ... 其他G6参数
 });
 
-const graph = g6.instance; // G6实例
+const graph = new G6.Graph(config);
 graph.read(data);
 ```
 

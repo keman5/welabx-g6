@@ -1,3 +1,5 @@
+import G6 from '@antv/g6';
+
 export default {
   nodes: [
     {
@@ -59,7 +61,7 @@ export default {
         lineWidth: 0,
       },
       x:        500,
-      y:        250,
+      y:        300,
       label:    '初始化\n事件和生命周期',
       labelCfg: {
         stroke:    '#ccc',
@@ -249,13 +251,14 @@ export default {
         date:   '2019-08-03',
       },
       label: '新建 Vue 实例',
-      shape: 'cubic-edge',
+      type:  'cubic-edge',
       style: {
         stroke:          'red',
         lineDash:        [5, 2],
         lineWidth:       2,
         lineAppendWidth: 10,
         cursor:          'hand',
+        endArrow:        true,
       },
       labelCfg: {
         position:   'center', // 其实默认就是 center，这里写出来便于理解
@@ -273,6 +276,7 @@ export default {
           lineDash:        [5, 2],
           lineWidth:       2,
           lineAppendWidth: 10,
+          endArrow:        true,
         },
         'edgeState:hover': {
           strokeOpacity: 0.6,
@@ -294,11 +298,23 @@ export default {
         amount: '100,000 元',
         date:   '2019-08-03',
       },
-      label:           '',
+      label: '',
+      style: {
+        endArrow: {
+          path:   'M 0,0 L 8,4 L 7,0 L 8,-4 Z',
+          fill:   '#aab7c1',
+          stroke: '#aab7c1',
+        },
+      },
       edgeStateStyles: {
         'edgeState:default': {
           strokeOpacity: 1,
           cursor:        'default',
+          endArrow:      {
+            path:   'M 0,0 L 8,4 L 7,0 L 8,-4 Z',
+            fill:   '#aab7c1',
+            stroke: '#aab7c1',
+          },
         },
         'edgeState:hover': {
           strokeOpacity: 0.6,
@@ -318,11 +334,23 @@ export default {
         amount: '100,000 元',
         date:   '2019-08-03',
       },
-      label:           '',
+      label: '',
+      style: {
+        endArrow: {
+          path:   G6.Arrow.vee(),
+          fill:   '#aab7c1',
+          stroke: '#aab7c1',
+        },
+      },
       edgeStateStyles: {
         'edgeState:default': {
           strokeOpacity: 1,
           animate:       false,
+          endArrow:      {
+            path:   G6.Arrow.vee(),
+            fill:   '#aab7c1',
+            stroke: '#aab7c1',
+          },
         },
         'edgeState:hover': {
           strokeOpacity: 0.6,
@@ -347,6 +375,13 @@ export default {
         date:   '2019-08-03',
       },
       label: '准备',
+      style: {
+        endArrow: {
+        path:   G6.Arrow.diamond(10, 10, 3),
+          fill:   '#aab7c1',
+          stroke: '#aab7c1',
+        },
+      },
     },
     {
       source: '4',
@@ -357,6 +392,13 @@ export default {
         date:   '2019-08-03',
       },
       label: '继续',
+      style: {
+        endArrow: {
+          path:   G6.Arrow.rect(10, 10, 3),
+          fill:   '#aab7c1',
+          stroke: '#aab7c1',
+        },
+      },
     },
     {
       source: '6',

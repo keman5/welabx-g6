@@ -124,7 +124,7 @@ const events = {
   /**
    * @description 边多状态事件
    */
-  nodeState(value, group) {
+  nodeState (value, group) {
     events[`nodeState:${value}`].call(this, value, group);
   },
 
@@ -198,7 +198,7 @@ const events = {
    */
   'edgeState:hover' (value, group) {
     const path = group.getChildByIndex(0);
-    const { endArrow } = path.get('attrs');
+    const { endArrow, startArrow } = path.get('attrs');
     const { activeStyle, defaultStyle, originStyle } = getItemStyle.call(this, 'edge', group, 'hover');
 
     if (!activeStyle) return;
@@ -210,8 +210,14 @@ const events = {
       } else {
         setStyle(path, activeStyle);
         if (endArrow) {
-          path.attr('endArrow', {
+          path.attr('endArrow', endArrow === true ? true : {
             path: endArrow.path,
+            fill: activeStyle.stroke || originStyle.stroke,
+          });
+        }
+        if (startArrow) {
+          path.attr('startArrow', startArrow === true ? true : {
+            path: startArrow.path,
             fill: activeStyle.stroke || originStyle.stroke,
           });
         }
@@ -225,8 +231,14 @@ const events = {
       } else {
         setStyle(path, defaultStyle);
         if (endArrow) {
-          path.attr('endArrow', {
+          path.attr('endArrow', endArrow === true ? true : {
             path: endArrow.path,
+            fill: defaultStyle.stroke || activeStyle.stroke || originStyle.stroke,
+          });
+        }
+        if (startArrow) {
+          path.attr('startArrow', startArrow === true ? true : {
+            path: startArrow.path,
             fill: defaultStyle.stroke || activeStyle.stroke || originStyle.stroke,
           });
         }
@@ -239,7 +251,7 @@ const events = {
    */
   'edgeState:selected'(value, group) {
     const path = group.getChildByIndex(0);
-    const { endArrow } = path.get('attrs');
+    const { endArrow, startArrow } = path.get('attrs');
     const { activeStyle, defaultStyle, originStyle } = getItemStyle.call(this, 'edge', group, 'selected');
 
     if (!activeStyle) return;
@@ -253,8 +265,14 @@ const events = {
       } else {
         setStyle(path, activeStyle);
         if (endArrow) {
-          path.attr('endArrow', {
+          path.attr('endArrow', endArrow === true ? true : {
             path: endArrow.path,
+            fill: activeStyle.stroke || originStyle.stroke,
+          });
+        }
+        if (startArrow) {
+          path.attr('startArrow', startArrow === true ? true : {
+            path: startArrow.path,
             fill: activeStyle.stroke || originStyle.stroke,
           });
         }
@@ -269,8 +287,14 @@ const events = {
       } else {
         setStyle(path, defaultStyle);
         if (endArrow) {
-          path.attr('endArrow', {
+          path.attr('endArrow', endArrow === true ? true : {
             path: endArrow.path,
+            fill: defaultStyle.stroke || activeStyle.stroke || originStyle.stroke,
+          });
+        }
+        if (startArrow) {
+          path.attr('startArrow', startArrow === true ? true : {
+            path: startArrow.path,
             fill: defaultStyle.stroke || activeStyle.stroke || originStyle.stroke,
           });
         }
