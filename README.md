@@ -20,6 +20,11 @@
 
 [流程案例](https://claudewowo.github.io/welabx-g6/build/?_blank)
 
+## 视频教程
+
+> 欢迎关注我的 B 站教程, 不定时更新, 讲解各种图形绘制以及问题解决思路, 带你领略可视化的魅力:
+[b站教程](http://www.bilibili.com/video/BV1YX4y1u7bB?share_medium=android&share_source=copy_link&bbid=XYECCEEEA651E106BC16F360C66C12F72B7CB&ts=1608714329434)
+
 ## G6 五十问
 
 [五十个问题及解答](https://github.com/claudewowo/welabx-g6/blob/master/FAQ.md)
