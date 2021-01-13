@@ -6,41 +6,96 @@
 
 import itemEvents from './item-event';
 import anchorEvent from './anchor-event';
+import defaultStyles from '../defaultStyles';
+
+const {
+  iconStyles,
+  nodeStyles,
+  anchorPointStyles,
+  nodeLabelStyles,
+} = defaultStyles;
+
+function getStyle (options, cfg) {
+  return {
+    ...cfg,
+    // 自定义默认样式
+    ...nodeStyles,
+    ...options,
+    // 当前节点样式
+    ...cfg.style,
+    // 文本配置
+    labelCfg: {
+      ...nodeLabelStyles,
+      ...cfg.labelCfg,
+    },
+    // 图标样式
+    iconStyles: {
+      ...iconStyles,
+      ...cfg.iconStyles,
+    },
+    // 锚点样式
+    anchorPointStyles: {
+      ...anchorPointStyles,
+      ...cfg.anchorPointStyles,
+    },
+    ...cfg.nodeStateStyles,
+    // 锚点高亮样式
+    anchorHotsoptStyles: cfg.anchorHotsoptStyles,
+  };
+}
 
 /*
  * 注册基础node => 添加锚点/图标 => 绘制node => 初始化node状态 => node动画(设置交互动画)
  */
 export default G6 => {
   G6.registerNode('base-node', {
+    getShapeStyle (cfg) {
+      const width = cfg.style.width || 80;
+      const height = cfg.style.height || 40;
+
+      return getStyle.call(this, {
+        width,
+        height,
+        radius: 5,
+        // 将图形中心坐标移动到图形中心, 用于方便鼠标位置计算
+        x:      -width / 2,
+        y:      -height / 2,
+      }, cfg);
+    },
     // 绘制图标
     drawIcon (cfg, group, attrs) {
       const { logoIcon, stateIcon } = attrs;
+      const icons = [logoIcon, stateIcon];
 
-      if (logoIcon && logoIcon.show) {
-        const icon = group.addShape(logoIcon.img ? 'image' : 'text', {
-          attrs: {
-            ...logoIcon,
-            ...logoIcon.style,
-          },
-          className: `${attrs.type}-icon`,
-          draggable: true,
-        });
+      icons.forEach(($item, index) => {
+        if ($item) {
+          const className = `${attrs.type}-${index === 0 ? 'logoIcon' : 'stateIcon'}`;
 
-        icon.toFront();
-      }
+          let item = group.getItem(className);
 
-      if (stateIcon && stateIcon.show) {
-        const icon = group.addShape(stateIcon.img ? 'image' : 'text', {
-          attrs: {
-            ...stateIcon,
-            ...stateIcon.style,
-          },
-          className: `${attrs.type}-icon`,
-          draggable: true,
-        });
+          if (!item) {
+            const icon = group.addShape($item.img ? 'image' : 'text', {
+              attrs: {
+                ...$item,
+                ...$item.style,
+              },
+              draggable: true,
+              className,
+            });
 
-        icon.toFront();
-      }
+            icon.toFront();
+            item = group.getItem(className);
+          }
+
+          if (item) {
+            if ($item.show) {
+              item.show();
+            } else {
+              item.hide();
+            }
+          }
+        }
+      });
     },
     // 绘制锚点
     initAnchor (cfg, group) {
@@ -201,7 +256,11 @@ export default G6 => {
       }
     },
     /* 绘制节点，包含文本 */
-    draw (cfg, group) { // 元素分组
+    draw (cfg, group) {
+      return this.drawShape(cfg, group);
+    },
+    /* 绘制节点，包含文本 */
+    drawShape (cfg, group) { // 元素分组
       // 合并外部样式和默认样式
       const attrs = this.getShapeStyle(cfg, group);
       // 添加节点
@@ -231,6 +290,7 @@ export default G6 => {
     /* 更新节点，包含文本 */
     update (cfg, node) {
       const model = node.get('model');
+      // const group = node.get('group');
       const { attrs } = node.get('keyShape');
       const text = node.get('group').getItem('node-text');
       const item = node.get('group').get('children')[0];
@@ -264,8 +324,10 @@ export default G6 => {
       if (buildInEvents.includes(name)) {
         // 内部this绑定到了当前item实例
         itemEvents[name].call(this, value, group);
+      } else if (this.stateApplying) {
+        this.stateApplying.call(this, name, value, item);
       } else {
-        console.warn(`warning: ${name} 事件回调未注册!`);
+        console.warn(`warning: ${name} 事件回调未注册!\n可继承该节点并通过 stateApplying 方法进行注册\n如已注册请忽略 (-_-!)`);
       }
     },
     /* 获取锚点（相关边的连入点） */

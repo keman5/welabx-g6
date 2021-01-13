@@ -143,3 +143,8 @@ npm run dev
 - [upgrade] 升级 G6 到 4.x 版本
 - [upgrade] 重大更新! 实例化方法已经独立成注册方法, 只需极少的改动, 具体写法请参照[使用教程](https://github.com/claudewowo/welabx-g6/blob/master/GUIDE.md)!
 - [add] 支持引用 G6 内置箭头了!
+
+### [0.5.2] 2021-01-13
+
+- [upgrade] 升级 G6 到 4.1.x 版本
+- [upgrade] 提供的 *-node 节点均支持二次继承, 支持更多扩展可能性! 二次继承可参考[使用教程](https://github.com/claudewowo/welabx-g6/blob/master/GUIDE.md)

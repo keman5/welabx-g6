@@ -438,6 +438,7 @@ export default {
       this.graph.on('before-edge-add', ({ source, target, sourceAnchor, targetAnchor }) => {
         setTimeout(() => {
           this.graph.addItem('edge', {
+            id:     `${+new Date() + (Math.random()*10000).toFixed(0)}`, // edge id
             source: source.get('id'),
             target: target.get('id'),
             sourceAnchor,
