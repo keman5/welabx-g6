@@ -21,57 +21,6 @@
       :graph="graph"
       @canvas-add-node="addNode"
     />
-    <!-- 浮动工具条 -->
-    <!-- <div id="toolbar">
-      <i
-        class="iconfont icon-undo"
-        @click="addNode"
-      />
-      <i
-        class="iconfont icon-redo"
-        @click="addNode"
-      />
-      <i class="split" />
-      <i
-        class="iconfont icon-copy"
-        @click="copyNode"
-      />
-      <i
-        class="iconfont icon-paste"
-        @click="addNode"
-      />
-      <i class="split" />
-      <i
-        class="iconfont icon-line-style"
-        @click="addNode"
-      />
-      <i
-        class="iconfont icon-line-strong"
-        @click="addNode"
-      />
-      <i class="split" />
-      <i
-        class="iconfont icon-toup"
-        @click="addNode"
-      />
-      <i
-        class="iconfont icon-todown"
-        @click="addNode"
-      />
-      <i class="split" />
-      <i
-        class="iconfont icon-font-size"
-        @click="addNode"
-      />
-      <i
-        class="iconfont icon-actual-size"
-        @click="addNode"
-      />
-      <i
-        class="iconfont icon-full-screen"
-        @click="addNode"
-      />
-    </div> -->
     <!-- 挂载节点 -->
     <div
       id="canvasPanel"
@@ -438,6 +387,7 @@ export default {
       this.graph.on('before-edge-add', ({ source, target, sourceAnchor, targetAnchor }) => {
         setTimeout(() => {
           this.graph.addItem('edge', {
+            id:     `${+new Date() + (Math.random()*10000).toFixed(0)}`, // edge id
             source: source.get('id'),
             target: target.get('id'),
             sourceAnchor,

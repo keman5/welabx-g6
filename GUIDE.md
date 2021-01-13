@@ -255,6 +255,46 @@ graph.paint();
 graph.destroy();
 ```
 
+## 二次继承
+
+> *-node 支持二次继承扩展状态回调了!
+> 先继承 [*-node], 在生命周期中通过 stateApplying 方法进行状态值处理
+
+```js
+/* file 1 */
+export default G6 => {
+  G6.registerNode('your-unique-node', {
+    shapeType: 'rect',
+    draw (cfg, group) {
+      return this.drawShape(cfg, group);
+    },
+    stateApplying (name, value, item) {
+      // 继承更多状态回调, name 为自定义名称时可用
+    },
+  }, 'rect-node' /* 要继承的 *-node */);
+}
+```
+
+```js
+/* file 2 */
+import G6 from '@antv/g6';
+import register from 'welabx-g6';
+import nodeStateApply from 'file1.js';
+
+const config = registerFactory(G6, {
+  // ...
+});
+
+// after registerFactory
+nodeStateApply(G6);
+
+const graph = new G6.TreeGraph(config);
+
+graph.read({
+  // your data
+});
+```
+
 ## 完整案例
 
 ```js

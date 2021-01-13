@@ -21,7 +21,7 @@
   "author": "claude.wu",
   "license": "MIT",
   "dependencies": {
-    "@antv/g6": "^4.0.1",
+    "@antv/g6": "^4.1.1",
     "insert-css": "^2.0.0"
   },
   "devDependencies": {
