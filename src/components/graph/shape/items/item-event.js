@@ -125,7 +125,7 @@ const events = {
    * @description 边多状态事件
    */
   nodeState (value, group) {
-    events[`nodeState:${value}`].call(this, value, group);
+    events[`nodeState:${value}`] && events[`nodeState:${value}`].call(this, value, group);
   },
 
   /**
@@ -174,7 +174,7 @@ const events = {
    * @description 边多状态事件
    */
   edgeState(value, group) {
-    events[`edgeState:${value}`].call(this, value, group);
+    events[`edgeState:${value}`] && events[`edgeState:${value}`].call(this, value, group);
   },
 
   /**
@@ -182,13 +182,27 @@ const events = {
    */
   'edgeState:default'(value, group) {
     if (value) {
-      const { activeStyle, defaultStyle } = getItemStyle.call(this, 'edge', group);
+      const { activeStyle, defaultStyle, originStyle } = getItemStyle.call(this, 'edge', group);
       const edge = group.getChildByIndex(0);
+      const { endArrow, startArrow } = edge.get('attrs');
 
       if (defaultStyle) {
         // 停止内部动画
         this.stopAnimate(group, activeStyle && activeStyle.animationType ? activeStyle.animationType : 'dash');
         setStyle(edge, { ...defaultStyle, animationType: activeStyle.animationType || 'dash' });
+
+        if (endArrow) {
+          edge.attr('endArrow', endArrow === true ? true : {
+            path: endArrow.path,
+            fill: defaultStyle.stroke || originStyle.stroke,
+          });
+        }
+        if (startArrow) {
+          edge.attr('startArrow', startArrow === true ? true : {
+            path: startArrow.path,
+            fill: defaultStyle.stroke || originStyle.stroke,
+          });
+        }
       }
     }
   },

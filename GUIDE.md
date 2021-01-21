@@ -269,7 +269,7 @@ export default G6 => {
       return this.drawShape(cfg, group);
     },
     stateApplying (name, value, item) {
-      // 继承更多状态回调
+      // 继承更多状态回调, name 为自定义名称时可用
     },
   }, 'rect-node' /* 要继承的 *-node */);
 }
@@ -279,10 +279,14 @@ export default G6 => {
 /* file 2 */
 import G6 from '@antv/g6';
 import register from 'welabx-g6';
+import nodeStateApply from 'file1.js';
 
 const config = registerFactory(G6, {
   // ...
 });
+
+// after registerFactory
+nodeStateApply(G6);
 
 const graph = new G6.TreeGraph(config);
 

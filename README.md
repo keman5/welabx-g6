@@ -147,4 +147,4 @@ npm run dev
 ### [0.5.2] 2021-01-13
 
 - [upgrade] 升级 G6 到 4.1.x 版本
-- [upgrade] 提供的 *-node 节点均支持二次继承, 支持更多扩展可能性! 二次继承可参考[使用教程](https://github.com/claudewowo/welabx-g6/blob/master/GUIDE.md)
+- [upgrade] 提供的 *-node 节点均支持二次继承, 支持更多扩展可能性! 二次继承可参考[使用教程](https://github.com/claudewowo/welabx-g6/blob/master/GUIDE.md#二次继承)
