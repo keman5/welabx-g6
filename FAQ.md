@@ -12,73 +12,72 @@
   });
   ```
 
-  [官方出处](https://g6.antv.vision/zh/docs/api/layout/Layout)
+  [官方出处](https://antv-g6.gitee.io/zh/docs/api/graphLayout/guide)
 
 - 如何传入数据渲染
 
-  [官方出处](https://g6.antv.vision/zh/docs/manual/middle/graph)
+  [官方出处](https://antv-g6.gitee.io/zh/docs/api/graphFunc/data)
 
 - 如何选择modes
 
-  [官方出处](https://g6.antv.vision/zh/docs/manual/middle/states/mode)
+  [官方出处](https://antv-g6.gitee.io/zh/docs/manual/middle/states/mode)
 
 - 什么是行为
 
-  [官方出处](https://g6.antv.vision/zh/docs/manual/middle/states/defaultBehavior)
+  [官方出处](https://antv-g6.gitee.io/zh/docs/manual/middle/states/defaultBehavior)
 
 - 内置节点和边
 
-  [官方出处](https://g6.antv.vision/zh/docs/manual/middle/elements/nodes/defaultNode)
+  [官方出处](https://antv-g6.gitee.io/zh/docs/manual/middle/elements/overview)
 
 - 如何自定义注册行为
 
-  [官方出处](https://g6.antv.vision/zh/docs/manual/advanced/custom-behavior)
+  [官方出处](https://antv-g6.gitee.io/zh/docs/manual/middle/states/custom-behavior)
 
 - 如何自定义modes
 
-  [官方出处](https://g6.antv.vision/zh/docs/manual/advanced/mode-and-custom-behavior)
+  [官方出处](https://antv-g6.gitee.io/zh/docs/manual/middle/states/mode)
 
 - 如何自定义节点
 
-  [官方出处1](https://g6.antv.vision/zh/docs/manual/advanced/custom-node)
-  [官方出处2](https://g6.antv.vision/zh/docs/api/Custom)
+  [官方出处1](https://antv-g6.gitee.io/zh/docs/manual/middle/elements/nodes/custom-node)
+  [官方出处2](https://antv-g6.gitee.io/zh/docs/api/registerItem)
 
 - 如何继承节点
 
-  [官方出处](https://g6.antv.vision/zh/docs/api/Shape)
+  [官方出处](https://antv-g6.gitee.io/zh/docs/manual/middle/elements/nodes/custom-node#%E6%89%A9%E5%B1%95-shape)
 
 - item 生命周期
 
-  [官方出处](https://g6.antv.vision/zh/docs/api/nodeEdge/Item)
-  [官方出处](https://g6.antv.vision/zh/docs/manual/middle/elements/shape-keyshape/#shape-%E7%9A%84%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F)
+  [官方出处](https://antv-g6.gitee.io/zh/docs/manual/middle/elements/shape/shape-keyshape#shape-%E7%9A%84%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F)
 
 - 什么是 shape
 
-  [官方出处](https://g6.antv.vision/zh/docs/manual/advanced/keyconcept/shape-and-properties)
+  [官方出处](https://antv-g6.gitee.io/zh/docs/manual/middle/elements/shape/shape-keyshape)
 
 - ￼如何给节点和边绑定事件
 
-  [官方出处](https://g6.antv.vision/zh/docs/api/Behavior)
+  [官方出处](https://antv-g6.gitee.io/zh/docs/manual/middle/states/bindEvent)
 
 - 如何给画布绑定事件
 
-  [官方出处](https://g6.antv.vision/zh/docs/api/Event)
+  [官方出处](https://antv-g6.gitee.io/zh/docs/api/Event)
 
 - ￼如何设置节点和边的状态
 
-  [官方出处](https://g6.antv.vision/zh/docs/manual/middle/states/state)
+  [官方出处](https://antv-g6.gitee.io/zh/docs/manual/middle/states/state)
 
 - 如何根据状态查找item
 
-  [官方出处](https://g6.antv.vision/zh/docs/api/Graph/#findallbystatetype-state)
+  [官方出处](https://antv-g6.gitee.io/zh/docs/api/graphFunc/find)
 
 - 如何绘制自定义锚点
 
-  [官方出处](https://g6.antv.vision/zh/docs/api/Shape#%E7%BB%98%E5%88%B6%E5%87%BD%E6%95%B0)
+  [官方出处](https://antv-g6.gitee.io/zh/docs/manual/middle/elements/nodes/custom-node)
 
 - 自定义锚点拖拽事件不生效
 
-  [官方出处](https://g6.antv.vision/zh/docs/api/Group/#addshapetype-cfgs)
+  [官方出处](https://antv-g6.gitee.io/zh/docs/manual/middle/elements/nodes/custom-node#1-%E4%BB%8E%E6%97%A0%E5%88%B0%E6%9C%89%E5%AE%9A%E4%B9%89%E8%8A%82%E7%82%B9)
 
 - 如何让锚点更生动
 

@@ -77,7 +77,7 @@
           字体大小: <input :value="labelCfg.fontSize">
         </div>
         <div class="config-item">
-          颜色: <input :value="labelCfg.fill">
+          颜色: <input :value="labelCfg.style.fill">
         </div>
       </div>
       <button @click="configVisible = false">取消</button>
@@ -123,7 +123,9 @@ export default {
       label:    '',
       labelCfg: {
         fontSize: 12,
-        fill:     '#fff',
+        style:    {
+          fill: '#fff',
+        },
       },
       node: {
         fill:        '',
@@ -306,8 +308,10 @@ export default {
           this.config = model;
           this.label = model.label;
           this.labelCfg = {
-            fill:     model.labelCfg.fill,
             fontSize: model.labelCfg.fontSize,
+            style:    {
+              fill: model.labelCfg.style.fill,
+            },
           };
           this.node = {
             fill:        model.style.fill,
@@ -399,7 +403,7 @@ export default {
     },
     save() {
       // eslint-disable-next-line no-alert
-      window.alert('还没写');
+      window.alert('我觉得就算我不写你也会了');
     },
   },
 };

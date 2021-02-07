@@ -96,43 +96,54 @@ export default {
             y:        -10,
             label:    '标题,最长10个字符~~',
             labelCfg: {
-              fill:      '#666',
-              fontSize:  14,
               maxlength: 10,
+              style:     {
+                fontSize: 14,
+                fill:     '#666',
+              },
             },
           }, {
             x:        -70,
             y:        7,
             label:    '描述,最长12个字符~~~',
             labelCfg: {
-              fontSize:  12,
-              fill:      '#999',
               maxlength: 12,
+              style:     {
+                fontSize: 12,
+                fill:     '#999',
+              },
             },
           }, {
             x:        -70,
             y:        24,
             label:    '第三行,最长16个字符,超出显示省略号~~~',
             labelCfg: {
-              fontSize:  10,
-              fill:      '#ccc',
               maxlength: 16,
+              style:     {
+                fontSize: 10,
+                fill:     '#ccc',
+              },
             },
           }],
           children: [{
             label:    '初始化事件和生命周期和其他',
             labelCfg: {
-              stroke:    '#ccc',
-              fill:      '#666',
               maxlength: 10,
+              style:     {
+                fill:   '#666',
+                stroke: '#ccc',
+              },
             },
           }],
         }, {
           label:    '初始化事件和生命周期和其他',
           labelCfg: {
-            stroke:    '#ccc',
-            fill:      '#666',
+            x:         16,
             maxlength: 10,
+            style:     {
+              fill:   '#666',
+              stroke: '#ccc',
+            },
           },
           // 状态图标, 注意: 坐标 (0, 0) 代表图形几何中心
           stateIcon: {
@@ -150,9 +161,11 @@ export default {
           children: [{
             label:    '初始化事件和生命周期和其他',
             labelCfg: {
-              stroke:    '#ccc',
-              fill:      '#666',
               maxlength: 10,
+              style:     {
+                fill:   '#666',
+                stroke: '#ccc',
+              },
             },
           }],
         }],
@@ -160,18 +173,22 @@ export default {
 
       for(let i = 0; i < 11; i++) {
         data.children.push({
-          label:    '初始化事件和生命周期和其他',
+          label:    '初始化事件和生命xxx',
           labelCfg: {
-            stroke:    '#ccc',
-            fill:      '#666',
             maxlength: 10,
+            style:     {
+              fill:   '#666',
+              stroke: '#ccc',
+            },
           },
           children: [{
-            label:    '初始化事件和生命周期和其他',
+            label:    '初始化事件和生命xxx',
             labelCfg: {
-              stroke:    '#ccc',
-              fill:      '#666',
               maxlength: 10,
+              style:     {
+                fill:   '#666',
+                stroke: '#ccc',
+              },
             },
           }],
         });
@@ -201,7 +218,9 @@ export default {
         defaultNode: {
           type:     'modelRect-node',
           labelCfg: {
-            fontSize: 20,
+            style: {
+              fontSize: 14,
+            },
           },
           // 锚点控制字段
           anchorControls: {
