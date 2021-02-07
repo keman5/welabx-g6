@@ -184,7 +184,6 @@ export default G6 => {
     /* https://g6.antv.vision/zh/docs/manual/advanced/keyconcept/shape-and-properties/#%E6%96%87%E6%9C%AC-text */
     addLabel (cfg, group, attrs) {
       const { label, labelCfg, labels } = attrs;
-
       // 字体小于12时 svg会报错
       /* if (labelCfg && labelCfg.fontSize < 12) {
         labelCfg.fontSize = 12;
@@ -206,6 +205,7 @@ export default G6 => {
               text,
               ...item,
               ...item.labelCfg,
+              ...item.labelCfg.style,
             },
             className: `node-text ${className}`,
             draggable: true,
@@ -225,8 +225,8 @@ export default G6 => {
               text,
               x: 0,
               y: 0,
-              ...label,
               ...labelCfg,
+              ...labelCfg.style,
             },
             className: 'node-text',
             draggable: true,

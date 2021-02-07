@@ -184,27 +184,33 @@ graph.read({
         y:        -10,
         label:    '标题,最长10个字符~~',
         labelCfg: {
-          fill:      '#666',
-          fontSize:  14,
           maxlength: 10,
+          style: {
+            fontSize:  14,
+            fill:      '#666',
+          }
         },
       }, {
         x:        -70,
         y:        7,
         label:    '描述,最长12个字符~~~',
         labelCfg: {
-          fontSize:  12,
-          fill:      '#999',
           maxlength: 12,
+          style: {
+            fontSize:  12,
+            fill:      '#999',
+          }
         },
       }, {
         x:        -70,
         y:        24,
         label:    '第三行,最长16个字符,超出显示省略号~~~',
         labelCfg: {
-          fontSize:  10,
-          fill:      '#ccc',
           maxlength: 16,
+          style: {
+            fontSize:  10,
+            fill:      '#ccc',
+          }
         },
       }],
     }, {
@@ -218,9 +224,11 @@ graph.read({
       },
       label:    '初始化事件和生命周期和其他',
       labelCfg: {
-        stroke:    '#ccc',
-        fill:      '#fff',
         maxlength: 10,
+        style: {
+          fill:      '#fff',
+          stroke:    '#ccc',
+        }
       },
     }],
   }]
@@ -328,11 +336,13 @@ const data = {
       label:    'new Vue()', // 节点上显示的文字
       // node 文本默认样式
       labelCfg: {
-        fill:         '#fff',
-        textAlign:    'center',
-        textBaseline: 'middle',
-        fontWeight:   'bold',
-        fontSize:     24,
+        style: {
+          fill:      '#fff',
+          textAlign:    'center',
+          textBaseline: 'middle',
+          fontWeight:   'bold',
+          fontSize:     24,
+        }
       },
       // 当前节点多状态样式, 覆盖全局样式, 仅对当前节点生效
       nodeStateStyles: {
@@ -540,27 +550,33 @@ data = {
     labels: [{
       label: '标题,最长10个字符~~',
       labelCfg: {
-        textBaseline: 'middle',
-        fontWeight:   'bold',
         maxlength: 10, // 超出10个字符显示省略号
-        fontSize: 14,
-        fill: '#666',
+        style: {
+          fontSize: 14,
+          fill:      '#666',
+          textBaseline: 'middle',
+          fontWeight:   'bold',
+        }
       },
       className: 'node-text-0', // 可用于绑定自定义事件
     }, {
       label: '描述描述',
       labelCfg: {
         maxlength: 12,
-        fontSize: 12,
-        fill: '#999',
+        style: {
+          fontSize: 12,
+          fill:      '#999',
+        }
       },
       className: 'node-text-1',
     }, {
       label: '第三行,最长16个字符,超出显示省略号~~~',
       labelCfg: {
         maxlength: 16,
-        fontSize: 10,
-        fill: '#ccc',
+        style: {
+          fontSize: 10,
+          fill:      '#ccc',
+        }
       },
       className: 'node-text-2',
     }],

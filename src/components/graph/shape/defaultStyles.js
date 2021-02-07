@@ -32,11 +32,13 @@ export default {
   },
   // node 文本默认样式
   nodeLabelStyles: {
-    cursor:       'default',
-    fill:         '#666',
-    textAlign:    'center',
-    textBaseline: 'middle',
-    fontSize:     12,
+    style: {
+      fontSize:     12,
+      fill:         '#666',
+      textAlign:    'center',
+      textBaseline: 'middle',
+      cursor:       'default',
+    },
   },
   // node 文本交互样式
   nodeLabelStateStyles: {
