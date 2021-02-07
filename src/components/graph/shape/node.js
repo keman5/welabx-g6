@@ -25,6 +25,10 @@ function getStyle (options, cfg) {
     labelCfg: {
       ...nodeLabelStyles,
       ...cfg.labelCfg,
+      style: {
+        ...nodeLabelStyles.style,
+        ...cfg.labelCfg.style,
+      },
     },
     // 图标样式
     iconStyles: {

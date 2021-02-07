@@ -22,11 +22,13 @@ export default {
       label:    'new Vue()', // 节点上的文本
       // node 文本默认样式
       labelCfg: {
-        fill:         '#fff',
-        textAlign:    'center',
-        textBaseline: 'middle',
-        fontWeight:   'bold',
-        fontSize:     24,
+        style: {
+          fontSize:     24,
+          fill:         '#fff',
+          textAlign:    'center',
+          textBaseline: 'middle',
+          fontWeight:   'bold',
+        },
       },
       // 当前节点的多状态样式
       nodeStateStyles: {
@@ -64,11 +66,13 @@ export default {
       y:        300,
       label:    '初始化\n事件和生命周期',
       labelCfg: {
-        stroke:    '#ccc',
-        lineWidth: 2,
-        fontSize:  18,
-        fill:      '#fff',
-        textAlign: 'center',
+        style: {
+          lineWidth: 2,
+          fontSize:  18,
+          stroke:    '#ccc',
+          fill:      '#fff',
+          textAlign: 'center',
+        },
       },
     },
     {
@@ -85,11 +89,13 @@ export default {
       y:        170,
       label:    'beforeCreate',
       labelCfg: {
-        fill:       '#c96164',
-        width:      200,
-        height:     60,
-        fontSize:   20,
-        fontWeight: '700',
+        style: {
+          fill:       '#c96164',
+          fontSize:   20,
+          fontWeight: '700',
+          width:      200,
+          height:     60,
+        },
       },
       anchorHotsoptStyles: {
         r:    11,
@@ -115,12 +121,14 @@ export default {
         lineWidth: 0,
       },
       labelCfg: {
-        fontSize:  12,
-        fill:      '#fff',
-        stroke:    '#65b586',
-        textAlign: 'left',
-        x:         -30,
-        y:         0,
+        style: {
+          fontSize:  12,
+          fill:      '#fff',
+          stroke:    '#65b586',
+          textAlign: 'left',
+          x:         -30,
+          y:         0,
+        },
       },
       /* anchorPoints: [
         [1, 0],
@@ -142,8 +150,10 @@ export default {
         height:    60,
       },
       labelCfg: {
-        fill:     '#c96164',
-        fontSize: 20,
+        style: {
+          fontSize: 20,
+          fill:     '#c96164',
+        },
       },
     },
     {
@@ -158,9 +168,11 @@ export default {
         stroke: '#f1b953',
       },
       labelCfg: {
-        fill:     '#fff',
-        stroke:   '#f1b953',
-        fontSize: 14,
+        style: {
+          fontSize: 14,
+          fill:     '#fff',
+          stroke:   '#f1b953',
+        },
       },
     },
     {
@@ -174,12 +186,14 @@ export default {
         lineWidth: 0,
       },
       labelCfg: {
-        fontSize:  12,
-        fill:      '#fff',
-        stroke:    '#65b586',
-        textAlign: 'left',
-        x:         -40,
-        y:         -30,
+        style: {
+          fill:      '#fff',
+          stroke:    '#65b586',
+          fontSize:  12,
+          textAlign: 'left',
+          x:         -40,
+          y:         -30,
+        },
       },
       type: 'triangle-node',
     },
@@ -189,7 +203,9 @@ export default {
       id:       '8',
       label:    '是否指定 "template" 选项',
       labelCfg: {
-        fontSize: 12,
+        style: {
+          fontSize: 12,
+        },
       },
       style: {
         rx: 100,
@@ -203,7 +219,9 @@ export default {
       y:        800,
       label:    '将 template 编译\n到 render 函数中',
       labelCfg: {
-        fontSize: 12,
+        style: {
+          fontSize: 12,
+        },
       },
       style: {
         width:  160,
@@ -216,7 +234,9 @@ export default {
       y:        800,
       label:    '将 el 外部的 HTML\n作为 template 编译',
       labelCfg: {
-        fontSize: 12,
+        style: {
+          fontSize: 12,
+        },
       },
       style: {
         width:  160,
@@ -229,8 +249,10 @@ export default {
       y:        1000,
       label:    '结束',
       labelCfg: {
-        fontSize: 16,
-        fill:     '#fff',
+        style: {
+          fontSize: 16,
+          fill:     '#fff',
+        },
       },
       style: {
         width:     160,
