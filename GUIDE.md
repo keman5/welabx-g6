@@ -348,12 +348,27 @@ const data = {
       nodeStateStyles: {
         'nodeState:default': {
           fill: 'orange',
+          labelCfg: {
+            style: {
+              fontWeight: 'normal',
+            }
+          }
         },
         'nodeState:hover': {
           fill: '#ffbd17',
+          labelCfg: {
+            style: {
+              fontWeight: 'normal',
+            }
+          }
         },
         'nodeState:selected': {
           fill: '#f1ac00',
+          labelCfg: {
+            style: {
+              fontWeight: 'bold',
+            }
+          }
         },
       },
     },
@@ -461,13 +476,28 @@ const confg = registerFactory(G6, {
     'nodeState:default': {
       fill:   '#E7F7FE',
       stroke: '#1890FF',
+      labelCfg: {
+        style: {
+          fontWeight: 'normal',
+        }
+      }
     },
     'nodeState:hover': {
       fill: '#d5f1fd',
+      labelCfg: {
+        style: {
+          fontWeight: 'normal',
+        }
+      }
     },
     'nodeState:selected': {
       fill:   '#caebf9',
       stroke: '#1890FF',
+      labelCfg: {
+        style: {
+          fontWeight: 'bold',
+        }
+      }
     },
   },
   // 默认边不同状态下的样式集合

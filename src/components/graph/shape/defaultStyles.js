@@ -6,14 +6,14 @@
 export default {
   // node默认样式
   nodeStyles: {
-    fill:      '#E7F7FE', // 浅蓝
+    fill:      '#ecf3ff', // 浅蓝
     stroke:    '#1890FF', // 深蓝
     lineWidth: 1,
   },
   // node 交互样式
   nodeStateStyles: {
     'nodeState:default': {
-      fill: '#E7F7FE',
+      fill: '#ecf3ff',
     },
     // 鼠标 hover 上节点，即 hover 状态为 true 时的样式
     'nodeState:hover': {
