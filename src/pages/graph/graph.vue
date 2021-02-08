@@ -159,10 +159,6 @@ export default {
       tooltip:       '',
       top:           0,
       left:          0,
-      canvasOffset:  {
-        x: 0,
-        y: 0,
-      },
     };
   },
   mounted () {
@@ -278,27 +274,14 @@ export default {
         // 形状
         type: e.target.dataset.shape,
         // 坐标
-        x:    e.clientX - this.canvasOffset.x - 40,
-        y:    e.clientY - this.canvasOffset.y - 40,
+        x:    e.x,
+        y:    e.y,
       };
 
       this.graph.addItem('node', model);
     },
     // 初始化图事件
     initGraphEvent () {
-      this.graph.on('on-canvas-dragend', e => {
-        this.canvasOffset.x = e.dx;
-        this.canvasOffset.y = e.dy;
-      });
-
-      this.graph.on('on-node-mouseenter', e => {
-        if (e && e.item) {
-          // const model = e.item.get('model');
-
-          // model.style.fill = 'rgba(24, 144, 255, .3)';
-        }
-      });
-
       this.graph.on('after-node-selected', e => {
         this.configVisible = !!e;
 

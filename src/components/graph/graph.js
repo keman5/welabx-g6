@@ -111,8 +111,6 @@ export default (G6, config) => {
 
         if (dom.nodeName === 'CANVAS') {
           dom.$id = `${options.container}-canvas`;
-          dom.setAttribute('dx', 0);
-          dom.setAttribute('dy', 0);
 
           /* 监听键盘事件 */
           document.addEventListener('click', e => {

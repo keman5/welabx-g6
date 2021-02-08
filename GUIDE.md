@@ -65,7 +65,7 @@ graph.destory();
 | after-node-selected | event 对象 | 节点选中事件 |
 | after-edge-selected | event 对象 | 边选中事件 |
 | on-canvas-click | event 对象 | 鼠标点击画布事件 |
-| on-canvas-dragend | event 对象(内置了画布偏移量dx, dy) | 画布拖拽结束事件 |
+| on-canvas-dragend | event 对象 | 画布拖拽结束事件 |
 | on-node-mouseenter | event 对象 | 鼠标移入节点事件 |
 | on-node-mousemove | event 对象 | 鼠标在节点上移动事件(持续触发) |
 | on-node-mouseleave | event 对象 | 鼠标从节点上移开事件 |
@@ -348,12 +348,27 @@ const data = {
       nodeStateStyles: {
         'nodeState:default': {
           fill: 'orange',
+          labelCfg: {
+            style: {
+              fontWeight: 'normal',
+            }
+          }
         },
         'nodeState:hover': {
           fill: '#ffbd17',
+          labelCfg: {
+            style: {
+              fontWeight: 'normal',
+            }
+          }
         },
         'nodeState:selected': {
           fill: '#f1ac00',
+          labelCfg: {
+            style: {
+              fontWeight: 'bold',
+            }
+          }
         },
       },
     },
@@ -461,13 +476,28 @@ const confg = registerFactory(G6, {
     'nodeState:default': {
       fill:   '#E7F7FE',
       stroke: '#1890FF',
+      labelCfg: {
+        style: {
+          fontWeight: 'normal',
+        }
+      }
     },
     'nodeState:hover': {
       fill: '#d5f1fd',
+      labelCfg: {
+        style: {
+          fontWeight: 'normal',
+        }
+      }
     },
     'nodeState:selected': {
       fill:   '#caebf9',
       stroke: '#1890FF',
+      labelCfg: {
+        style: {
+          fontWeight: 'bold',
+        }
+      }
     },
   },
   // 默认边不同状态下的样式集合
