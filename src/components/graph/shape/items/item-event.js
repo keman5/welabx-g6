@@ -134,9 +134,13 @@ const events = {
   'nodeState:default'(value, group) {
     if (value) {
       const node = group.getChildByIndex(0);
+      const text = group.getChildByIndex(1);
       const { defaultStyle } = getItemStyle.call(this, 'node', group);
 
-      setStyle(node, defaultStyle);
+      if (!defaultStyle) return;
+      const textStyle = defaultStyle.labelCfg && defaultStyle.labelCfg.style ? defaultStyle.labelCfg.style : {};
+
+      setStyle(node, defaultStyle, text, textStyle);
     }
   },
 
@@ -145,13 +149,19 @@ const events = {
    */
   'nodeState:selected'(value, group) {
     const node = group.getChildByIndex(0);
+    const text = group.getChildByIndex(1);
     const { activeStyle, defaultStyle } = getItemStyle.call(this, 'node', group, 'selected');
 
     if (!activeStyle) return;
+
     if (value) {
-      setStyle(node, activeStyle);
+      const textStyle = activeStyle.labelCfg && activeStyle.labelCfg.style ? activeStyle.labelCfg.style : {};
+
+      setStyle(node, activeStyle, text, textStyle);
     } else {
-      setStyle(node, defaultStyle);
+      const textStyle = defaultStyle.labelCfg && defaultStyle.labelCfg.style ? defaultStyle.labelCfg.style : {};
+
+      setStyle(node, defaultStyle, text, textStyle);
     }
   },
 
