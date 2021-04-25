@@ -22,13 +22,9 @@ import registerFactory from '../../components/graph/graph';
 export default {
   data () {
     return {
-      graph:        null,
-      node:         null,
-      inputEl:      null,
-      canvasOffset: {
-        x: 0,
-        y: 0,
-      },
+      graph:   null,
+      node:    null,
+      inputEl: null,
     };
   },
   mounted () {
@@ -266,11 +262,6 @@ export default {
     },
     // 初始化图事件
     initGraphEvent () {
-      this.graph.on('on-canvas-dragend', e => {
-        this.canvasOffset.x = e.dx;
-        this.canvasOffset.y = e.dy;
-      });
-
       // 监听键盘事件
       this.graph.on('keydown', e => {
         switch (e.keyCode) {

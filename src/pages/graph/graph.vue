@@ -5,6 +5,12 @@
       :class="{ hidden: headVisible }"
     >
       <span class="logo">Vue 生命周期图示</span>
+      <button
+        style="background:#1890FF;color:#fff;border-radius:5px;margin-left:10px;cursor:pointer;"
+        @click="changeMode"
+      >
+        切换拖拽模式 ({{ mode }})
+      </button>
       <router-link
         :to="{ path: '/tree' }"
         style="float:right; text-decoration:underline; color:#1890FF; font-size: 16px;"
@@ -110,6 +116,7 @@ export default {
   },
   data () {
     return {
+      mode:      'drag-shadow-node',
       graph:     {},
       highLight: {
         undo: false,
@@ -159,10 +166,6 @@ export default {
       tooltip:       '',
       top:           0,
       left:          0,
-      canvasOffset:  {
-        x: 0,
-        y: 0,
-      },
     };
   },
   mounted () {
@@ -253,6 +256,11 @@ export default {
             stroke:        '#1890FF',
           },
         },
+        modes: {
+          // 支持的 behavior
+          default:    ['drag-canvas', 'drag-shadow-node'],
+          originDrag: ['drag-canvas', 'drag-node'],
+        },
         plugins: [menu, minimap],
         // ... 其他G6原生入参
       });
@@ -263,10 +271,15 @@ export default {
       // this.graph.get('canvas').set('localRefresh', false); // 关闭局部渲染
       // this.graph.fitView();
     },
-    // 复制节点
-    copyNode () { },
-    // 粘贴节点
-    paste () { },
+    changeMode () {
+      if (this.mode === 'drag-node') {
+        this.mode = 'drag-shadow-node';
+        this.graph.setMode('default');
+      } else {
+        this.mode = 'drag-node';
+        this.graph.setMode('originDrag');
+      }
+    },
     deleteNode(item) {
       this.graph.removeItem(item);
     },
@@ -278,27 +291,14 @@ export default {
         // 形状
         type: e.target.dataset.shape,
         // 坐标
-        x:    e.clientX - this.canvasOffset.x - 40,
-        y:    e.clientY - this.canvasOffset.y - 40,
+        x:    e.x,
+        y:    e.y,
       };
 
       this.graph.addItem('node', model);
     },
     // 初始化图事件
     initGraphEvent () {
-      this.graph.on('on-canvas-dragend', e => {
-        this.canvasOffset.x = e.dx;
-        this.canvasOffset.y = e.dy;
-      });
-
-      this.graph.on('on-node-mouseenter', e => {
-        if (e && e.item) {
-          // const model = e.item.get('model');
-
-          // model.style.fill = 'rgba(24, 144, 255, .3)';
-        }
-      });
-
       this.graph.on('after-node-selected', e => {
         this.configVisible = !!e;
 
