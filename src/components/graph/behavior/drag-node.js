@@ -1,5 +1,5 @@
 export default G6 => {
-  G6.registerBehavior('drag-node', {
+  G6.registerBehavior('drag-shadow-node', {
     getDefaultCfg () {
       return {
         sourceAnchorIndex: 0,
@@ -32,7 +32,6 @@ export default G6 => {
         const nodes = this.graph.findAll('node', node => node);
 
         nodes.forEach(node => {
-          // this.graph.setItemState(node, 'anchorActived', true);
           node.setState('anchorActived', true);
         });
       }
@@ -50,20 +49,28 @@ export default G6 => {
     },
     // 拖拽开始
     onDragStart (e) {
+      const group = e.item.getContainer();
+
+      this.origin = {
+        x: e.x,
+        y: e.y,
+      };
       if (e.target.get('isAnchor')) {
         // 拖拽锚点, 记录当前点击的锚点 index
         this.sourceAnchorIndex = e.target.get('index');
-      } else {
-        // 拖拽节点
+      } else if (group.getFirst().cfg.xShapeNode) {
+        // 拖拽自定义节点
         e.item.toFront();
         this.dragTarget = 'node';
-        this._nodeOnDragStart(e, e.item.getContainer());
+        this._nodeOnDragStart(e, group);
       }
       this.graph.emit('on-node-dragstart', e);
     },
     // 拖拽中
     onDrag (e) {
-      if (this.dragTarget === 'node') {
+      const group = e.item.getContainer();
+
+      if (this.dragTarget === 'node' && group.getFirst().cfg.xShapeNode) {
         this._nodeOnDrag(e, e.item.getContainer());
       }
       this.graph.emit('on-node-drag', e);
@@ -78,7 +85,7 @@ export default G6 => {
         nodes.forEach(node => {
           node.clearStates('anchorActived');
         });
-      } else if (this.dragTarget === 'node') {
+      } else if (this.dragTarget === 'node' && group.getFirst().cfg.xShapeNode) {
         this._nodeOnDragEnd(e, group);
       }
       this.graph.emit('on-node-dragend', e);
@@ -113,15 +120,42 @@ export default G6 => {
     },
 
     /**
+     * @description 判断当前画布模式是否启用了内置的 drag-node, 因为有冲突
+     */
+    _enableDragNodeMode () {
+      const currentMode = this.graph.cfg.modes[this.graph.getCurrentMode()];
+
+      if (currentMode) {
+        const originDragNodeMode = currentMode.find(mode => mode.type === 'drag-node');
+
+        if (!originDragNodeMode) {
+          return false;
+        }
+      }
+      return true;
+    },
+
+    /**
      * @description 节点拖拽开始事件
      */
     _nodeOnDragStart (e, group) {
+      if (!this._enableDragNodeMode()) {
+        this._addShadowNode(e, group);
+      }
+    },
+
+    /**
+     * @description 添加虚拟节点
+     */
+    _addShadowNode (e, group) {
       const item = group.get('item');
+      const model = item.get('model');
       const { radius } = item.get('originStyle');
       const currentShape = item.get('currentShape');
       const { width, height, centerX, centerY } = item.getBBox();
+      const shapes = item.get('shapeFactory')[currentShape];
 
-      let { shapeType } = item.get('shapeFactory')[currentShape];
+      let { shapeType } = shapes || {};
 
       let attrs = {
         fillOpacity: 0.1,
@@ -131,6 +165,8 @@ export default G6 => {
         lineDash:    [4, 4],
         width,
         height,
+        x:           model.x,
+        y:           model.y,
       };
 
       switch (shapeType) {
@@ -138,8 +174,6 @@ export default G6 => {
           this.distance = [e.x - centerX, e.y - centerY];
           attrs = {
             ...attrs,
-            x: 0,
-            y: 0,
             r: width / 2,
           };
           break;
@@ -157,8 +191,6 @@ export default G6 => {
           this.distance = [e.x - centerX, e.y - centerY];
           attrs = {
             ...attrs,
-            x:  0,
-            y:  0,
             rx: width / 2,
             ry: height / 2,
           };
@@ -167,8 +199,6 @@ export default G6 => {
           this.distance = [e.x - centerX, e.y - centerY];
           attrs.path = item.get('keyShape').attrs.path;
           attrs.size = [width, height];
-          attrs.x = 0;
-          attrs.y = 0;
           break;
         case 'modelRect':
           this.distance = [e.x - centerX + width / 2, e.y - centerY + height / 2];
@@ -179,6 +209,9 @@ export default G6 => {
             r: width / 2,
           };
           shapeType = 'rect';
+          break;
+        default:
+          shapeType = 'circle';
           break;
       }
 
@@ -198,9 +231,9 @@ export default G6 => {
       const item = group.get('item');
       const pathAttrs = group.getFirst();
       const { width, height, centerX, centerY } = item.getBBox();
-      const currentShape = item.get('currentShape');
-      const { shapeType } = item.get('shapeFactory')[currentShape];
-      const shadowNode = group.getItem ? group.getItem('shadow-node') : null;
+      const shadowNode = pathAttrs.cfg.xShapeNode ? group.$getItem('shadow-node') : null;
+      const shapes = item.get('shapeFactory')[item.get('currentShape')];
+      const { shapeType } = shapes || {};
 
       if (!shadowNode) {
         return console.warn('暂未支持拖拽内置节点');
@@ -240,13 +273,14 @@ export default G6 => {
         shadowNode.attr({
           path,
         });
+
       } else {
         shadowNode.attr({
           x: e.x - centerX - this.distance[0],
           y: e.y - centerY - this.distance[1],
         });
-
       }
+
       shadowNode.toFront();
     },
 
@@ -254,48 +288,25 @@ export default G6 => {
      * @description 节点拖拽结束事件
      */
     _nodeOnDragEnd (e, group) {
-      const node = group.get('item');
-      const { width, height } = node.getBBox();
-      const shadowNode = group.getItem ? group.getItem('shadow-node') : null;
-      const currentShape = node.get('currentShape');
-      const { shapeType } = node.get('shapeFactory')[currentShape];
-      const { type, direction } = group.getFirst().get('attrs');
-      const coords = {
-        x: 0,
-        y: 0,
-      };
+      const { graph } = this;
+      const model = e.item.getModel();
+      const shadowNode = group.getFirst().cfg.xShapeNode ? group.$getItem('shadow-node') : null;
 
-      switch (shapeType) {
-        case 'ellipse':
-        case 'circle':
-          coords.x = e.x - this.distance[0];
-          coords.y = e.y - this.distance[1];
-          break;
-        case 'rect':
-          coords.x = e.x - this.distance[0] + width / 2;
-          coords.y = e.y - this.distance[1] + height / 2;
-          break;
-        case 'path':
-          coords.x = e.x - this.distance[0];
-          coords.y = e.y - this.distance[1];
-          if (type === 'triangle-node') {
-            if (direction === 'up') {
-              coords.y += height / 2;
-            } else {
-              coords.y -= height / 2;
-            }
-          }
-          break;
+      if (shadowNode) {
+        const x = e.x - this.origin.x + model.x;
+        const y = e.y - this.origin.y + model.y;
+        const pos = {
+          x,
+          y,
+        };
+
+        shadowNode.remove();
+
+        if (!this._enableDragNodeMode()) {
+          // 如果当前模式中没有使用内置的 drag-node 则让画布更新节点位置
+          graph.updateItem(e.item, pos);
+        }
       }
-
-      shadowNode && shadowNode.remove();
-
-      /* 添加移动动画? */
-      // 更新坐标
-      node.updatePosition(coords);
-
-      // 当节点位置发生变化时，刷新所有节点位置，并重计算边的位置
-      this.graph.refreshPositions();
     },
     // 清空已选的边
     _clearSelected (e) {

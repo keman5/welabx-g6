@@ -40,6 +40,10 @@ graph.read(data);
 graph.destory();
 ```
 
+## 0.6+
+
+> 注意: drag-shadow-node 行为会在拖拽节点时在节点上覆盖蓝色的虚拟节点, 并在拖拽结束后更新节点的位置. 不能与官方 drag-node 行为共存, 请准备两种 modes, 使用 setMode 切换 drag-node 和 drag-shadow-node. 其中 drag-shadow-node 仅支持本文档中指定的自定义节点
+
 ### 自定义节点和边(边支持设置箭头)
 
 | 非内置节点和边 | type | 宽高/半径属性 |
@@ -145,8 +149,13 @@ graph.addItem('node', model);
 - delete-item
 - select-node
 - hover-node
-- drag-node
+- ~~drag-node~~ (自 0.6.0 开始已废弃)
+- drag-shadow-node (自 0.6.0 新增)
 - active-edge
+
+### 关于 drag-shadow-node
+
+> 该行为会在拖拽节点时在节点上覆盖蓝色的虚拟节点, 并在拖拽结束后更新节点的位置. 不能与官方 drag-node 行为共存, 请准备两种 modes, 使用 setMode 切换 drag-node 和 drag-shadow-node. 其中 drag-shadow-node 仅支持本文档中指定的自定义节点.
 
 ## 自定义G6实例
 

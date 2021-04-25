@@ -5,6 +5,12 @@
       :class="{ hidden: headVisible }"
     >
       <span class="logo">Vue 生命周期图示</span>
+      <button
+        style="background:#1890FF;color:#fff;border-radius:5px;margin-left:10px;cursor:pointer;"
+        @click="changeMode"
+      >
+        切换拖拽模式 ({{ mode }})
+      </button>
       <router-link
         :to="{ path: '/tree' }"
         style="float:right; text-decoration:underline; color:#1890FF; font-size: 16px;"
@@ -110,6 +116,7 @@ export default {
   },
   data () {
     return {
+      mode:      'drag-shadow-node',
       graph:     {},
       highLight: {
         undo: false,
@@ -249,6 +256,11 @@ export default {
             stroke:        '#1890FF',
           },
         },
+        modes: {
+          // 支持的 behavior
+          default:    ['drag-canvas', 'drag-shadow-node'],
+          originDrag: ['drag-canvas', 'drag-node'],
+        },
         plugins: [menu, minimap],
         // ... 其他G6原生入参
       });
@@ -259,10 +271,15 @@ export default {
       // this.graph.get('canvas').set('localRefresh', false); // 关闭局部渲染
       // this.graph.fitView();
     },
-    // 复制节点
-    copyNode () { },
-    // 粘贴节点
-    paste () { },
+    changeMode () {
+      if (this.mode === 'drag-node') {
+        this.mode = 'drag-shadow-node';
+        this.graph.setMode('default');
+      } else {
+        this.mode = 'drag-node';
+        this.graph.setMode('originDrag');
+      }
+    },
     deleteNode(item) {
       this.graph.removeItem(item);
     },

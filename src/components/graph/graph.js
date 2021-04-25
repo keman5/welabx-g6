@@ -41,7 +41,7 @@ export default (G6, config) => {
         'delete-item',
         'select-node',
         'hover-node',
-        'drag-node',
+        'drag-shadow-node',
         'active-edge',
       ],
     },
