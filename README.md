@@ -88,17 +88,14 @@ npm run dev
 
 [更新日志](https://github.com/claudewowo/welabx-g6/blob/master/CHANGELOG.md)
 
-### [0.5] 2020-11-27 !重大更新
-
-- [upgrade] 升级 G6 到 4.x 版本
-- [upgrade] 重大更新! 实例化方法已经独立成注册方法, 只需极少的改动, 具体写法请参照[使用教程](https://github.com/claudewowo/welabx-g6/blob/master/GUIDE.md)!
-- [add] 支持引用 G6 内置箭头了!
-
-### [0.5.2] 2021-01-13
+## [0.5.4] 2021-02-07 !重大更新
 
 - [upgrade] 升级 G6 到 4.1.x 版本
+- [upgrade] 重大更新! 实例化方法已经独立成注册方法, 只需极少的改动, 具体写法请参照[使用教程](https://github.com/claudewowo/welabx-g6/blob/master/GUIDE.md)!
 - [upgrade] 提供的 *-node 节点均支持二次继承, 支持更多扩展可能性! 二次继承可参考[使用教程](https://github.com/claudewowo/welabx-g6/blob/master/GUIDE.md#二次继承)
-
-## [0.5.4] 2021-02-07
-
 - [fixed] 所有 labelCfg 样式配置调整为 labelCfg.style, 同官方 API
+
+## [0.6.0] 2021-04-25 !重大更新
+
+- [upgrade] 升级 G6 到 4.2.x 版本, 0.6.0 版本以后请使用 antv/G6 v4.2.0+ 作为生产版本
+- [fixed] 修复了拖拽节点后, 边未自动更新, 需要更新 modes 参数 drag-node 为 drag-shadow-node, 当使用 drag-node 时, 拖拽节点行为将使用官方内置行为, 如果需要使用虚拟节点拖拽效果, 请从 modes 中删除 drag-node, 替换为 drag-shadow-node !!!

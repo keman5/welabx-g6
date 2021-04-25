@@ -71,7 +71,7 @@ export default G6 => {
         if ($item) {
           const className = `${attrs.type}-${index === 0 ? 'logoIcon' : 'stateIcon'}`;
 
-          let item = group.getItem(className);
+          let item = group.$getItem(className);
 
           if (!item) {
             const icon = group.addShape($item.img ? 'image' : 'text', {
@@ -84,7 +84,7 @@ export default G6 => {
             });
 
             icon.toFront();
-            item = group.getItem(className);
+            item = group.$getItem(className);
           }
 
           if (item) {
@@ -266,12 +266,13 @@ export default G6 => {
       // 添加节点
       const shape = group.addShape(this.shapeType, { // shape 属性在定义时返回
         className: `${this.shapeType}-shape`,
+        xShapeNode: true, // 自定义节点标识
         draggable: true,
         attrs,
       });
 
-      // 按className查找元素
-      group.getItem = className => {
+      // 给 group 添加自定义方法 按className查找元素
+      group.$getItem = className => {
         return group.get('children').find(item => item.get('className') === className);
       };
 
@@ -290,9 +291,8 @@ export default G6 => {
     /* 更新节点，包含文本 */
     update (cfg, node) {
       const model = node.get('model');
-      // const group = node.get('group');
       const { attrs } = node.get('keyShape');
-      const text = node.get('group').getItem('node-text');
+      const text = node.get('group').$getItem('node-text');
       const item = node.get('group').get('children')[0];
 
       setTimeout(() => {

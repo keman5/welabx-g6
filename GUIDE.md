@@ -145,8 +145,13 @@ graph.addItem('node', model);
 - delete-item
 - select-node
 - hover-node
-- drag-node
+- ~~drag-node~~ (自 0.6.0 开始已废弃)
+- drag-shadow-node (自 0.6.0 新增)
 - active-edge
+
+### 关于 drag-shadow-node
+
+> 该行为会在拖拽节点时在节点上覆盖蓝色的虚拟节点, 并在拖拽结束后更新节点的位置. 不能与官方 drag-node 行为共存, 所以请按需选择.
 
 ## 自定义G6实例
 
