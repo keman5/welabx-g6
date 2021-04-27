@@ -57,7 +57,7 @@ export default (anchor, group, p) => {
     const { type, direction } = group.getFirst().attr();
     const canvasBox = group.get('children')[0].get('canvasBox') || group.get('children')[0].get('canvasBBox');
     const diff = type === 'triangle-node' ? (direction === 'up' ? canvasBox.height : 0) : canvasBox.height / 2;
-    const line = group.getItem('dashed-line');
+    const line = group.$getItem('dashed-line');
     const pointStart = line.get('pointStart');
     const endPoint = [e.x - canvasBox.x - canvasBox.width / 2, e.y - canvasBox.y - diff];
 
@@ -103,7 +103,7 @@ export default (anchor, group, p) => {
 
   // 拖拽结束删除虚线
   anchor.on('dragend', e => {
-    const item = group.getItem('dashed-line');
+    const item = group.$getItem('dashed-line');
 
     item.remove();
     anchorNodeId = null;

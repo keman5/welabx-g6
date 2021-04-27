@@ -23,15 +23,15 @@
       />
     </div>
     <!-- 左侧按钮 -->
-    <item-panel
-      :graph="graph"
-      @canvas-add-node="addNode"
-    />
+    <item-panel />
+
     <!-- 挂载节点 -->
     <div
       id="canvasPanel"
+      ref="canvasPanel"
       @dragover.prevent
     />
+
     <!-- 配置面板 -->
     <div
       id="configPanel"
@@ -181,6 +181,7 @@ export default {
   methods: {
     createGraphic () {
       const vm = this;
+      const grid = new G6.Grid();
       const menu = new G6.Menu({
           offsetX:   -20,
           offsetY:   -50,
@@ -205,21 +206,30 @@ export default {
           size: [200, 100],
       });
       const cfg = registerFactory(G6, {
-        width:  window.innerWidth - 40,
-        height: window.innerHeight - 40,
+        width:  window.innerWidth,
+        height: window.innerHeight,
         // renderer: 'svg',
         layout: {
           type: 'xxx', // 位置将固定
         },
+        // 所有节点默认配置
         defaultNode: {
           type:  'rect-node',
           style: {
             radius: 10,
+            width:  100,
+            height: 50,
+            cursor: 'move',
+            fill:   '#ecf3ff',
           },
           labelCfg: {
             fontSize: 20,
+            style:    {
+              cursor: 'move',
+            },
           },
         },
+        // 所有边的默认配置
         defaultEdge: {
           type:  'polyline-edge', // 扩展了内置边, 有边的事件
           style: {
@@ -258,10 +268,10 @@ export default {
         },
         modes: {
           // 支持的 behavior
-          default:    ['drag-canvas', 'drag-shadow-node'],
-          originDrag: ['drag-canvas', 'drag-node'],
+          default:    ['drag-canvas', 'drag-shadow-node', 'canvas-event', 'delete-item', 'select-node', 'hover-node', 'active-edge'],
+          originDrag: ['drag-canvas', 'drag-node', 'canvas-event', 'delete-item', 'select-node', 'hover-node', 'active-edge'],
         },
-        plugins: [menu, minimap],
+        plugins: [menu, minimap, grid],
         // ... 其他G6原生入参
       });
 
@@ -271,34 +281,20 @@ export default {
       // this.graph.get('canvas').set('localRefresh', false); // 关闭局部渲染
       // this.graph.fitView();
     },
-    changeMode () {
-      if (this.mode === 'drag-node') {
-        this.mode = 'drag-shadow-node';
-        this.graph.setMode('default');
-      } else {
-        this.mode = 'drag-node';
-        this.graph.setMode('originDrag');
-      }
-    },
-    deleteNode(item) {
-      this.graph.removeItem(item);
-    },
-    // 添加节点
-    addNode (e) {
-      const model = {
-        text: 'node',
-        // id:  Util.uniqueId(),
-        // 形状
-        type: e.target.dataset.shape,
-        // 坐标
-        x:    e.x,
-        y:    e.y,
-      };
-
-      this.graph.addItem('node', model);
-    },
     // 初始化图事件
     initGraphEvent () {
+      this.graph.on('drop', e => {
+        const { originalEvent } = e;
+
+        if(originalEvent.dataTransfer) {
+          const transferData = originalEvent.dataTransfer.getData('dragComponent');
+
+          if(transferData) {
+            this.addNode(transferData, e);
+          }
+        }
+      });
+
       this.graph.on('after-node-selected', e => {
         this.configVisible = !!e;
 
@@ -321,12 +317,6 @@ export default {
             height:      model.style.height,
             shape:       model.type,
           };
-
-          // model.label = e.item.get('id');
-          /* this.graph.updateItem(e.item, {
-            x: 100,
-            y: 100,
-          }); */
         }
       });
 
@@ -400,6 +390,37 @@ export default {
           });
         }, 100);
       });
+    },
+    changeMode () {
+      if (this.mode === 'drag-node') {
+        this.mode = 'drag-shadow-node';
+        this.graph.setMode('default');
+      } else {
+        this.mode = 'drag-node';
+        this.graph.setMode('originDrag');
+      }
+    },
+    deleteNode(item) {
+      this.graph.removeItem(item);
+    },
+    // 添加节点
+    addNode (transferData, { x, y }) {
+      const { label, shape, fill } = JSON.parse(transferData);
+
+      const model = {
+        label,
+        // id:  Util.uniqueId(),
+        // 形状
+        type:  shape,
+        style: {
+          fill: fill || '#ecf3ff',
+        },
+        // 坐标
+        x,
+        y,
+      };
+
+      this.graph.addItem('node', model);
     },
     save() {
       // eslint-disable-next-line no-alert
