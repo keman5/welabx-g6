@@ -185,7 +185,7 @@ export default {
       const menu = new G6.Menu({
           offsetX:   -20,
           offsetY:   -50,
-          itemTypes: ['node'],
+          itemTypes: ['node', 'edge'],
           getContent(e) {
               const outDiv = document.createElement('div');
 
@@ -295,6 +295,12 @@ export default {
         }
       });
 
+      this.graph.on('node:drop', e => {
+        e.item.getOutEdges().forEach(edge => {
+          edge.clearStates('edgeState');
+        });
+      });
+
       this.graph.on('after-node-selected', e => {
         this.configVisible = !!e;
 
@@ -317,6 +323,48 @@ export default {
             height:      model.style.height,
             shape:       model.type,
           };
+        }
+      });
+
+      this.graph.on('on-node-mouseenter', e => {
+        if(e && e.item) {
+          e.item.getOutEdges().forEach(edge => {
+            edge.clearStates('edgeState');
+            edge.setState('edgeState', 'hover');
+          });
+        }
+      });
+
+      this.graph.on('on-node-mousemove', e => {
+        if (e && e.item) {
+          this.tooltip = e.item.get('model').id;
+          this.left = e.clientX + 40;
+          this.top = e.clientY - 20;
+        }
+      });
+
+      this.graph.on('on-node-mouseleave', e => {
+        if (e && e.item) {
+          this.tooltip = '';
+          if(e && e.item) {
+            e.item.getOutEdges().forEach(edge => {
+              edge.clearStates('edgeState');
+            });
+          }
+        }
+      });
+
+      this.graph.on('before-node-removed', ({ target, callback }) => {
+        console.log(target);
+        setTimeout(() => {
+          // 确认提示
+          callback(true);
+        }, 1000);
+      });
+
+      this.graph.on('after-node-dblclick', e => {
+        if (e && e.item) {
+          console.log(e.item);
         }
       });
 
@@ -344,37 +392,9 @@ export default {
         }
       });
 
-      this.graph.on('on-node-mousemove', e => {
-        if (e && e.item) {
-          this.tooltip = e.item.get('model').id;
-          this.left = e.clientX + 40;
-          this.top = e.clientY - 20;
-        }
-      });
-
-      this.graph.on('on-node-mouseleave', e => {
-        if (e && e.item) {
-          this.tooltip = '';
-        }
-      });
-
       this.graph.on('on-edge-mouseleave', e => {
         if (e && e.item) {
           this.tooltip = '';
-        }
-      });
-
-      this.graph.on('before-node-removed', ({ target, callback }) => {
-        console.log(target);
-        setTimeout(() => {
-          // 确认提示
-          callback(true);
-        }, 1000);
-      });
-
-      this.graph.on('after-node-dblclick', e => {
-        if (e && e.item) {
-          console.log(e.item);
         }
       });
 

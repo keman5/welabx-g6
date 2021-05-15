@@ -99,3 +99,8 @@ npm run dev
 
 - [upgrade] 升级 G6 到 4.2.x 版本, 0.6.0 版本以后请使用 antv/G6 v4.2.0+ 作为生产版本
 - [fixed] 修复了拖拽节点后, 边未自动更新, 需要更新 modes 参数 drag-node 为 drag-shadow-node, 当使用 drag-node 时, 拖拽节点行为将使用官方内置行为, 如果需要使用虚拟节点拖拽效果, 请准备两种 modes, 使用 setMode 切换 drag-node 和 drag-shadow-node !!!
+
+## [0.6.3] 2021-05-15
+
+- [fixed] 修复某些报错和动画异常
+- [changed] 完善 demo 案例功能
