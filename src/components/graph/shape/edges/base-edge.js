@@ -15,6 +15,8 @@ import hvh from './hvh.js';
  */
 
 function drawShape (cfg, group) {
+  group.running = false;
+  group.runners = [];
   // 当前配置覆盖全局配置
   const shapeStyle = Object.assign({}, this.getShapeStyle(cfg), {
     ...cfg.edgeStateStyles,
@@ -48,8 +50,8 @@ function setState (name, value, item) {
 }
 
 function runAnimate (group, animationType) {
-  if (this.running) return;
-  this.running = true;
+  if (group.running) return;
+  group.running = true;
   group.toFront();
   animation[animationType].run.call(this, group);
 }
@@ -62,8 +64,6 @@ function stopAnimate (group, animationType) {
 // 继承方法
 function inheritEdge (G6, name) {
   G6.registerEdge(`${name}-edge`, {
-    running: false,
-    runners: [],
     drawShape,
     setState,
     runAnimate,
@@ -79,16 +79,12 @@ export default (G6) => {
   });
 
   hvh(G6, {
-    running: false,
-    runners: [],
     drawShape,
     setState,
     runAnimate,
     stopAnimate,
   });
   hvh_h(G6, {
-    running: false,
-    runners: [],
     drawShape,
     setState,
     runAnimate,

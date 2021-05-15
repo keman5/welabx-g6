@@ -125,7 +125,12 @@ const events = {
    * @description 边多状态事件
    */
   nodeState (value, group) {
-    events[`nodeState:${value}`] && events[`nodeState:${value}`].call(this, value, group);
+    if (value === false) {
+      // 清除所有状态
+      events['nodeState:default'].call(this, true, group);
+    } else {
+      events[`nodeState:${value}`] && events[`nodeState:${value}`].call(this, value, group);
+    }
   },
 
   /**
@@ -183,8 +188,13 @@ const events = {
   /**
    * @description 边多状态事件
    */
-  edgeState(value, group) {
-    events[`edgeState:${value}`] && events[`edgeState:${value}`].call(this, value, group);
+  edgeState (value, group) {
+    if (value === false) {
+      // 清除所有状态
+      events['edgeState:default'].call(this, true, group);
+    } else {
+      events[`edgeState:${value}`] && events[`edgeState:${value}`].call(this, value, group);
+    }
   },
 
   /**

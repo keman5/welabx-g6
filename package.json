@@ -1,10 +1,11 @@
 {
   "name": "welabx-g6",
-  "version": "0.6.2",
+  "version": "0.6.3",
   "description": "welabx - antv G6",
   "main": "src/components/graph/graph.js",
   "scripts": {
     "build": "node webpack/build.js",
+    "lib": "node webpack/library.js",
     "prod": "node webpack/build.js",
     "dev": "webpack-dev-server --config webpack/webpack.dev.js",
     "dll": "webpack -p --progress --config webpack/webpack.dll.js"

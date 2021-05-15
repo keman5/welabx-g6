@@ -7,7 +7,7 @@ const ball = {
     // 获得当前边的第1个图形，这里是边本身的 path
     const path = group.get('children')[0];
     const endArrowShape = path.get('endArrowShape');
-    const arrowSize = endArrowShape ? Math.max(endArrowShape.get('bbox').width, endArrowShape.get('bbox').height) : 0;
+    const arrowSize = endArrowShape ? (endArrowShape.get('bbox') ? Math.max(endArrowShape.get('bbox').width, endArrowShape.get('bbox').height) : 0) : 0;
     const startPoint = path.getPoint(0);
     const length = path.getTotalLength();
     const num = Math.floor(length / 100) || 1;
@@ -48,7 +48,7 @@ const ball = {
         );
       }, i * length);
 
-      this.runners.push(timeout);
+      group.runners.push(timeout);
     }
   },
   stop (group) {
@@ -63,10 +63,10 @@ const ball = {
 
     runners.forEach(runner => runner.remove());
     // 清除所有定时器
-    this.runners.forEach(settimeout => {
+    group.runners.forEach(settimeout => {
       clearTimeout(settimeout);
     });
-    this.running = false;
+    group.running = false;
   },
 };
 
@@ -109,7 +109,7 @@ const dash = {
 
     if (path) {
       path.remove();
-      this.running = false;
+      group.running = false;
     }
   },
 };
