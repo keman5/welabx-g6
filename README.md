@@ -18,7 +18,7 @@
 
 ## 在线案例
 
-[流程案例](https://claudewowo.github.io/welabx-g6/build/?_blank)
+[流程案例](https://claudewowo.github.io/welabx-g6/dist/?_blank)
 
 ## 视频教程
 

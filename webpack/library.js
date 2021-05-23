@@ -22,7 +22,7 @@ const webpackLibConfig = {
       commonjs: 'welabxG6',
     },
     libraryTarget: 'umd',
-    path:          resolve('../build/library'),
+    path:          resolve('../dist/library'),
   },
 };
 

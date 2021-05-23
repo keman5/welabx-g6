@@ -1,16 +1,16 @@
 {
-  "name": "welabx-g6",
+  "name": "welabx-g",
   "version": "0.6.3",
   "description": "welabx - antv G6",
   "main": "src/components/graph/graph.js",
   "scripts": {
     "build": "node webpack/build.js",
     "lib": "node webpack/library.js",
-    "prod": "node webpack/build.js",
+    "prod": "node webpack/build.js && node webpack/library.js",
     "dev": "webpack-dev-server --config webpack/webpack.dev.js",
     "dll": "webpack -p --progress --config webpack/webpack.dll.js"
   },
-  "homepage": "https://claudewowo.github.io/welabx-g6/build/",
+  "homepage": "https://claudewowo.github.io/welabx-g6/dist/",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/claudewowo/welabx-g6.git"
