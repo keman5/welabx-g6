@@ -94,6 +94,7 @@ registerFactory(G6, {
 | on-edge-mousemove | event 对象 | 同节点事件 |
 | on-edge-mouseleave | event 对象 | 同节点事件 |
 | before-node-removed | event 对象 | 节点移除前的事件 |
+| before-edge-removed | event 对象 | 节点移除前的事件 |
 | after-node-removed | event 对象 | 节点移除后的事件 |
 | after-node-dblclick | event 对象 | 双击节点事件 |
 | after-edge-dblclick | event 对象 | 双击边事件 |
@@ -115,6 +116,13 @@ graph.on('after-edge-selected', e => {
 });
 
 graph.on('before-node-removed', ({target, callback}) => {
+  console.log(target);
+  setTimeout(() => {
+    callback(true);
+  }, 1000);
+});
+
+graph.on('before-edge-removed', ({target, callback}) => {
   console.log(target);
   setTimeout(() => {
     callback(true);

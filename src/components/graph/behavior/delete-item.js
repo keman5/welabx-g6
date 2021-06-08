@@ -28,7 +28,7 @@ export default G6 => {
               if (confirm) {
                 graph.remove($node);
                 graph.set('after-node-selected', []);
-                // 发射事件
+                // 提交事件
                 graph.emit('after-node-selected');
                 graph.emit('after-node-removed', $node);
               }
@@ -42,13 +42,13 @@ export default G6 => {
         if (edges && edges.length) {
           const $edge = edges[0].getContainer().get('item');
 
-          graph.emit('before-node-removed', {
+          graph.emit('before-edge-removed', {
             target: $edge,
             callback (confirm) {
               if (confirm) {
                 graph.remove($edge);
                 graph.set('after-edge-selected', []);
-                // 发射事件
+                // 提交事件
                 graph.emit('after-edge-selected');
                 graph.emit('after-edge-removed', $edge);
               }
