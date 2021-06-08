@@ -265,9 +265,9 @@ export default G6 => {
       const attrs = this.getShapeStyle(cfg, group);
       // 添加节点
       const shape = group.addShape(this.shapeType, { // shape 属性在定义时返回
-        className: `${this.shapeType}-shape`,
+        className:  `${this.shapeType}-shape`,
         xShapeNode: true, // 自定义节点标识
-        draggable: true,
+        draggable:  true,
         attrs,
       });
 
