@@ -64,8 +64,8 @@ const webpackConfig = {
   output: {
     filename:      `js/[name].[${devMode ? 'hash' : 'chunkhash'}:7].js`,
     chunkFilename: `js/[name].[${devMode ? 'hash' : 'chunkhash'}:7].js`,
-    path:          resolve(isProd ? '../build': '../dist'),
-    publicPath:    isProd ? '/welabx-g6/build/' : '/',
+    path:          resolve('../dist'),
+    publicPath:    isProd ? '/welabx-g6/dist/' : '/',
   },
   resolve: {
     extensions: ['.js', '.vue', '.scss'],

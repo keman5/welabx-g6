@@ -110,6 +110,8 @@ import registerFactory from '../../components/graph/graph';
 import ItemPanel from './ItemPanel.vue';
 import data from './data.js';
 
+// const registerFactory = require('../../../library/welabx-g6').default;
+
 export default {
   components: {
     ItemPanel,

@@ -15,7 +15,7 @@ module.exports = merge(webpackConfig, {
   mode:    'production',
   plugins: [
     new CleanWebpackPlugin({
-      cleanOnceBeforeBuildPatterns: ['**/*', '!**/lib/**'],
+      cleanOnceBeforeBuildPatterns: ['**/*', '!**/lib/**', '!**/library/**'],
     }),
     new webpack.HashedModuleIdsPlugin(), // 强制缓存
   ],

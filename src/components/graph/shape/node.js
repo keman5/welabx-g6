@@ -27,7 +27,7 @@ function getStyle (options, cfg) {
       ...cfg.labelCfg,
       style: {
         ...nodeLabelStyles.style,
-        ...cfg.labelCfg.style,
+        ...(cfg.labelCfg ? cfg.labelCfg.style : {}),
       },
     },
     // 图标样式

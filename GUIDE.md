@@ -44,6 +44,17 @@ graph.destory();
 
 > 注意: drag-shadow-node 行为会在拖拽节点时在节点上覆盖蓝色的虚拟节点, 并在拖拽结束后更新节点的位置. 不能与官方 drag-node 行为共存, 请准备两种 modes, 使用 setMode 切换 drag-node 和 drag-shadow-node. 其中 drag-shadow-node 仅支持本文档中指定的自定义节点
 
+同样支持 UMD 直接引用了:
+
+```js
+import G6 from '@antv/g6';
+const registerFactory = require('node_modules/library/welabx-g6').default;
+
+registerFactory(G6, {
+  // 其他配置
+});
+```
+
 ### 自定义节点和边(边支持设置箭头)
 
 | 非内置节点和边 | type | 宽高/半径属性 |
@@ -83,7 +94,9 @@ graph.destory();
 | on-edge-mousemove | event 对象 | 同节点事件 |
 | on-edge-mouseleave | event 对象 | 同节点事件 |
 | before-node-removed | event 对象 | 节点移除前的事件 |
+| before-edge-removed | event 对象 | 边移除前的事件 |
 | after-node-removed | event 对象 | 节点移除后的事件 |
+| after-edge-removed | event 对象 | 边移除后的事件 |
 | after-node-dblclick | event 对象 | 双击节点事件 |
 | after-edge-dblclick | event 对象 | 双击边事件 |
 | before-edge-add | event 对象 | 添加边之前的事件 |
@@ -104,6 +117,13 @@ graph.on('after-edge-selected', e => {
 });
 
 graph.on('before-node-removed', ({target, callback}) => {
+  console.log(target);
+  setTimeout(() => {
+    callback(true);
+  }, 1000);
+});
+
+graph.on('before-edge-removed', ({target, callback}) => {
   console.log(target);
   setTimeout(() => {
     callback(true);
