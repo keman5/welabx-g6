@@ -44,6 +44,8 @@ function setState (name, value, item) {
   if (buildInEvents.includes(name)) {
     // 内部this绑定到了当前item实例
     itemEvents[name].call(this, value, group);
+  } else if (this.stateApplying) {
+    this.stateApplying.call(this, name, value, item);
   } else {
     console.warn(`warning: edge ${name} 事件回调未注册!`);
   }

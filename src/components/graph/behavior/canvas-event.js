@@ -4,6 +4,9 @@ export default G6 => {
     getDefaultCfg () {
       return {};
     },
+    shouldBegin (e) {
+      return true;
+    },
     getEvents () {
       return {
         'canvas:mousemove': 'onCanvasMouseMove',

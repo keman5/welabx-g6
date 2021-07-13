@@ -5,11 +5,15 @@ export default G6 => {
         'keydown': 'onKeydown',
       };
     },
+    shouldBegin (e) {
+      return true;
+    },
     onKeydown (e) {
-      const graph = this.graph;
+      const { graph } = this;
 
       // 实例化时监听了键盘事件, 防止在画布外仍然能监听到画布内的事件
       if (graph.cfg.canvas.cfg.el.getAttribute('isFocused') !== 'true') return;
+      if (!this.shouldBegin(e)) return;
 
       /**
        * TODO:

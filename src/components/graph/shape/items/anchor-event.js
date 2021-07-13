@@ -4,9 +4,8 @@
  * @description 锚点事件
  */
 
-let dragLog = []; // 记录鼠标坐标
-
-let anchorNodeId = null; // dragover 也会发生在拖拽的锚点上, 用于记录当前拖拽的节点id
+let dragLog = [], // 记录鼠标坐标
+anchorNodeId = null; // dragover 也会发生在拖拽的锚点上, 用于记录当前拖拽的节点id
 
 export default (anchor, group, p) => {
   // 鼠标移入事件
@@ -55,7 +54,10 @@ export default (anchor, group, p) => {
   // 拖拽中
   anchor.on('drag', e => {
     const { type, direction } = group.getFirst().attr();
-    const canvasBox = group.get('children')[0].get('canvasBox') || group.get('children')[0].get('canvasBBox');
+    const canvasBox = group.get('children')[0].get('canvasBBox');
+
+    if (!canvasBox) return;
+
     const diff = type === 'triangle-node' ? (direction === 'up' ? canvasBox.height : 0) : canvasBox.height / 2;
     const line = group.$getItem('dashed-line');
     const pointStart = line.get('pointStart');

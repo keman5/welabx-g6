@@ -21,10 +21,15 @@ export default G6 => {
         'edge:mouseleave': 'onMouseLeave',
       };
     },
+    shouldBegin (e) {
+      return true;
+    },
     onCanvasClick(e) {
       this._clearSelected();
     },
-    onEdgeClick(e) {
+    onEdgeClick (e) {
+      if (!this.shouldBegin(e)) return;
+
       this._clearSelected();
       // 设置当前节点的 click 状态为 true
       e.item.setState('edgeState', 'selected');
@@ -32,7 +37,9 @@ export default G6 => {
       // 将点击事件发送给 graph 实例
       this.graph.emit('after-edge-selected', e);
     },
-    ondblEdgeClick(e) {
+    ondblEdgeClick (e) {
+      if (!this.shouldBegin(e)) return;
+
       this._clearSelected();
       // 设置当前节点的 click 状态为 true
       e.item.setState('edgeState', 'selected');
@@ -40,17 +47,23 @@ export default G6 => {
       this.graph.emit('after-edge-dblclick', e);
     },
     // hover edge
-    onMouseEnter(e) {
+    onMouseEnter (e) {
+      if (!this.shouldBegin(e)) return;
+
       if (!e.item.hasState('edgeState:hover') && !e.item.hasState('edgeState:selected')) {
         e.item.setState('edgeState', 'hover');
       }
       this.graph.emit('on-edge-mouseenter', e);
     },
-    onMouseMove(e) {
+    onMouseMove (e) {
+      if (!this.shouldBegin(e)) return;
+
       this.graph.emit('on-edge-mousemove', e);
     },
     // out edge
-    onMouseLeave(e) {
+    onMouseLeave (e) {
+      if (!this.shouldBegin(e)) return;
+
       if (!e.item.hasState('edgeState:selected')) {
         e.item.setState('edgeState', 'default');
       }
