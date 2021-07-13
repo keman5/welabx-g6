@@ -19,8 +19,12 @@ export default G6 => {
         'node:mouseleave': 'onNodeMouseLeave',
       };
     },
+    shouldBegin (e) {
+      return true;
+    },
     // 点击事件
     onNodeClick (e) {
+      if (!this.shouldBegin(e)) return;
       // 先将所有当前是 click 状态的节点/edge 置为非 selected 状态
       this._clearSelected();
       e.item.toFront();
@@ -30,6 +34,7 @@ export default G6 => {
       this.graph.emit('after-node-selected', e);
     },
     ondblClick (e) {
+      if (!this.shouldBegin(e)) return;
       // 先将所有当前是 click 状态的节点/edge 置为非 selected 状态
       this._clearSelected();
       e.item.toFront();
@@ -39,21 +44,25 @@ export default G6 => {
       this.graph.emit('after-node-dblclick', e);
     },
     onCanvasClick (e) {
+      if (!this.shouldBegin(e)) return;
       this._clearSelected();
       this.graph.emit('on-canvas-click', e);
     },
     // hover node
     onNodeMouseEnter (e) {
+      if (!this.shouldBegin(e)) return;
       if (!e.item.hasState('nodeState:selected')) {
         e.item.setState('nodeState', 'hover');
       }
       this.graph.emit('on-node-mouseenter', e);
     },
     onNodeMouseMove (e) {
+      if (!this.shouldBegin(e)) return;
       this.graph.emit('on-node-mousemove', e);
     },
     // 移出 node
     onNodeMouseLeave (e) {
+      if (!this.shouldBegin(e)) return;
       // hasState 判断当前元素是否存在某种状态
       if (!e.item.hasState('nodeState:selected')) {
         e.item.clearStates('nodeState:hover');

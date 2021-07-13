@@ -78,6 +78,7 @@
 - [fixed] 修复某些报错和动画异常
 - [changed] 完善 demo 案例功能
 
-## [0.6.4] 2021-06-08
+## [0.6.5] 2021-07-12
 
-- [fixed] 更新删除边的事件名为 before-edge-removed
+- [add] 为 drag-shadow-node 添加 shouldBegin 方法, 可在使用时进行自定义
+- [add] 边和节点均支持二次扩展并通过 stateApplying 扩展更多状态

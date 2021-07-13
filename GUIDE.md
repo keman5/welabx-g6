@@ -94,8 +94,9 @@ registerFactory(G6, {
 | on-edge-mousemove | event 对象 | 同节点事件 |
 | on-edge-mouseleave | event 对象 | 同节点事件 |
 | before-node-removed | event 对象 | 节点移除前的事件 |
-| before-edge-removed | event 对象 | 节点移除前的事件 |
+| before-edge-removed | event 对象 | 边移除前的事件 |
 | after-node-removed | event 对象 | 节点移除后的事件 |
+| after-edge-removed | event 对象 | 边移除后的事件 |
 | after-node-dblclick | event 对象 | 双击节点事件 |
 | after-edge-dblclick | event 对象 | 双击边事件 |
 | before-edge-add | event 对象 | 添加边之前的事件 |
@@ -172,9 +173,13 @@ graph.addItem('node', model);
 - drag-shadow-node (自 0.6.0 新增)
 - active-edge
 
-### 关于 drag-shadow-node
+### 关于 drag-shadow-node 行为
 
-> 该行为会在拖拽节点时在节点上覆盖蓝色的虚拟节点, 并在拖拽结束后更新节点的位置. 不能与官方 drag-node 行为共存, 请准备两种 modes, 使用 setMode 切换 drag-node 和 drag-shadow-node. 其中 drag-shadow-node 仅支持本文档中指定的自定义节点.
+> 1. 该行为会在拖拽节点时在节点上覆盖蓝色的虚拟节点, 拖拽时仅移动虚拟节点坐标, 拖拽结束后才会更新原始节点的位置.
+
+> 2. Behavior drag-shadow-node 与内置 Behavior drag-node 在行为上有冲突, 不能与官方 drag-node 行为共存, 请考虑改用 setMode 来分开两种错误, 或在以上两种行为的入参 shouldBegin 方法中添加逻辑处理来避免冲突.
+
+> 3. 另外 drag-shadow-node 仅支持本文档中指定的自定义节点.
 
 ## 自定义G6实例
 
@@ -293,7 +298,7 @@ graph.destroy();
 
 ## 二次继承
 
-> *-node 支持二次继承扩展状态回调了!
+> \*-node 和 \*-edge 支持二次继承扩展状态回调了!
 > 先继承 [*-node], 在生命周期中通过 stateApplying 方法进行状态值处理
 
 ```js
@@ -308,6 +313,14 @@ export default G6 => {
       // 继承更多状态回调, name 为自定义名称时可用
     },
   }, 'rect-node' /* 要继承的 *-node */);
+}
+// 二次扩展边
+export default G6 => {
+  G6.registerNode('your-unique-edge', {
+    stateApplying (name, value, item) {
+      // 继承更多状态回调, name 为自定义名称时可用
+    },
+  }, 'polyline-edge' /* 要继承的 *-edge */);
 }
 ```
 
