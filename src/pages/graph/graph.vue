@@ -212,7 +212,7 @@ export default {
         height: window.innerHeight,
         // renderer: 'svg',
         layout: {
-          type: 'xxx', // 位置将固定
+          type: '', // 位置将固定
         },
         // 所有节点默认配置
         defaultNode: {

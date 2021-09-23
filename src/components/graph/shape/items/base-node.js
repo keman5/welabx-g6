@@ -295,19 +295,13 @@ export default G6 => {
       const text = node.get('group').$getItem('node-text');
       const item = node.get('group').get('children')[0];
 
-      setTimeout(() => {
-        // 更新文本内容
-        text && text.attr({
-          text: model.label,
-          ...model.labelCfg,
-          ...model.labelCfg.style,
-        });
-        // 更新节点属性
-        item.attr({
-          ...attrs,
-          ...model.style,
-        });
+      // 更新文本内容
+      text && text.attr({
+        text: model.label,
+      ...model.labelCfg.style,
       });
+      // 更新节点属性
+      item.attr({ ...attrs, ...model.style });
     },
     /* 设置节点的状态，主要是交互状态，业务状态请在 draw 方法中实现 */
     setState (name, value, item) {
