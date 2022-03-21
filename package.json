@@ -1,6 +1,6 @@
 {
   "name": "welabx-g6",
-  "version": "0.6.8",
+  "version": "0.7.1",
   "description": "welabx - antv G6",
   "main": "src/components/graph/graph.js",
   "scripts": {
@@ -22,7 +22,7 @@
   "author": "claude.wu",
   "license": "MIT",
   "dependencies": {
-    "@antv/g6": "^4.3.6",
+    "@antv/g6": "^4.6.4",
     "insert-css": "^2.0.0"
   },
   "devDependencies": {
@@ -71,6 +71,9 @@
     "webpack-dev-server": "^3.11.0",
     "webpack-manifest-plugin": "^2.2.0",
     "webpack-merge": "^5.0.9"
+  },
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/"
   },
   "engines": {
     "node": ">= 8.0.0",

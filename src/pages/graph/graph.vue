@@ -95,7 +95,7 @@
       </button>
     </div>
     <div
-      v-if="tooltip"
+      v-if="tooltip && !isMouseDown"
       class="g6-tooltip"
       :style="`top: ${top}px; left: ${left}px;`"
     >
@@ -164,6 +164,7 @@ export default {
       ],
       headVisible:   false,
       configVisible: false,
+      isMouseDown:   false,
       config:        '',
       tooltip:       '',
       top:           0,
@@ -335,6 +336,22 @@ export default {
             edge.setState('edgeState', 'hover');
           });
         }
+      });
+
+      // 鼠标拖拽到画布外时特殊处理
+      this.graph.on('mousedown', e => {
+        this.isMouseDown = true;
+      });
+      this.graph.on('mouseup', e => {
+        this.isMouseDown = false;
+      });
+      this.graph.on('canvas:mouseleave', e => {
+        this.graph.getNodes().forEach(x => {
+          const group = x.getContainer();
+
+          group.clearAnchor();
+          x.clearStates('anchorActived');
+        });
       });
 
       this.graph.on('on-node-mousemove', e => {

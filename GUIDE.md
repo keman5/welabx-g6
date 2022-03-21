@@ -27,6 +27,7 @@ g6.destroy();
 ## v0.5+ (推荐)
 
 ```js
+// 用法1: 完整引入 G6
 import G6 from '@antv/g6';
 import registerFactory from 'welabx-g6';
 
@@ -35,6 +36,25 @@ const config = registerFactory(G6, {
 });
 
 const graph = new G6.Graph(config);
+
+// 用法2: 解构出注册函数传给 welabx-g6
+import {
+  registerNode,
+  registerEdge,
+  registerBehavior,
+  Graph,
+} from '@antv/g6';
+import registerFactory from 'welabx-g6';
+
+const config = registerFactory({
+  registerNode,
+  registerEdge,
+  registerBehavior,
+}, {
+  // g6 config
+});
+
+const graph = new Graph(config);
 
 graph.read(data);
 graph.destory();

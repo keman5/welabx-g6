@@ -1,4 +1,4 @@
-import registerBaseNode from './items/base-node';
+import registerBaseNode from './nodes/base-node';
 import registerNode from './node';
 
 export default (G6) => {
