@@ -100,11 +100,18 @@ export default G6 => {
     // 绘制锚点
     initAnchor (cfg, group) {
       group.anchorShapes = [];
-      group.showAnchor = group => {
+      group.showAnchor = () => {
         this.drawAnchor(cfg, group);
       };
-      group.clearAnchor = group => {
-        group.anchorShapes && group.anchorShapes.forEach(a => a.remove());
+      group.clearAnchor = () => {
+        if (group.anchorShapes) {
+          const line = group.$getItem('dashed-line');
+
+          if (line) {
+            line.remove();
+          }
+          group.anchorShapes.forEach(a => a.remove());
+        }
         group.anchorShapes = [];
       };
     },

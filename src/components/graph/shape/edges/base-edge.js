@@ -5,7 +5,7 @@
  */
 
 import animation from './edge-animations';
-import itemEvents from '../items/item-event';
+import itemEvents from '../nodes/item-event';
 import hvh_h from './hvh-h.js';
 import hvh from './hvh.js';
 
