@@ -65,7 +65,6 @@
 🤔 对齐线如何实现
 🤔 富文本功能栏
 ​
-
 ## 如何开发
 
 ```shell
@@ -101,3 +100,18 @@ npm run dev
 
 - [add] 为 drag-shadow-node 添加 shouldBegin 方法, 可在使用时进行自定义
 - [add] 边和节点均支持二次扩展并通过 stateApplying 扩展更多状态
+
+### [0.7.0] 2022-03-21
+
+- [fix] 鼠标拖拽到画布外时连线会断开, 但需要做些额外处理:
+
+```js
+this.graph.on('canvas:mouseleave', e => {
+  this.graph.getNodes().forEach(x => {
+    const group = x.getContainer();
+
+    group.clearAnchor();
+    x.clearStates('anchorActived');
+  });
+});
+```
