@@ -13,8 +13,25 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const FriendlyErrorsPlugin = require('friendly-errors-webpack-plugin');
 const resolve = dir => path.resolve(__dirname, dir);
 
-const plugins = [];
+// 命令行/环境变量
 const devMode = process.env.NODE_ENV !== 'production';
+
+const plugins = [];
+
+// 添加分析插件
+/* if (webpackEnv.envParams.report !== undefined) {
+  plugins.push(new BundleAnalyzerPlugin());
+} */
+
+// Dashboard 插件
+/* if (webpackEnv.envParams.log !== undefined) {
+  const Dashboard = require('webpack-dashboard');
+  const DashboardPlugin = require('webpack-dashboard/plugin');
+  const dashboard = new Dashboard();
+
+  plugins.push(new DashboardPlugin(dashboard.setData));
+} */
+
 const cssloaders = [
   'css-loader',
   'postcss-loader',
@@ -33,6 +50,7 @@ const cssloaders = [
     },
   },
 ];
+
 const isProd = process.env.npm_lifecycle_event === 'prod';
 const webpackConfig = {
   mode:  'development',
@@ -137,4 +155,7 @@ const webpackConfig = {
   },
 };
 
-module.exports = webpackConfig;
+module.exports = {
+  webpackConfig,
+  devMode,
+};
