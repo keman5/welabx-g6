@@ -9,7 +9,7 @@ const { merge } = require('webpack-merge');
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const TerserJSPlugin = require('terser-webpack-plugin');
-const webpackConfig = require('./webpack.common');
+const { webpackConfig } = require('./webpack.common');
 
 module.exports = merge(webpackConfig, {
   mode:    'production',
