@@ -166,7 +166,7 @@ export default G6 => {
         });
 
         /**
-         * ! 添加锚点事件绑定
+         * 添加锚点事件绑定
          */
         anchorEvent(anchorGroup, group, p);
 
@@ -299,8 +299,9 @@ export default G6 => {
     update (cfg, node) {
       const model = node.get('model');
       const { attrs } = node.get('keyShape');
-      const text = node.get('group').$getItem('node-text');
-      const item = node.get('group').get('children')[0];
+      const group = node.get('group');
+      const text = group.$getItem('node-text');
+      const item = group.get('children')[0];
 
       // 更新文本内容
       text && text.attr({
@@ -308,7 +309,23 @@ export default G6 => {
       ...model.labelCfg.style,
       });
       // 更新节点属性
-      item.attr({ ...attrs, ...model.style });
+      if (attrs.type === 'diamond-node') {
+        const path = this.getPath({
+          style: {
+            size: model.size,
+          },
+        });
+
+        item.attr({
+          ...attrs,
+          ...model.style,
+          path,
+          width:  model.size[0],
+          height: model.size[1],
+        });
+      } else {
+        item.attr({ ...attrs, ...model.style });
+      }
     },
     /* 设置节点的状态，主要是交互状态，业务状态请在 draw 方法中实现 */
     setState (name, value, item) {
