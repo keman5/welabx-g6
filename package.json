@@ -73,7 +73,7 @@
     "webpack-merge": "^5.0.9"
   },
   "publishConfig": {
-    "registry": "https://registry.npmjs.org/"
+    "registry": "git://github.com/claudewowo/welabx-g6.git"
   },
   "engines": {
     "node": ">= 8.0.0",
