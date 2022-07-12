@@ -84,23 +84,6 @@ npm run dev
 
 [https://github.com/claudewowo/welabx-g6/blob/master/CHANGELOG.md](https://github.com/claudewowo/welabx-g6/blob/master/CHANGELOG.md)
 
-### [0.5.4] 2021-02-07 !重大更新
-
-- [upgrade] 升级 G6 到 4.1.x 版本
-- [upgrade] 重大更新! 实例化方法已经独立成注册方法, 只需极少的改动, 具体写法请参照[使用教程](https://github.com/claudewowo/welabx-g6/blob/master/GUIDE.md)!
-- [upgrade] 提供的 *-node 节点均支持二次继承, 支持更多扩展可能性! 二次继承可参考[使用教程](https://github.com/claudewowo/welabx-g6/blob/master/GUIDE.md#%E4%BA%8C%E6%AC%A1%E7%BB%A7%E6%89%BF)
-- [fixed] 所有 labelCfg 样式配置调整为 labelCfg.style, 同官方 API
-
-### [0.6.0] 2021-04-25 !重大更新
-
-- [upgrade] 升级 G6 到 4.2.x 版本, 0.6.0 版本以后请使用 antv/G6 v4.2.0+ 作为生产版本
-- [fixed] 修复了拖拽节点后, 边未自动更新, 需要更新 modes 参数 drag-node 为 drag-shadow-node, 当使用 drag-node 时, 拖拽节点行为将使用官方内置行为, 如果需要使用虚拟节点拖拽效果, 请准备两种 modes, 使用 setMode 切换 drag-node 和 drag-shadow-node !!!
-
-### [0.6.5] 2021-07-12
-
-- [add] 为 drag-shadow-node 添加 shouldBegin 方法, 可在使用时进行自定义
-- [add] 边和节点均支持二次扩展并通过 stateApplying 扩展更多状态
-
 ### [0.7.0] 2022-03-21
 
 - [add] 添加 umd 打包格式, 可通过 script 引入
@@ -116,3 +99,20 @@ this.graph.on('canvas:mouseleave', e => {
   });
 });
 ```
+### [0.6.5] 2021-07-12
+
+- [add] 为 drag-shadow-node 添加 shouldBegin 方法, 可在使用时进行自定义
+- [add] 边和节点均支持二次扩展并通过 stateApplying 扩展更多状态
+
+### [0.6.0] 2021-04-25 !重大更新
+
+- [upgrade] 升级 G6 到 4.2.x 版本, 0.6.0 版本以后请使用 antv/G6 v4.2.0+ 作为生产版本
+- [fixed] 修复了拖拽节点后, 边未自动更新, 需要更新 modes 参数 drag-node 为 drag-shadow-node, 当使用 drag-node 时, 拖拽节点行为将使用官方内置行为, 如果需要使用虚拟节点拖拽效果, 请准备两种 modes, 使用 setMode 切换 drag-node 和 drag-shadow-node !!!
+
+### [0.5.4] 2021-02-07 !重大更新
+
+- [upgrade] 升级 G6 到 4.1.x 版本
+- [upgrade] 重大更新! 实例化方法已经独立成注册方法, 只需极少的改动, 具体写法请参照[使用教程](https://github.com/claudewowo/welabx-g6/blob/master/GUIDE.md)!
+- [upgrade] 提供的 *-node 节点均支持二次继承, 支持更多扩展可能性! 二次继承可参考[使用教程](https://github.com/claudewowo/welabx-g6/blob/master/GUIDE.md#%E4%BA%8C%E6%AC%A1%E7%BB%A7%E6%89%BF)
+- [fixed] 所有 labelCfg 样式配置调整为 labelCfg.style, 同官方 API
+
