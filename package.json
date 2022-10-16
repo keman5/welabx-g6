@@ -1,6 +1,6 @@
 {
   "name": "welabx-g6",
-  "version": "0.7.2",
+  "version": "0.7.3",
   "description": "welabx - antv G6",
   "main": "src/components/graph/graph.js",
   "scripts": {
@@ -73,7 +73,7 @@
     "webpack-merge": "^5.0.9"
   },
   "publishConfig": {
-    "registry": "git://github.com/claudewowo/welabx-g6.git"
+    "registry": "https://registry.npmjs.org/"
   },
   "engines": {
     "node": ">= 8.0.0",
