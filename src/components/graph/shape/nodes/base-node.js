@@ -324,7 +324,22 @@ export default G6 => {
           height: model.size[1],
         });
       } else {
-        item.attr({ ...attrs, ...model.style });
+        const logoIcon = group.get('children').find(x => x.cfg.className === `${attrs.type}-logoIcon`);
+
+        if (logoIcon) {
+          logoIcon.attr({ ...model.logoIcon });
+        }
+
+        const stateIcon = group.get('children').find(x => x.cfg.className === `${attrs.type}-stateIcon`);
+
+        if (stateIcon) {
+          stateIcon.attr({ ...model.stateIcon });
+        }
+
+        item.attr({
+          ...attrs,
+          ...model.style,
+        });
       }
     },
     /* 设置节点的状态，主要是交互状态，业务状态请在 draw 方法中实现 */
