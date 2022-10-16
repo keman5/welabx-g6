@@ -10,9 +10,7 @@ const webpack = require('webpack');
 const spinner = ora('构建编译中...');
 const webpackProdConfig = require('./webpack.prod');
 
-const params = JSON.parse(process.env.npm_config_argv);
-
-webpackProdConfig.mode = params.remain[0] || 'production';
+webpackProdConfig.mode = 'production';
 
 spinner.start();
 
