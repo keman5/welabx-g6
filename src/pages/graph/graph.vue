@@ -271,7 +271,7 @@ export default {
         },
         modes: {
           // 支持的 behavior
-          default:    ['drag-canvas', 'drag-shadow-node', 'canvas-event', 'delete-item', 'select-node', 'hover-node', 'active-edge'],
+          default:    ['drag-canvas', 'drag-shadow-node', 'canvas-event', 'delete-item', 'select-node', 'hover-node', 'active-edge', 'zoom-canvas'],
           originDrag: ['drag-canvas', 'drag-node', 'canvas-event', 'delete-item', 'select-node', 'hover-node', 'active-edge'],
         },
         plugins: [menu, minimap, grid],
@@ -280,6 +280,7 @@ export default {
 
       this.graph = new G6.Graph(cfg);
       this.graph.read(data); // 读取数据
+      window.$welabxG6 = this.graph;
       // this.graph.paint(); // 渲染到页面
       // this.graph.get('canvas').set('localRefresh', false); // 关闭局部渲染
       // this.graph.fitView();
