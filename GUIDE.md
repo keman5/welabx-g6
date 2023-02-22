@@ -201,6 +201,17 @@ graph.addItem('node', model);
 
 > 3. 另外 drag-shadow-node 仅支持本文档中指定的自定义节点.
 
+## 开启拖拽连线跟随缩放
+
+> 默认缩放为1, 如果实例化后缩放不是1, 必须设置此全局变量, 建议实例化后直接设置, 后续迭代可能会用到该变量
+```js
+const graph = new G6.Graph({});
+
+graph.read(data); // 读取数据
+// 添加全局变量, 内部会自动读取该对象进行缩放
+window.$welabxG6 = graph;
+```
+
 ## 自定义G6实例
 
 ```js
