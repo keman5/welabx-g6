@@ -101,19 +101,19 @@
 
 - 绑定事件 this 指向问题
 
-  [仅供参考](https://github.com/claudewowo/welabx-g6/blob/54217b1fc293e9ff01a724822977f73d86d988eb/src/components/graph/shape/items/base-node.js#L228)
+  [仅供参考](https://github.com/keman5/welabx-g6/blob/54217b1fc293e9ff01a724822977f73d86d988eb/src/components/graph/shape/items/base-node.js#L228)
 
 - 如何拖拽节点，位置如何计算
 
-  [仅供参考](https://github.com/claudewowo/welabx-g6/blob/master/src/components/graph/behavior/drag-node.js#L102)
+  [仅供参考](https://github.com/keman5/welabx-g6/blob/master/src/components/graph/behavior/drag-node.js#L102)
 
 - 如何生成拖拽节点的影子节点
 
-  [仅供参考](https://github.com/claudewowo/welabx-g6/blob/master/src/components/graph/behavior/drag-node.js#L158)
+  [仅供参考](https://github.com/keman5/welabx-g6/blob/master/src/components/graph/behavior/drag-node.js#L158)
 
 - 拖拽锚点时如何生成虚线
 
-  [仅供参考](https://github.com/claudewowo/welabx-g6/blob/master/src/components/graph/shape/items/anchor-event.js#L32)
+  [仅供参考](https://github.com/keman5/welabx-g6/blob/master/src/components/graph/shape/items/anchor-event.js#L32)
 
 - ￼如何自定义节点，边的样式和状态样式
 
@@ -122,7 +122,7 @@
 - ￼事件触发了如何通知画布外部
 
   [官方出处](https://g6.antv.vision/zh/docs/api/Graph#oneventname-handler)
-  [仅供参考](https://github.com/claudewowo/welabx-g6/blob/master/src/components/graph/behavior/drag-node.js#L60)
+  [仅供参考](https://github.com/keman5/welabx-g6/blob/master/src/components/graph/behavior/drag-node.js#L60)
 
 - ￼事件通知event 对象有哪些属性
 
@@ -137,7 +137,7 @@
 - 如何添加键盘事件，并在画布后防止事件仍然触发
 
   [官方出处](https://g6.antv.vision/zh/docs/api/Behavior)
-  [仅供参考](https://github.com/claudewowo/welabx-g6/blob/master/src/components/graph/graph.js#L123)
+  [仅供参考](https://github.com/keman5/welabx-g6/blob/master/src/components/graph/graph.js#L123)
 
 - ￼group ，item ，children 有何区别
 
@@ -151,15 +151,15 @@
 
 - ￼为何拖拽锚点生成虚线总是无法触发锚点事件
 
-  [仅供参考](https://github.com/claudewowo/welabx-g6/blob/master/src/components/graph/shape/items/anchor-event.js#L63)
+  [仅供参考](https://github.com/keman5/welabx-g6/blob/master/src/components/graph/shape/items/anchor-event.js#L63)
 
 - 如何防止状态冲突，如何处理
 
-  [仅供参考](https://github.com/claudewowo/welabx-g6/blob/master/src/components/graph/behavior/select-node.js#L47)
+  [仅供参考](https://github.com/keman5/welabx-g6/blob/master/src/components/graph/behavior/select-node.js#L47)
 
 - 如何给画布设置鼠标样式
 
-  [仅供参考](https://github.com/claudewowo/welabx-g6/blob/master/src/components/graph/behavior/canvas-event.js#L20)
+  [仅供参考](https://github.com/keman5/welabx-g6/blob/master/src/components/graph/behavior/canvas-event.js#L20)
 
 - 如何给边加上箭头
 
@@ -196,7 +196,7 @@
 
 - ￼如何在删除时通知画布外部
 
-  [仅供参考](https://github.com/claudewowo/welabx-g6/blob/master/src/components/graph/behavior/delete-item.js#L45)
+  [仅供参考](https://github.com/keman5/welabx-g6/blob/master/src/components/graph/behavior/delete-item.js#L45)
 
 - ￼如何封装g6开箱即用
 
@@ -208,11 +208,11 @@
 
 - ￼如何封装后支持注册行为
 
-  [仅供参考](https://github.com/claudewowo/welabx-g6/blob/master/src/components/graph/graph.js)
+  [仅供参考](https://github.com/keman5/welabx-g6/blob/master/src/components/graph/graph.js)
 
 - 如何封装前暴露G6类用于注册插件
 
-  [仅供参考](https://github.com/claudewowo/welabx-g6/blob/master/src/components/graph/graph.js)
+  [仅供参考](https://github.com/keman5/welabx-g6/blob/master/src/components/graph/graph.js)
 
 - 为什么初始化位置后拖动后被初始化的节点会移动
 
@@ -238,7 +238,7 @@
 
 - 如何将画布偏移量暴露给外部使用
 
-  [仅供参考](https://github.com/claudewowo/welabx-g6/blob/master/src/components/graph/behavior/canvas-event.js#L40)
+  [仅供参考](https://github.com/keman5/welabx-g6/blob/master/src/components/graph/behavior/canvas-event.js#L40)
 
 - 如何在时minimap拖拽通知内部
 

@@ -10,10 +10,10 @@
     "dev": "webpack-dev-server --config webpack/webpack.dev.js",
     "dll": "webpack -p --progress --config webpack/webpack.dll.js"
   },
-  "homepage": "https://claudewowo.github.io/welabx-g6/dist/",
+  "homepage": "https://keman5.github.io/welabx-g6/dist/",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/claudewowo/welabx-g6.git"
+    "url": "git+https://github.com/keman5/welabx-g6.git"
   },
   "keywords": [
     "antv/g6",

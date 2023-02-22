@@ -2,14 +2,13 @@
 
 ## 在线 Demo
 
-[https://claudewowo.github.io/welabx-g6/dist/?_blank](https://claudewowo.github.io/welabx-g6/dist/?_blank)
+[https://keman5.github.io/welabx-g6/dist/?_blank](https://keman5.github.io/welabx-g6/dist/?_blank)
 > 欢迎关注我的 B 站教程, 不定时更新, 讲解各种图形绘制以及问题解决思路, 带你领略可视化的魅力：[bilibli](http://www.bilibili.com/video/BV1YX4y1u7bB?share_medium=android&share_source=copy_link&bbid=XYECCEEEA651E106BC16F360C66C12F72B7CB&ts=1608714329434)
 >
-> G6 五十问：[五十个问题及解答](https://github.com/claudewowo/welabx-g6/blob/master/FAQ.md)
+> G6 五十问：[五十个问题及解答](https://github.com/keman5/welabx-g6/blob/master/FAQ.md)
 >
-> 中文文档：[https://github.com/claudewowo/welabx-g6/blob/master/GUIDE.md](https://github.com/claudewowo/welabx-g6/blob/master/GUIDE.md)
+> 中文文档：[https://github.com/keman5/welabx-g6/blob/master/GUIDE.md](https://github.com/keman5/welabx-g6/blob/master/GUIDE.md)
 ​
-
 ![image.png](https://cdn.nlark.com/yuque/0/2021/png/566082/1628650308370-fd5bee09-cac2-4752-b1af-423382e04160.png#clientId=u4603bf6b-29eb-4&from=paste&height=723&id=Mkmiz&margin=%5Bobject%20Object%5D&name=image.png&originHeight=1446&originWidth=1580&originalType=binary&ratio=1&size=171292&status=done&style=none&taskId=u88aacbad-cb50-454a-9271-27a0b26b1a8&width=790)
 
 ## 起源
@@ -23,18 +22,18 @@
 🙋 官网所有支持的布局均可使用
 🙋 以及领域相关的开发者
 ​
-
-## 计划
-
-1.0 版本完整实现所有流程化的自定义功能，并包含绝大部分可选的交互，实现极高性能的绘图工具。
-
 ## 已完成功能
 
 😎 自定义节点和边, 支持锚点配置
+
 😎 自定义圆形, 方形, 椭圆, 菱形节点
+
 😎 节点支持拖拽连线, 删除(按delete键), 编辑
+
 😎 边默认带结束箭头, 支持标签显示
+
 😎 支持自定义 tool-tip 内容
+
 😎 支持画布/节点/边事件监听
 
 ## TODO
@@ -60,9 +59,13 @@
 ## 未来规划
 
 🤔 边有相交时, 能否使用弧线跳过
+
 🤔 如何将多个事件注册为插件
+
 🤔 ps 旋转和拖拽变形
+
 🤔 对齐线如何实现
+
 🤔 富文本功能栏
 ​
 ## 如何开发
@@ -82,7 +85,19 @@ npm run dev
 
 ## 重要更新日志
 
-[https://github.com/claudewowo/welabx-g6/blob/master/CHANGELOG.md](https://github.com/claudewowo/welabx-g6/blob/master/CHANGELOG.md)
+[https://github.com/keman5/welabx-g6/blob/master/CHANGELOG.md](https://github.com/keman5/welabx-g6/blob/master/CHANGELOG.md)
+
+### [0.8.0] 2023-02-21
+
+- [upgrade] 拖拽添加连线支持画布缩放了, 设置 window.$welabxG6 = graph; 自动生效, 默认缩放为1, 如果实例化后缩放不是1, 必须设置此全局变量, 建议实例化后直接设置, 后续迭代可能会用到该变量
+
+```js
+const graph = new G6.Graph({});
+
+graph.read(data); // 读取数据
+// !!! 添加全局变量, 内部会自动读取该对象进行缩放
+window.$welabxG6 = graph;
+```
 
 ### [0.7.0] 2022-03-21
 
@@ -99,6 +114,7 @@ this.graph.on('canvas:mouseleave', e => {
   });
 });
 ```
+
 ### [0.6.5] 2021-07-12
 
 - [add] 为 drag-shadow-node 添加 shouldBegin 方法, 可在使用时进行自定义
@@ -112,7 +128,6 @@ this.graph.on('canvas:mouseleave', e => {
 ### [0.5.4] 2021-02-07 !重大更新
 
 - [upgrade] 升级 G6 到 4.1.x 版本
-- [upgrade] 重大更新! 实例化方法已经独立成注册方法, 只需极少的改动, 具体写法请参照[使用教程](https://github.com/claudewowo/welabx-g6/blob/master/GUIDE.md)!
-- [upgrade] 提供的 *-node 节点均支持二次继承, 支持更多扩展可能性! 二次继承可参考[使用教程](https://github.com/claudewowo/welabx-g6/blob/master/GUIDE.md#%E4%BA%8C%E6%AC%A1%E7%BB%A7%E6%89%BF)
+- [upgrade] 重大更新! 实例化方法已经独立成注册方法, 只需极少的改动, 具体写法请参照[使用教程](https://github.com/keman5/welabx-g6/blob/master/GUIDE.md)!
+- [upgrade] 提供的 *-node 节点均支持二次继承, 支持更多扩展可能性! 二次继承可参考[使用教程](https://github.com/keman5/welabx-g6/blob/master/GUIDE.md#%E4%BA%8C%E6%AC%A1%E7%BB%A7%E6%89%BF)
 - [fixed] 所有 labelCfg 样式配置调整为 labelCfg.style, 同官方 API
-

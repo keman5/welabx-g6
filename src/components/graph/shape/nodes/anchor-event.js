@@ -5,6 +5,7 @@
  */
 
 let dragLog = [], // 记录鼠标坐标
+zoom = 1, // 当前画布缩放比例
 anchorNodeId = null; // dragover 也会发生在拖拽的锚点上, 用于记录当前拖拽的节点id
 
 export default (anchor, group, p) => {
@@ -47,6 +48,8 @@ export default (anchor, group, p) => {
     group.toFront();
     line.toFront(); // 最后把这条线层级提升至最高
     anchorNodeId = id;
+    // 计算当前画布缩放比例
+    zoom = window.$welabxG6 ? window.$welabxG6.getZoom() : 1;
   });
 
   // 拖拽中
@@ -59,7 +62,7 @@ export default (anchor, group, p) => {
 
     const diff = type === 'triangle-node' ? (direction === 'up' ? canvasBox.height : 0) : canvasBox.height / 2;
     const pointStart = line.get('pointStart');
-    const endPoint = [e.x - canvasBox.x - canvasBox.width / 2, e.y - canvasBox.y - diff];
+    const endPoint = [(e.x - canvasBox.x - canvasBox.width / 2) / zoom, (e.y - canvasBox.y - diff) / zoom];
 
     line.toFront();
     /**
