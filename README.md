@@ -82,6 +82,10 @@ npm run dev
 - 另外发现使用 `npm` 安装内部依赖会自动更新, 导致G6内部出现报错, 如有报错, 请自行排查依赖版本. 请务必使用 `package-lock` 或 `yarn.lock` 锁定依赖版本
 - 有问题请在 GitHub 上提 issue, 目前版本还有大部分功能要完善, 欢迎 star
 ​
+## 开源不易, 请多多鼓励
+> 开源3年, 生活不易, 希望同行多多鼓励
+
+<img src='./public/IMG_041.jpg' width='400px' style='width: 400px;' /><img src='./public/IMG_042.jpg' width='400px' style='width: 400px;' />
 
 ## 重要更新日志
 
